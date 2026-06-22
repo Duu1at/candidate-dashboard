@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:candidate_dashboard/core/theme/theme.dart';
+import 'package:candidate_dashboard/core/core.dart';
 
 abstract final class BottomSheetComponentTheme {
   static BottomSheetThemeData build(ColorScheme colors) {
@@ -7,7 +7,9 @@ abstract final class BottomSheetComponentTheme {
       backgroundColor: colors.surface,
       surfaceTintColor: AppColors.transparent,
       elevation: 0,
-      shape: const RoundedRectangleBorder(borderRadius: AppRadius.modalBorderRadius),
+      shape: const RoundedRectangleBorder(
+        borderRadius: AppRadius.modalBorderRadius,
+      ),
       showDragHandle: true,
       dragHandleColor: colors.outline,
     );

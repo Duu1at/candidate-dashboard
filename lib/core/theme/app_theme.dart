@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'theme.dart';
+import 'package:candidate_dashboard/core/core.dart';
 
 abstract final class AppTheme {
   static ThemeData get light => _build(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../theme.dart';
+import 'package:candidate_dashboard/core/core.dart';
 
 @immutable
 final class AppTextThemeExt extends ThemeExtension<AppTextThemeExt> {

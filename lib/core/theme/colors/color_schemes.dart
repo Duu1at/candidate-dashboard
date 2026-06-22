@@ -1,6 +1,5 @@
+import 'package:candidate_dashboard/core/core.dart';
 import 'package:flutter/material.dart';
-
-import 'app_colors.dart';
 
 abstract final class AppColorSchemes {
   static const ColorScheme light = ColorScheme(

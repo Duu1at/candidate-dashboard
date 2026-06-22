@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:candidate_dashboard/core/theme/theme.dart';
+import 'package:candidate_dashboard/core/core.dart';
 
 abstract final class SwitchComponentTheme {
   static SwitchThemeData build(ColorScheme colors) {

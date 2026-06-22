@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:candidate_dashboard/core/theme/theme.dart';
+import 'package:candidate_dashboard/core/core.dart';
 
 abstract final class TooltipComponentTheme {
   static TooltipThemeData build(ColorScheme colors, TextTheme textTheme) {

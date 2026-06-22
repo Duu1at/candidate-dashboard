@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:candidate_dashboard/core/theme/theme.dart';
+import 'package:candidate_dashboard/core/core.dart';
 
 abstract final class DialogComponentTheme {
   static DialogThemeData build(ColorScheme colors, TextTheme textTheme) {
@@ -11,7 +11,9 @@ abstract final class DialogComponentTheme {
         borderRadius: BorderRadius.all(Radius.circular(AppRadius.modal)),
       ),
       titleTextStyle: textTheme.headlineSmall,
-      contentTextStyle: textTheme.bodyMedium?.copyWith(color: colors.onSurfaceVariant),
+      contentTextStyle: textTheme.bodyMedium?.copyWith(
+        color: colors.onSurfaceVariant,
+      ),
     );
   }
 }

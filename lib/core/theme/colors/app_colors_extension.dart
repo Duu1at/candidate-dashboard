@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../theme.dart';
+import 'package:candidate_dashboard/core/core.dart';
 
 /// Theme-aware colors and shadow tokens that fall outside Material's
 /// `ColorScheme`. Read via `Theme.of(context).extension<AppColorsExt>()`
@@ -169,23 +168,14 @@ final class AppColorsExt extends ThemeExtension<AppColorsExt> {
     return AppColorsExt(
       success: Color.lerp(success, other.success, t)!,
       onSuccess: Color.lerp(onSuccess, other.onSuccess, t)!,
-      successContainer: Color.lerp(
-        successContainer,
-        other.successContainer,
-        t,
-      )!,
-      onSuccessContainer: Color.lerp(
-        onSuccessContainer,
-        other.onSuccessContainer,
-        t,
-      )!,
+      successContainer:
+          Color.lerp(successContainer, other.successContainer, t)!,
+      onSuccessContainer:
+          Color.lerp(onSuccessContainer, other.onSuccessContainer, t)!,
       warning: Color.lerp(warning, other.warning, t)!,
       onWarning: Color.lerp(onWarning, other.onWarning, t)!,
-      warningContainer: Color.lerp(
-        warningContainer,
-        other.warningContainer,
-        t,
-      )!,
+      warningContainer:
+          Color.lerp(warningContainer, other.warningContainer, t)!,
       info: Color.lerp(info, other.info, t)!,
       onInfo: Color.lerp(onInfo, other.onInfo, t)!,
       infoContainer: Color.lerp(infoContainer, other.infoContainer, t)!,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../theme.dart';
+import 'package:candidate_dashboard/core/core.dart';
 
 abstract final class AppBarComponentTheme {
   static AppBarTheme build(ColorScheme colors, TextTheme textTheme) {
@@ -12,9 +12,10 @@ abstract final class AppBarComponentTheme {
       elevation: 0,
       scrolledUnderElevation: 0,
       centerTitle: true,
-      systemOverlayStyle:
-          (isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark)
-              .copyWith(statusBarColor: AppColors.transparent),
+      systemOverlayStyle: (isDark
+              ? SystemUiOverlayStyle.light
+              : SystemUiOverlayStyle.dark)
+          .copyWith(statusBarColor: AppColors.transparent),
       titleTextStyle: textTheme.titleLarge,
       iconTheme: IconThemeData(color: colors.primary),
       surfaceTintColor: AppColors.transparent,

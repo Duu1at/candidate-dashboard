@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:candidate_dashboard/core/theme/theme.dart';
+import 'package:candidate_dashboard/core/core.dart';
 
 abstract final class FloatingActionButtonComponentTheme {
-  static FloatingActionButtonThemeData build(ColorScheme colors, TextTheme textTheme) {
+  static FloatingActionButtonThemeData build(
+    ColorScheme colors,
+    TextTheme textTheme,
+  ) {
     return FloatingActionButtonThemeData(
       backgroundColor: colors.primary,
       foregroundColor: colors.onPrimary,

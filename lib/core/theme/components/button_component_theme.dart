@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:candidate_dashboard/core/theme/theme.dart';
+import 'package:candidate_dashboard/core/core.dart';
 
 abstract final class ButtonComponentTheme {
   static const Size _minSize = Size(double.infinity, 56);
@@ -13,8 +13,12 @@ abstract final class ButtonComponentTheme {
       style: FilledButton.styleFrom(
         backgroundColor: colors.primary,
         foregroundColor: colors.onPrimary,
-        disabledBackgroundColor: colors.onSurface.withValues(alpha: AppOpacity.disabledBackground),
-        disabledForegroundColor: colors.onSurface.withValues(alpha: AppOpacity.disabledForeground),
+        disabledBackgroundColor: colors.onSurface.withValues(
+          alpha: AppOpacity.disabledBackground,
+        ),
+        disabledForegroundColor: colors.onSurface.withValues(
+          alpha: AppOpacity.disabledForeground,
+        ),
         elevation: 0,
         shape: _shape,
         minimumSize: _minSize,
@@ -23,13 +27,20 @@ abstract final class ButtonComponentTheme {
     );
   }
 
-  static ElevatedButtonThemeData elevated(ColorScheme colors, TextTheme textTheme) {
+  static ElevatedButtonThemeData elevated(
+    ColorScheme colors,
+    TextTheme textTheme,
+  ) {
     return ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: colors.primary,
         foregroundColor: colors.onPrimary,
-        disabledBackgroundColor: colors.onSurface.withValues(alpha: AppOpacity.disabledBackground),
-        disabledForegroundColor: colors.onSurface.withValues(alpha: AppOpacity.disabledForeground),
+        disabledBackgroundColor: colors.onSurface.withValues(
+          alpha: AppOpacity.disabledBackground,
+        ),
+        disabledForegroundColor: colors.onSurface.withValues(
+          alpha: AppOpacity.disabledForeground,
+        ),
         elevation: 0,
         shape: _shape,
         minimumSize: _minSize,
@@ -38,12 +49,17 @@ abstract final class ButtonComponentTheme {
     );
   }
 
-  static OutlinedButtonThemeData outlined(ColorScheme colors, TextTheme textTheme) {
+  static OutlinedButtonThemeData outlined(
+    ColorScheme colors,
+    TextTheme textTheme,
+  ) {
     return OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         backgroundColor: colors.surfaceContainerHighest,
         foregroundColor: colors.onSurface,
-        disabledForegroundColor: colors.onSurface.withValues(alpha: AppOpacity.disabledForeground),
+        disabledForegroundColor: colors.onSurface.withValues(
+          alpha: AppOpacity.disabledForeground,
+        ),
         side: BorderSide.none,
         elevation: 0,
         shape: _shape,
@@ -60,7 +76,9 @@ abstract final class ButtonComponentTheme {
         minimumSize: Size.zero,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         foregroundColor: colors.primary,
-        disabledForegroundColor: colors.onSurface.withValues(alpha: AppOpacity.disabledForeground),
+        disabledForegroundColor: colors.onSurface.withValues(
+          alpha: AppOpacity.disabledForeground,
+        ),
         shape: _shape,
         textStyle: textTheme.labelLarge,
       ),

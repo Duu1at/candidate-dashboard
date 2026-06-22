@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:candidate_dashboard/core/theme/colors/app_colors.dart';
+import 'package:candidate_dashboard/core/core.dart';
 
 /// Drop-shadow tokens. Light and dark have separate sets — on dark surfaces
 /// shadows need a denser black to remain visible.

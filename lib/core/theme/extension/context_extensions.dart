@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../theme.dart';
+import 'package:candidate_dashboard/core/core.dart';
 
 extension AppThemeContextExt on BuildContext {
   ThemeData get appTheme => Theme.of(this);
