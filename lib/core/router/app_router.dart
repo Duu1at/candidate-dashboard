@@ -1,33 +1,25 @@
+import 'package:candidate_dashboard/core/router/app_routes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../features/candidate_detail/cubit/candidate_detail_cubit.dart';
 import '../../features/candidate_detail/view/candidate_detail_screen.dart';
 import '../../features/candidates_list/view/candidates_list_screen.dart';
-import '../di/injection.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/',
+  initialLocation: AppRoutes.init,
   routes: [
     GoRoute(
-      path: '/',
-      builder: (_, _s) => const CandidatesListScreen(),
+      path: AppRoutes.candidatesList,
+      builder: (_, _) => const CandidatesListScreen(),
       routes: [
         GoRoute(
-          path: 'candidate/:id',
-          builder: (_, state) {
-            final id = state.pathParameters['id']!;
-            return BlocProvider(
-              create: (_) => getIt<CandidateDetailCubit>()..load(id),
-              child: const CandidateDetailScreen(),
-            );
-          },
+          path: AppRoutes.candidateDetail,
+          builder: (_, _) => const CandidateDetailScreen(),
         ),
       ],
     ),
   ],
-  errorBuilder: (_, _s) => const Scaffold(
-    body: Center(child: Text('Страница не найдена')),
-  ),
+  errorBuilder:
+      (_, _) =>
+          const Scaffold(body: Center(child: Text('Страница не найдена'))),
 );
