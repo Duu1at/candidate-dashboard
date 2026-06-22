@@ -54,13 +54,15 @@ class _CandidatesListScreenState extends State<CandidatesListScreen> {
         actions: [
           BlocBuilder<CandidatesListCubit, CandidatesListState>(
             buildWhen: (a, b) => a.sortBy != b.sortBy || a.status != b.status,
-            builder: (context, state) => IconButton(
-              icon: const Icon(Icons.sort_rounded),
-              tooltip: 'Сортировка',
-              onPressed: state.status == CandidatesListStatus.loaded
-                  ? () => _showSortSheet(context, state.sortBy)
-                  : null,
-            ),
+            builder:
+                (context, state) => IconButton(
+                  icon: const Icon(Icons.sort_rounded),
+                  tooltip: 'Сортировка',
+                  onPressed:
+                      state.status == CandidatesListStatus.loaded
+                          ? () => _showSortSheet(context, state.sortBy)
+                          : null,
+                ),
           ),
         ],
       ),
@@ -68,8 +70,11 @@ class _CandidatesListScreenState extends State<CandidatesListScreen> {
         children: [
           BlocBuilder<CandidatesListCubit, CandidatesListState>(
             buildWhen: (a, b) => a.isOffline != b.isOffline,
-            builder: (_, state) =>
-                state.isOffline ? const OfflineBanner() : const SizedBox.shrink(),
+            builder:
+                (_, state) =>
+                    state.isOffline
+                        ? const OfflineBanner()
+                        : const SizedBox.shrink(),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
@@ -80,28 +85,35 @@ class _CandidatesListScreenState extends State<CandidatesListScreen> {
                 prefixIcon: const Icon(Icons.search),
                 suffixIcon: ValueListenableBuilder<TextEditingValue>(
                   valueListenable: _searchController,
-                  builder: (_, value, __) => value.text.isNotEmpty
-                      ? IconButton(
-                          icon: const Icon(Icons.clear),
-                          onPressed: () {
-                            _searchController.clear();
-                            context.read<CandidatesListCubit>().search('');
-                          },
-                        )
-                      : const SizedBox.shrink(),
+                  builder:
+                      (_, value, _) =>
+                          value.text.isNotEmpty
+                              ? IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  _searchController.clear();
+                                  context.read<CandidatesListCubit>().search(
+                                    '',
+                                  );
+                                },
+                              )
+                              : const SizedBox.shrink(),
                 ),
               ),
-              onChanged: (q) => _debouncer.run(
-                () => context.read<CandidatesListCubit>().search(q),
-              ),
+              onChanged:
+                  (q) => _debouncer.run(
+                    () => context.read<CandidatesListCubit>().search(q),
+                  ),
             ),
           ),
           BlocBuilder<CandidatesListCubit, CandidatesListState>(
             buildWhen: (a, b) => a.verdictFilter != b.verdictFilter,
-            builder: (context, state) => FilterChipsRow(
-              selected: state.verdictFilter,
-              onSelected: context.read<CandidatesListCubit>().filterByVerdict,
-            ),
+            builder:
+                (context, state) => FilterChipsRow(
+                  selected: state.verdictFilter,
+                  onSelected:
+                      context.read<CandidatesListCubit>().filterByVerdict,
+                ),
           ),
           Expanded(child: _buildBody()),
         ],
@@ -111,57 +123,65 @@ class _CandidatesListScreenState extends State<CandidatesListScreen> {
 
   Widget _buildBody() {
     return BlocBuilder<CandidatesListCubit, CandidatesListState>(
-      buildWhen: (a, b) =>
-          a.status != b.status ||
-          a.displayedCandidates != b.displayedCandidates ||
-          a.hasMore != b.hasMore,
-      builder: (context, state) => switch (state.status) {
-        CandidatesListStatus.initial ||
-        CandidatesListStatus.loading =>
-          ListView.builder(
-            itemCount: 6,
-            itemBuilder: (_, __) => const SkeletonCard(),
-          ),
-        CandidatesListStatus.error => _ErrorView(
-            message: state.errorMessage ?? 'Неизвестная ошибка',
-            onRetry: () => context.read<CandidatesListCubit>().load(forceRefresh: true),
-          ),
-        CandidatesListStatus.loaded when state.filteredCandidates.isEmpty =>
-          const _EmptyView(),
-        CandidatesListStatus.loaded => RefreshIndicator(
-            onRefresh: () => context.read<CandidatesListCubit>().load(forceRefresh: true),
-            child: ListView.builder(
-              controller: _scrollController,
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemCount:
-                  state.displayedCandidates.length + (state.hasMore ? 1 : 0),
-              itemBuilder: (context, index) {
-                if (index == state.displayedCandidates.length) {
-                  return const Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                }
-                final candidate = state.displayedCandidates[index];
-                return CandidateCard(
-                  key: ValueKey(candidate.id),
-                  candidate: candidate,
-                  onTap: () => context.push('/candidate/${candidate.id}'),
-                );
-              },
+      buildWhen:
+          (a, b) =>
+              a.status != b.status ||
+              a.displayedCandidates != b.displayedCandidates ||
+              a.hasMore != b.hasMore,
+      builder:
+          (context, state) => switch (state.status) {
+            CandidatesListStatus.initial ||
+            CandidatesListStatus.loading => ListView.builder(
+              itemCount: 6,
+              itemBuilder: (_, _) => const SkeletonCard(),
             ),
-          ),
-      },
+            CandidatesListStatus.error => _ErrorView(
+              message: state.errorMessage ?? 'Неизвестная ошибка',
+              onRetry:
+                  () => context.read<CandidatesListCubit>().load(
+                    forceRefresh: true,
+                  ),
+            ),
+            CandidatesListStatus.loaded when state.filteredCandidates.isEmpty =>
+              const _EmptyView(),
+            CandidatesListStatus.loaded => RefreshIndicator(
+              onRefresh:
+                  () => context.read<CandidatesListCubit>().load(
+                    forceRefresh: true,
+                  ),
+              child: ListView.builder(
+                controller: _scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                itemCount:
+                    state.displayedCandidates.length + (state.hasMore ? 1 : 0),
+                itemBuilder: (context, index) {
+                  if (index == state.displayedCandidates.length) {
+                    return const Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  }
+                  final candidate = state.displayedCandidates[index];
+                  return CandidateCard(
+                    key: ValueKey(candidate.id),
+                    candidate: candidate,
+                    onTap: () => context.push('/candidate/${candidate.id}'),
+                  );
+                },
+              ),
+            ),
+          },
     );
   }
 
   void _showSortSheet(BuildContext context, SortOption current) {
     showModalBottomSheet<void>(
       context: context,
-      builder: (_) => SortBottomSheet(
-        current: current,
-        onSelect: context.read<CandidatesListCubit>().sortBy,
-      ),
+      builder:
+          (_) => SortBottomSheet(
+            current: current,
+            onSelect: context.read<CandidatesListCubit>().sortBy,
+          ),
     );
   }
 }
@@ -184,15 +204,15 @@ class _EmptyView extends StatelessWidget {
           Text(
             'Кандидаты не найдены',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
           const SizedBox(height: 4),
           Text(
             'Попробуйте изменить фильтры или запрос',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
         ],
       ),

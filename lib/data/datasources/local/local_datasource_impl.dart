@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 
-import '../models/candidate.dart';
+import '../../models/candidate.dart';
 import 'local_datasource.dart';
 
 const _kCandidatesKey = 'candidates_list';
@@ -23,7 +23,9 @@ class LocalDatasourceImpl implements LocalDatasource {
     final raw = _candidatesBox.get(_kCandidatesKey);
     if (raw == null) return null;
     final list = jsonDecode(raw) as List<dynamic>;
-    return list.map((e) => Candidate.fromJson(e as Map<String, dynamic>)).toList();
+    return list
+        .map((e) => Candidate.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   @override

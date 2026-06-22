@@ -18,8 +18,12 @@ enum CandidateStatus {
   final String value;
   final String label;
 
-  static CandidateStatus fromValue(String value) => CandidateStatus.values
-      .firstWhere((s) => s.value == value, orElse: () => CandidateStatus.newCandidate);
+  static CandidateStatus fromValue(String value) {
+    return CandidateStatus.values.firstWhere(
+      (s) => s.value == value,
+      orElse: () => CandidateStatus.newCandidate,
+    );
+  }
 }
 
 @freezed
