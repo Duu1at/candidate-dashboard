@@ -1,127 +1,96 @@
 import 'package:flutter/material.dart';
 import 'package:candidate_dashboard/core/core.dart';
 
-/// Theme-aware colors and shadow tokens that fall outside Material's
-/// `ColorScheme`. Read via `Theme.of(context).extension<AppColorsExt>()`
-/// (shortcut: `context.appColors`).
+@immutable
+final class VerdictPalette {
+  const VerdictPalette({
+    required this.background,
+    required this.foreground,
+    required this.dot,
+  });
+
+  final Color background;
+  final Color foreground;
+  final Color dot;
+
+  VerdictPalette _lerp(VerdictPalette other, double t) => VerdictPalette(
+    background: Color.lerp(background, other.background, t)!,
+    foreground: Color.lerp(foreground, other.foreground, t)!,
+    dot: Color.lerp(dot, other.dot, t)!,
+  );
+}
+
 @immutable
 final class AppColorsExt extends ThemeExtension<AppColorsExt> {
   const AppColorsExt({
-    required this.success,
-    required this.onSuccess,
-    required this.successContainer,
-    required this.onSuccessContainer,
-    required this.warning,
-    required this.onWarning,
-    required this.warningContainer,
-    required this.info,
-    required this.onInfo,
-    required this.infoContainer,
-    required this.brandAmberSoft,
+    required this.verdictGreen,
+    required this.verdictOrange,
+    required this.verdictRed,
+    required this.statusRejected,
+    required this.offlineBannerBg,
+    required this.offlineBannerText,
+    required this.accentBlueSoft,
     required this.shadowSm,
     required this.shadowMd,
     required this.shadowLg,
   });
 
-  /// Success / positive state color.
-  /// - light: `#65A30D` (`AppColors.successGreen`)
-  /// - dark:  `#65A30D` (`AppColors.successGreen`)
-  final Color success;
-
-  /// Foreground that goes on top of [success].
-  /// - light: `#FFFFFF` (`AppColors.white`)
-  /// - dark:  `#FFFFFF` (`AppColors.white`)
-  final Color onSuccess;
-
-  /// Filled background for success badges / chips.
-  /// - light: `#ECFCCB` (`AppColors.successLight`)
-  /// - dark:  `#4D7C0F` (`AppColors.successDark`)
-  final Color successContainer;
-
-  /// Foreground for content placed on [successContainer].
-  /// - light: `#4D7C0F` (`AppColors.successDark`)
-  /// - dark:  `#ECFCCB` (`AppColors.successLight`)
-  final Color onSuccessContainer;
-
-  /// Warning color.
-  /// - light: `#F59E0B` (`AppColors.warningAmber`)
-  /// - dark:  `#F59E0B` (`AppColors.warningAmber`)
-  final Color warning;
-
-  /// Foreground that goes on top of [warning].
-  /// - light: `#1C1917` (`AppColors.ink900`)
-  /// - dark:  `#1C1917` (`AppColors.ink900`)
-  final Color onWarning;
-
-  /// Filled background for warning badges / chips.
-  /// - light: `#FEF3C7` (`AppColors.warningLight`)
-  /// - dark:  `#F59E0B` (`AppColors.warningAmber`)
-  final Color warningContainer;
-
-  /// Info color.
-  /// - light: `#0891B2` (`AppColors.infoCyan`)
-  /// - dark:  `#0891B2` (`AppColors.infoCyan`)
-  final Color info;
-
-  /// Foreground that goes on top of [info].
-  /// - light: `#FFFFFF` (`AppColors.white`)
-  /// - dark:  `#FFFFFF` (`AppColors.white`)
-  final Color onInfo;
-
-  /// Filled background for info badges / chips.
-  /// - light: `#CFFAFE` (`AppColors.infoLight`)
-  /// - dark:  `#155E75` (`AppColors.infoDark`)
-  final Color infoContainer;
-
-  /// Soft brand-amber overlay (translucent). Used by NavigationBar indicator.
-  /// - light: `#20D97706` (12% alpha, `AppColors.brandAmberSoftLight`)
-  /// - dark:  `#33D97706` (20% alpha, `AppColors.brandAmberSoftDark`)
-  final Color brandAmberSoft;
-
-  /// Small shadow (sm).
-  /// - light: black @ 4% alpha (`AppShadow.smLight`)
-  /// - dark:  black @ 20% alpha (`AppShadow.smDark`)
+  final VerdictPalette verdictGreen;
+  final VerdictPalette verdictOrange;
+  final VerdictPalette verdictRed;
+  final Color statusRejected;
+  final Color offlineBannerBg;
+  final Color offlineBannerText;
+  final Color accentBlueSoft;
   final List<BoxShadow> shadowSm;
-
-  /// Medium shadow (md).
-  /// - light: black @ 8% alpha (`AppShadow.mdLight`)
-  /// - dark:  black @ 28% alpha (`AppShadow.mdDark`)
   final List<BoxShadow> shadowMd;
-
-  /// Large shadow (lg).
-  /// - light: black @ 12% alpha (`AppShadow.lgLight`)
-  /// - dark:  black @ 40% alpha (`AppShadow.lgDark`)
   final List<BoxShadow> shadowLg;
 
   static const AppColorsExt light = AppColorsExt(
-    success: AppColors.successGreen,
-    onSuccess: AppColors.white,
-    successContainer: AppColors.successLight,
-    onSuccessContainer: AppColors.successDark,
-    warning: AppColors.warningAmber,
-    onWarning: AppColors.ink900,
-    warningContainer: AppColors.warningLight,
-    info: AppColors.infoCyan,
-    onInfo: AppColors.white,
-    infoContainer: AppColors.infoLight,
-    brandAmberSoft: AppColors.brandAmberSoftLight,
+    verdictGreen: VerdictPalette(
+      background: AppColors.verdictGreenLight,
+      foreground: AppColors.verdictGreenDark,
+      dot: AppColors.verdictGreen,
+    ),
+    verdictOrange: VerdictPalette(
+      background: AppColors.verdictOrangeLight,
+      foreground: AppColors.verdictOrangeDark,
+      dot: AppColors.verdictOrange,
+    ),
+    verdictRed: VerdictPalette(
+      background: AppColors.verdictRedLight,
+      foreground: AppColors.verdictRedDark,
+      dot: AppColors.verdictRed,
+    ),
+    statusRejected: AppColors.slate400,
+    offlineBannerBg: AppColors.verdictOrangeLight,
+    offlineBannerText: AppColors.offlineTextAmber,
+    accentBlueSoft: AppColors.accentBlueSoftLight,
     shadowSm: AppShadow.smLight,
     shadowMd: AppShadow.mdLight,
     shadowLg: AppShadow.lgLight,
   );
 
   static const AppColorsExt dark = AppColorsExt(
-    success: AppColors.successGreen,
-    onSuccess: AppColors.white,
-    successContainer: AppColors.successDark,
-    onSuccessContainer: AppColors.successLight,
-    warning: AppColors.warningAmber,
-    onWarning: AppColors.ink900,
-    warningContainer: AppColors.warningAmber,
-    info: AppColors.infoCyan,
-    onInfo: AppColors.white,
-    infoContainer: AppColors.infoDark,
-    brandAmberSoft: AppColors.brandAmberSoftDark,
+    verdictGreen: VerdictPalette(
+      background: AppColors.verdictGreenSoft,
+      foreground: AppColors.verdictGreenMod,
+      dot: AppColors.verdictGreen,
+    ),
+    verdictOrange: VerdictPalette(
+      background: AppColors.verdictOrangeSoft,
+      foreground: AppColors.verdictOrangeMod,
+      dot: AppColors.verdictOrange,
+    ),
+    verdictRed: VerdictPalette(
+      background: AppColors.verdictRedSoft,
+      foreground: AppColors.verdictRedMod,
+      dot: AppColors.verdictRed,
+    ),
+    statusRejected: AppColors.slate400,
+    offlineBannerBg: AppColors.verdictOrangeSoft,
+    offlineBannerText: AppColors.verdictOrangeMod,
+    accentBlueSoft: AppColors.accentBlueSoftDark,
     shadowSm: AppShadow.smDark,
     shadowMd: AppShadow.mdDark,
     shadowLg: AppShadow.lgDark,
@@ -129,33 +98,25 @@ final class AppColorsExt extends ThemeExtension<AppColorsExt> {
 
   @override
   AppColorsExt copyWith({
-    Color? success,
-    Color? onSuccess,
-    Color? successContainer,
-    Color? onSuccessContainer,
-    Color? warning,
-    Color? onWarning,
-    Color? warningContainer,
-    Color? info,
-    Color? onInfo,
-    Color? infoContainer,
-    Color? brandAmberSoft,
+    VerdictPalette? verdictGreen,
+    VerdictPalette? verdictOrange,
+    VerdictPalette? verdictRed,
+    Color? statusRejected,
+    Color? offlineBannerBg,
+    Color? offlineBannerText,
+    Color? accentBlueSoft,
     List<BoxShadow>? shadowSm,
     List<BoxShadow>? shadowMd,
     List<BoxShadow>? shadowLg,
   }) {
     return AppColorsExt(
-      success: success ?? this.success,
-      onSuccess: onSuccess ?? this.onSuccess,
-      successContainer: successContainer ?? this.successContainer,
-      onSuccessContainer: onSuccessContainer ?? this.onSuccessContainer,
-      warning: warning ?? this.warning,
-      onWarning: onWarning ?? this.onWarning,
-      warningContainer: warningContainer ?? this.warningContainer,
-      info: info ?? this.info,
-      onInfo: onInfo ?? this.onInfo,
-      infoContainer: infoContainer ?? this.infoContainer,
-      brandAmberSoft: brandAmberSoft ?? this.brandAmberSoft,
+      verdictGreen: verdictGreen ?? this.verdictGreen,
+      verdictOrange: verdictOrange ?? this.verdictOrange,
+      verdictRed: verdictRed ?? this.verdictRed,
+      statusRejected: statusRejected ?? this.statusRejected,
+      offlineBannerBg: offlineBannerBg ?? this.offlineBannerBg,
+      offlineBannerText: offlineBannerText ?? this.offlineBannerText,
+      accentBlueSoft: accentBlueSoft ?? this.accentBlueSoft,
       shadowSm: shadowSm ?? this.shadowSm,
       shadowMd: shadowMd ?? this.shadowMd,
       shadowLg: shadowLg ?? this.shadowLg,
@@ -166,20 +127,17 @@ final class AppColorsExt extends ThemeExtension<AppColorsExt> {
   AppColorsExt lerp(ThemeExtension<AppColorsExt>? other, double t) {
     if (other is! AppColorsExt) return this;
     return AppColorsExt(
-      success: Color.lerp(success, other.success, t)!,
-      onSuccess: Color.lerp(onSuccess, other.onSuccess, t)!,
-      successContainer:
-          Color.lerp(successContainer, other.successContainer, t)!,
-      onSuccessContainer:
-          Color.lerp(onSuccessContainer, other.onSuccessContainer, t)!,
-      warning: Color.lerp(warning, other.warning, t)!,
-      onWarning: Color.lerp(onWarning, other.onWarning, t)!,
-      warningContainer:
-          Color.lerp(warningContainer, other.warningContainer, t)!,
-      info: Color.lerp(info, other.info, t)!,
-      onInfo: Color.lerp(onInfo, other.onInfo, t)!,
-      infoContainer: Color.lerp(infoContainer, other.infoContainer, t)!,
-      brandAmberSoft: Color.lerp(brandAmberSoft, other.brandAmberSoft, t)!,
+      verdictGreen: verdictGreen._lerp(other.verdictGreen, t),
+      verdictOrange: verdictOrange._lerp(other.verdictOrange, t),
+      verdictRed: verdictRed._lerp(other.verdictRed, t),
+      statusRejected: Color.lerp(statusRejected, other.statusRejected, t)!,
+      offlineBannerBg: Color.lerp(offlineBannerBg, other.offlineBannerBg, t)!,
+      offlineBannerText: Color.lerp(
+        offlineBannerText,
+        other.offlineBannerText,
+        t,
+      )!,
+      accentBlueSoft: Color.lerp(accentBlueSoft, other.accentBlueSoft, t)!,
       shadowSm: t < 0.5 ? shadowSm : other.shadowSm,
       shadowMd: t < 0.5 ? shadowMd : other.shadowMd,
       shadowLg: t < 0.5 ? shadowLg : other.shadowLg,

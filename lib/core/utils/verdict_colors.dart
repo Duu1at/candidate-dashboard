@@ -1,39 +1,36 @@
 import 'package:flutter/material.dart';
 import '../theme/theme.dart';
 
-Color verdictColor(BuildContext context, String vc) => switch (vc) {
-      'verdict-green' => Theme.of(context).extension<AppColorsExt>()!.success,
-      'verdict-orange' => Theme.of(context).extension<AppColorsExt>()!.warning,
-      'verdict-red' => Theme.of(context).colorScheme.error,
-      _ => Theme.of(context).colorScheme.outline,
+AppColorsExt _ext(BuildContext context) =>
+    Theme.of(context).extension<AppColorsExt>()!;
+
+VerdictPalette verdictPalette(BuildContext context, String vc) => switch (vc) {
+  'verdict-green' => _ext(context).verdictGreen,
+  'verdict-orange' => _ext(context).verdictOrange,
+  _ => _ext(context).verdictRed,
+};
+
+Color verdictColor(BuildContext context, String vc) =>
+    verdictPalette(context, vc).dot;
+
+Color verdictContainerColor(BuildContext context, String vc) =>
+    verdictPalette(context, vc).background;
+
+Color onVerdictContainerColor(BuildContext context, String vc) =>
+    verdictPalette(context, vc).foreground;
+
+VerdictPalette criteriaPalette(BuildContext context, String status) =>
+    switch (status) {
+      'ok' => _ext(context).verdictGreen,
+      'warn' => _ext(context).verdictOrange,
+      _ => _ext(context).verdictRed,
     };
 
-Color verdictContainerColor(BuildContext context, String vc) => switch (vc) {
-      'verdict-green' =>
-        Theme.of(context).extension<AppColorsExt>()!.successContainer,
-      'verdict-orange' =>
-        Theme.of(context).extension<AppColorsExt>()!.warningContainer,
-      'verdict-red' => Theme.of(context).colorScheme.errorContainer,
-      _ => Theme.of(context).colorScheme.surfaceContainerHighest,
-    };
-
-Color onVerdictContainerColor(BuildContext context, String vc) => switch (vc) {
-      'verdict-green' =>
-        Theme.of(context).extension<AppColorsExt>()!.onSuccessContainer,
-      'verdict-orange' =>
-        Theme.of(context).extension<AppColorsExt>()!.onWarning,
-      'verdict-red' => Theme.of(context).colorScheme.onErrorContainer,
-      _ => Theme.of(context).colorScheme.onSurface,
-    };
-
-Color criteriaColor(BuildContext context, String status) => switch (status) {
-      'ok' => Theme.of(context).extension<AppColorsExt>()!.success,
-      'warn' => Theme.of(context).extension<AppColorsExt>()!.warning,
-      _ => Theme.of(context).colorScheme.error,
-    };
+Color criteriaColor(BuildContext context, String status) =>
+    criteriaPalette(context, status).dot;
 
 IconData criteriaIcon(String status) => switch (status) {
-      'ok' => Icons.check_circle_outline_rounded,
-      'warn' => Icons.warning_amber_rounded,
-      _ => Icons.cancel_outlined,
-    };
+  'ok' => Icons.check_circle_outline_rounded,
+  'warn' => Icons.warning_amber_rounded,
+  _ => Icons.cancel_outlined,
+};

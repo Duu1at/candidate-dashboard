@@ -5,13 +5,13 @@ abstract final class AppTheme {
   static ThemeData get light => _build(
     colors: AppColorSchemes.light,
     appColors: AppColorsExt.light,
-    scaffoldBackground: AppColors.bgWarm,
+    scaffoldBackground: AppColors.iosGray,
   );
 
   static ThemeData get dark => _build(
     colors: AppColorSchemes.dark,
     appColors: AppColorsExt.dark,
-    scaffoldBackground: AppColors.darkBgPrimary,
+    scaffoldBackground: AppColors.dark900,
   );
 
   static ThemeData _build({
@@ -28,6 +28,7 @@ abstract final class AppTheme {
       brightness: colors.brightness,
       colorScheme: colors,
       scaffoldBackgroundColor: scaffoldBackground,
+      fontFamily: 'Inter',
       textTheme: textTheme,
       extensions: [appColors, textThemeExt],
       floatingActionButtonTheme: FloatingActionButtonComponentTheme.build(

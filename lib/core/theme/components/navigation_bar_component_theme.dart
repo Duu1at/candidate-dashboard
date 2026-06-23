@@ -9,7 +9,7 @@ abstract final class NavigationBarComponentTheme {
   ) {
     return NavigationBarThemeData(
       backgroundColor: colors.surface,
-      indicatorColor: appColors.brandAmberSoft,
+      indicatorColor: appColors.accentBlueSoft,
       iconTheme: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
           return IconThemeData(color: colors.primary);

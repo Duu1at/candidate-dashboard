@@ -24,15 +24,15 @@ final class AppTextTheme {
   factory AppTextTheme.from(Color color) {
     return AppTextTheme(
       displayLarge: _style(
+        48,
         56,
-        64,
         FontWeight.w700,
         tabular: true,
         color: color,
       ),
       displayMedium: _style(
-        56,
-        64,
+        40,
+        48,
         FontWeight.w700,
         tabular: true,
         color: color,
@@ -44,18 +44,18 @@ final class AppTextTheme {
         tabular: true,
         color: color,
       ),
-      headlineLarge: _style(28, 34, FontWeight.w700, color: color),
-      headlineMedium: _style(22, 28, FontWeight.w600, color: color),
+      headlineLarge: _style(27, 33, FontWeight.w700, color: color),
+      headlineMedium: _style(20, 26, FontWeight.w700, color: color),
       headlineSmall: _style(18, 24, FontWeight.w600, color: color),
-      titleLarge: _style(22, 28, FontWeight.w600, color: color),
-      titleMedium: _style(18, 24, FontWeight.w600, color: color),
-      titleSmall: _style(16, 24, FontWeight.w600, color: color),
-      bodyLarge: _style(16, 24, FontWeight.w600, color: color),
-      bodyMedium: _style(16, 24, FontWeight.w400, color: color),
+      titleLarge: _style(16, 22, FontWeight.w600, color: color),
+      titleMedium: _style(16, 22, FontWeight.w600, color: color),
+      titleSmall: _style(14, 20, FontWeight.w600, color: color),
+      bodyLarge: _style(15, 22, FontWeight.w600, color: color),
+      bodyMedium: _style(14, 22, FontWeight.w400, color: color),
       bodySmall: _style(13, 18, FontWeight.w500, color: color),
-      labelLarge: _style(17, 22, FontWeight.w600, color: color),
-      labelMedium: _style(13, 18, FontWeight.w500, color: color),
-      labelSmall: _style(13, 18, FontWeight.w500, color: color),
+      labelLarge: _style(15, 20, FontWeight.w600, color: color),
+      labelMedium: _style(13, 18, FontWeight.w600, color: color),
+      labelSmall: _style(12, 16, FontWeight.w500, color: color),
       amountSmall: _style(24, 32, FontWeight.w700, tabular: true, color: color),
     );
   }
@@ -81,55 +81,54 @@ final class AppTextTheme {
     );
   }
 
-  /// 56 / 64 · w700 · tabular-nums — biggest number / timer display.
+  /// 48 / 56 · w700
   final TextStyle displayLarge;
 
-  /// 56 / 64 · w700 · tabular-nums — alias of [displayLarge].
+  /// 40 / 48 · w700
   final TextStyle displayMedium;
 
-  /// 32 / 40 · w700 · tabular-nums — large amount (money, stat).
+  /// 32 / 40 · w700
   final TextStyle displaySmall;
 
-  /// 28 / 34 · w700 — screen title (H1).
+  /// 27 / 33 · w700
   final TextStyle headlineLarge;
 
-  /// 22 / 28 · w600 — section title (H2).
+  /// 20 / 26 · w700
   final TextStyle headlineMedium;
 
-  /// 18 / 24 · w600 — subsection title (H3).
+  /// 18 / 24 · w600
   final TextStyle headlineSmall;
 
-  /// 22 / 28 · w600 — AppBar title (Material titleLarge slot).
+  /// 16 / 22 · w600
   final TextStyle titleLarge;
 
-  /// 18 / 24 · w600 — list-tile / row title.
+  /// 16 / 22 · w600
   final TextStyle titleMedium;
 
-  /// 16 / 24 · w600 — emphasized label.
+  /// 14 / 20 · w600
   final TextStyle titleSmall;
 
-  /// 16 / 24 · w600 — bold body text.
+  /// 15 / 22 · w600
   final TextStyle bodyLarge;
 
-  /// 16 / 24 · w400 — default body text.
+  /// 14 / 22 · w400
   final TextStyle bodyMedium;
 
-  /// 13 / 18 · w500 — caption / helper text.
+  /// 13 / 18 · w500
   final TextStyle bodySmall;
 
-  /// 17 / 22 · w600 — button label (Filled / Elevated / Outlined / Text).
+  /// 15 / 20 · w600
   final TextStyle labelLarge;
 
-  /// 13 / 18 · w500 — secondary label (chip, badge).
+  /// 13 / 18 · w600
   final TextStyle labelMedium;
 
-  /// 13 / 18 · w500 — small label (overline-style).
+  /// 12 / 16 · w500
   final TextStyle labelSmall;
 
-  /// 24 / 32 · w700 · tabular-nums — inline money amount (no Material slot).
+  /// 24 / 32 · w700
   final TextStyle amountSmall;
 
-  /// Convert to Material 3 [TextTheme] — pass to `ThemeData(textTheme: ...)`.
   TextTheme toMaterialTextTheme() {
     return TextTheme(
       displayLarge: displayLarge,
@@ -162,6 +161,7 @@ final class AppTextTheme {
       fontSize: size,
       height: height / size,
       fontWeight: weight,
+      fontFamily: 'Inter',
       fontFeatures: tabular ? const [FontFeature.tabularFigures()] : null,
     );
   }

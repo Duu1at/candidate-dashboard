@@ -1,176 +1,176 @@
 import 'package:flutter/material.dart';
 
-/// Single source of truth for every color used in the app.
-///
-/// To find where a Figma hex value lives, search this file. The doc comment
-/// above each constant tells you how the color is exposed by the theme so
-/// you can read it via `Theme.of(context)` or `AppColorsExt` instead of
-/// importing the constant directly.
+/// Single source of truth for every raw color token used in the app.
 ///
 /// Access patterns:
-/// - `colorScheme.X` → `context.colors.X`
-/// - `appColorsExt.X` → `context.appColors.X`
-/// - `AppShadow.X` → raw token; `context.appColors.shadowX` is theme-aware.
+/// - `colorScheme.X`   → semantic Material slots (see comments below)
+/// - `context.appColors.verdictGreen` → verdict palette
+/// - Raw constant → only when no theme-aware path exists
 abstract final class AppColors {
-  /// Brand primary.
-  /// → `colorScheme.primary` (light + dark)
-  static const Color brandAmber = Color(0xFFD97706);
+  /// → colorScheme.primary (light + dark)
+  static const Color accentBlue = Color(0xFF1E88E5);
 
-  /// Brand dark variant.
-  /// → `colorScheme.primaryContainer` (dark) / `colorScheme.onPrimaryContainer` (light)
-  /// → `colorScheme.inversePrimary` (dark)
-  static const Color brandAmberDark = Color(0xFFB45309);
+  /// → colorScheme.primaryContainer (light)
+  static const Color accentBlueLight = Color(0xFFE3F2FD);
 
-  /// Brand light variant.
-  /// → `colorScheme.primaryContainer` (light) / `colorScheme.onPrimaryContainer` (dark)
-  /// → `colorScheme.inversePrimary` (light)
-  static const Color brandAmberLight = Color(0xFFFEF3C7);
+  /// → colorScheme.primaryContainer (dark) / inversePrimary (light)
+  static const Color accentBlueDark = Color(0xFF5BA8F0);
 
-  /// Soft brand overlay (light) — used for the NavigationBar indicator.
-  /// → `appColors.brandAmberSoft` (light)
-  static const Color brandAmberSoftLight = Color(0x20D97706);
+  /// → appColors.accentBlueSoft (light)
+  static const Color accentBlueSoftLight = Color(0x291E88E5);
 
-  /// Soft brand overlay (dark).
-  /// → `appColors.brandAmberSoft` (dark)
-  static const Color brandAmberSoftDark = Color(0x33D97706);
+  /// → appColors.accentBlueSoft (dark)
+  static const Color accentBlueSoftDark = Color(0x381E88E5);
 
-  /// Success / positive state color.
-  /// → `colorScheme.secondary` (light + dark)
-  /// → `appColors.success`
-  static const Color successGreen = Color(0xFF65A30D);
+  /// → colorScheme.secondary (light + dark)
+  static const Color verdictGreen = Color(0xFF22C55E);
 
-  /// Success dark variant.
-  /// → `colorScheme.secondaryContainer` (dark) / `colorScheme.onSecondaryContainer` (light)
-  /// → `appColors.successContainer` (dark) / `appColors.onSuccessContainer` (light)
-  static const Color successDark = Color(0xFF4D7C0F);
+  /// → colorScheme.onSecondaryContainer (light)
+  static const Color verdictGreenDark = Color(0xFF15803D);
 
-  /// Success light variant.
-  /// → `colorScheme.secondaryContainer` (light) / `colorScheme.onSecondaryContainer` (dark)
-  /// → `appColors.successContainer` (light) / `appColors.onSuccessContainer` (dark)
-  static const Color successLight = Color(0xFFECFCCB);
+  /// → colorScheme.secondaryContainer (light)
+  static const Color verdictGreenLight = Color(0xFFDCFCE7);
 
-  /// Danger / error color.
-  /// → `colorScheme.error` (light + dark)
+  /// → colorScheme.onSecondaryContainer (dark)
+  static const Color verdictGreenMod = Color(0xFF4ADE80);
+
+  /// → colorScheme.secondaryContainer (dark)
+  static const Color verdictGreenSoft = Color(0x2922C55E);
+
+  /// → colorScheme.tertiary (light + dark)
+  static const Color verdictOrange = Color(0xFFF59E0B);
+
+  /// → colorScheme.onTertiaryContainer (light)
+  static const Color verdictOrangeDark = Color(0xFFB45309);
+
+  /// Orange pill background (light) / offline banner bg.
+  /// → colorScheme.tertiaryContainer (light)
+  static const Color verdictOrangeLight = Color(0xFFFEF3C7);
+
+  /// → colorScheme.onTertiaryContainer (dark)
+  static const Color verdictOrangeMod = Color(0xFFFBBF24);
+
+  /// → colorScheme.tertiaryContainer (dark)
+  static const Color verdictOrangeSoft = Color(0x29F59E0B);
+
+  /// Amber-800 — offline banner foreground text (light mode).
+  static const Color offlineTextAmber = Color(0xFF92400E);
+
+  /// Red dot — "no" criterion indicator, НЕ ПОДХОДИТ verdict dot.
+  static const Color verdictRed = Color(0xFFEF4444);
+
+  /// → colorScheme.onErrorContainer (light)
+  static const Color verdictRedDark = Color(0xFFB91C1C);
+
+  /// Red pill background (light).
+  /// → colorScheme.errorContainer (light)
+  static const Color verdictRedLight = Color(0xFFFEE2E2);
+
+  /// Red text for dark pill / chip.
+  static const Color verdictRedMod = Color(0xFFF87171);
+
+  /// Translucent red @ 16% alpha — pill bg on dark surfaces.
+  /// → colorScheme.errorContainer (dark)
+  static const Color verdictRedSoft = Color(0x29EF4444);
+
+  /// Reject-button label color / destructive alert.
+  /// → colorScheme.error (light + dark)
   static const Color dangerRed = Color(0xFFDC2626);
 
-  /// Danger dark variant.
-  /// → `colorScheme.errorContainer` (dark) / `colorScheme.onErrorContainer` (light)
-  static const Color dangerDark = Color(0xFFB91C1C);
+  /// Reject-button border (light).
+  static const Color dangerBorderLight = Color(0xFFFECACA);
 
-  /// Danger light variant.
-  /// → `colorScheme.errorContainer` (light) / `colorScheme.onErrorContainer` (dark)
-  static const Color dangerLight = Color(0xFFFEE2E2);
+  /// Reject-button border (dark).
+  static const Color dangerBorderDark = Color(0xFF4C2A2A);
 
-  /// Warning color.
-  /// → `appColors.warning`
-  static const Color warningAmber = Color(0xFFF59E0B);
+  /// Reject-button surface (dark).
+  static const Color dangerSurfaceDark = Color(0xFF1A1416);
 
-  /// Warning light variant.
-  /// → `appColors.warningContainer` (light)
-  static const Color warningLight = Color(0xFFFEF3C7);
+  /// → colorScheme.onSurface (light) / colorScheme.inverseSurface (light)
+  static const Color slate900 = Color(0xFF0F172A);
 
-  /// Info color.
-  /// → `colorScheme.tertiary` (light + dark)
-  /// → `appColors.info`
-  static const Color infoCyan = Color(0xFF0891B2);
+  /// Strong secondary text — section headings, list labels.
+  static const Color slate700 = Color(0xFF334155);
 
-  /// Info dark variant (cyan-800).
-  /// → `colorScheme.tertiaryContainer` (dark)
-  /// → `appColors.infoContainer` (dark)
-  static const Color infoDark = Color(0xFF155E75);
+  /// Tertiary text — avatar initials, divider labels.
+  static const Color slate600 = Color(0xFF475569);
 
-  /// Info light variant.
-  /// → `colorScheme.tertiaryContainer` (light)
-  /// → `appColors.infoContainer` (light)
-  static const Color infoLight = Color(0xFFCFFAFE);
+  /// → colorScheme.onSurfaceVariant (light)
+  static const Color slate500 = Color(0xFF64748B);
 
-  /// Darkest text / surface tone.
-  /// → `colorScheme.onSurface` (light)
-  /// → `colorScheme.inverseSurface` (light)
-  /// → `appColors.onWarning`
-  static const Color ink900 = Color(0xFF1C1917);
+  /// Muted / hint / "rejected" status dot.
+  static const Color slate400 = Color(0xFF94A3B8);
 
-  /// Secondary text (light).
-  /// → `colorScheme.outlineVariant` (dark)
-  static const Color ink700 = Color(0xFF44403C);
+  /// → colorScheme.outline (light)
+  static const Color slate300 = Color(0xFFCBD5E1);
 
-  /// Helper text / disabled.
-  /// → `colorScheme.onSurfaceVariant` (light)
-  static const Color ink500 = Color(0xFF78716C);
+  /// → colorScheme.outlineVariant (light)
+  static const Color slate200 = Color(0xFFE2E8F0);
 
-  /// Border / disabled background (light).
-  /// → `colorScheme.outline` (light)
-  /// → `colorScheme.onSurfaceVariant` (dark)
-  static const Color ink300 = Color(0xFFD6D3D1);
+  /// → colorScheme.surfaceContainerHigh / Highest (light)
+  static const Color slate100 = Color(0xFFF1F5F9);
 
-  /// Soft surface (light).
-  /// → `colorScheme.surfaceContainerHigh / surfaceContainerHighest` (light)
-  /// → `colorScheme.outlineVariant` (light)
-  /// → `colorScheme.inverseSurface` (dark)
-  static const Color ink100 = Color(0xFFF5F5F4);
+  /// → colorScheme.surfaceContainerLow (light) / scaffoldBackground (light)
+  static const Color iosGray = Color(0xFFF2F2F7);
 
-  /// Lightest neutral (reserved; not currently used by ColorScheme).
-  static const Color ink50 = Color(0xFFFAFAF9);
+  /// Avatar placeholder background (light).
+  static const Color avatarBgLight = Color(0xFFEEF2F6);
 
-  /// White.
-  /// → `colorScheme.onPrimary / onSecondary / onError / onTertiary`
-  /// → `colorScheme.onInverseSurface` (light)
-  /// → `colorScheme.surface / surfaceContainer / surfaceContainerLowest / surfaceContainerLow` (light)
-  /// → `colorScheme.onSurface` (dark)
+  /// → colorScheme.surfaceContainerLowest / Low (dark) / scaffoldBackground (dark)
+  static const Color dark900 = Color(0xFF0B0F14);
+
+  /// Header / bottom bar / status bar surface (dark).
+  static const Color dark800 = Color(0xFF11161D);
+
+  /// → colorScheme.surface / surfaceContainer / surfaceContainerHigh (dark)
+  static const Color dark700 = Color(0xFF161C24);
+
+  /// → colorScheme.surfaceContainerHighest (dark)
+  static const Color dark600 = Color(0xFF1E2630);
+
+  /// → colorScheme.outline (dark)
+  static const Color dark500 = Color(0xFF232B36);
+
+  /// → colorScheme.outlineVariant (dark)
+  static const Color dark400 = Color(0xFF2A3340);
+
+  /// Inactive timeline dot / empty step ring (dark).
+  static const Color dark300 = Color(0xFF3A4656);
+
+  /// → colorScheme.onSurface (dark)
+  static const Color darkText100 = Color(0xFFF1F5F9);
+
+  /// → colorScheme.onSurfaceVariant (dark)
+  static const Color darkText200 = Color(0xFFC2CCD8);
+
+  /// Muted text (dark).
+  static const Color darkText300 = Color(0xFF8A97A8);
+
+  /// Label / caption (dark).
+  static const Color darkText400 = Color(0xFF7C8794);
+
   static const Color white = Color(0xFFFFFFFF);
-
-  /// Pure black — `colorScheme.shadow / scrim`.
   static const Color black = Color(0xFF000000);
-
-  /// Transparent — surface tints, status bar, transparent overlays.
   static const Color transparent = Color(0x00000000);
 
-  /// Modal / scrim overlay (50% black).
+  /// 50% black — modal scrim / backdrop.
   static const Color overlay = Color(0x80000000);
 
-  /// Dark mode scaffold background.
-  /// → `colorScheme.surfaceContainerLow / surfaceContainerLowest` (dark)
-  /// → Scaffold background (dark)
-  static const Color darkBgPrimary = Color(0xFF0F0D0B);
-
-  /// Dark mode card / sheet / dialog surface.
-  /// → `colorScheme.surface / surfaceContainer / surfaceContainerHigh` (dark)
-  static const Color darkBgSecondary = Color(0xFF161310);
-
-  /// Dark mode chip / input / tonal-button surface.
-  /// → `colorScheme.surfaceContainerHighest` (dark)
-  static const Color darkBgTertiary = Color(0xFF201B17);
-
-  /// Dark mode border / divider.
-  /// → `colorScheme.outline` (dark)
-  static const Color darkBgBorder = Color(0xFF2E2825);
-
-  /// Light mode scaffold background (warm off-white).
-  /// → `colorScheme.surfaceContainerLow` (light)
-  /// → Scaffold background (light)
-  static const Color bgWarm = Color(0xFFFAF6F0);
-
-  /// Light shadow (light mode) — sm.
-  /// → `AppShadow.smLight`
+  /// Card shadow (light) — black @ 4%.
   static const Color shadowSmLight = Color(0x0A000000);
 
-  /// Medium shadow (light mode) — md.
-  /// → `AppShadow.mdLight`
-  static const Color shadowMdLight = Color(0x14000000);
+  /// Panel shadow (light) — black @ 5%.
+  static const Color shadowMdLight = Color(0x0D000000);
 
-  /// Strong shadow (light mode) — lg.
-  /// → `AppShadow.lgLight`
-  static const Color shadowLgLight = Color(0x1F000000);
+  /// Sheet shadow (light) — black @ 7%.
+  static const Color shadowLgLight = Color(0x12000000);
 
-  /// Light shadow (dark mode) — denser black so it remains visible on dark surfaces.
-  /// → `AppShadow.smDark`
+  /// Card shadow (dark) — black @ 20%.
   static const Color shadowSmDark = Color(0x33000000);
 
-  /// Medium shadow (dark mode).
-  /// → `AppShadow.mdDark`
+  /// Panel shadow (dark) — black @ 28%.
   static const Color shadowMdDark = Color(0x47000000);
 
-  /// Strong shadow (dark mode).
-  /// → `AppShadow.lgDark`
+  /// Sheet shadow (dark) — black @ 40%.
   static const Color shadowLgDark = Color(0x66000000);
 }
