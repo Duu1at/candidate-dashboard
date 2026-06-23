@@ -6,7 +6,7 @@ import '../../features/candidates_list/view/candidates_list_view.dart';
 import 'app_routes.dart';
 
 final appRouter = GoRouter(
-  initialLocation: AppRoutes.init,
+  initialLocation: AppRoutes.candidatesList,
   routes: [
     GoRoute(
       path: AppRoutes.candidatesList,

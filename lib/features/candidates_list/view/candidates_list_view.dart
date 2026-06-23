@@ -39,8 +39,11 @@ class _CandidatesListViewState extends State<CandidatesListView> {
     }
   }
 
-  void _onSearch(String q) =>
-      _debouncer.run(() => context.read<CandidatesListCubit>().search(q));
+  void _onSearch(String q) {
+    _debouncer.run(() {
+      context.read<CandidatesListCubit>().search(q);
+    });
+  }
 
   void _onClear() {
     _searchController.clear();
@@ -70,24 +73,29 @@ class _CandidatesListViewState extends State<CandidatesListView> {
           children: [
             BlocBuilder<CandidatesListCubit, CandidatesListState>(
               buildWhen: (a, b) => a.isOffline != b.isOffline,
-              builder: (_, state) => state.isOffline
-                  ? const OfflineBanner()
-                  : const SizedBox.shrink(),
+              builder: (_, state) {
+                return state.isOffline
+                    ? const OfflineBanner()
+                    : const SizedBox.shrink();
+              },
             ),
             ListHeader(
               searchController: _searchController,
               onSearch: _onSearch,
               onClear: _onClear,
-              onFilterSelected:
-                  context.read<CandidatesListCubit>().filterByVerdict,
+              onFilterSelected: context
+                  .read<CandidatesListCubit>()
+                  .filterByVerdict,
             ),
             BlocBuilder<CandidatesListCubit, CandidatesListState>(
-              buildWhen: (a, b) =>
-                  a.status != b.status ||
-                  a.displayedCandidates.length !=
-                      b.displayedCandidates.length ||
-                  a.filteredCandidates.length != b.filteredCandidates.length ||
-                  a.sortBy != b.sortBy,
+              buildWhen: (a, b) {
+                return a.status != b.status ||
+                    a.displayedCandidates.length !=
+                        b.displayedCandidates.length ||
+                    a.filteredCandidates.length !=
+                        b.filteredCandidates.length ||
+                    a.sortBy != b.sortBy;
+              },
               builder: (context, state) {
                 if (state.status != CandidatesListStatus.loaded) {
                   return const SizedBox.shrink();
@@ -103,8 +111,7 @@ class _CandidatesListViewState extends State<CandidatesListView> {
               child: CandidateListBody(
                 scrollController: _scrollController,
                 onReset: _resetFilters,
-                onCardTap: (id) =>
-                    context.push('/candidates/candidate/$id'),
+                onCardTap: (id) => context.push('/candidates/candidate/$id'),
               ),
             ),
           ],
