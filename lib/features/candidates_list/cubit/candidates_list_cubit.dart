@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:injectable/injectable.dart';
 
 import '../../../core/utils/candidate_filter.dart';
 import '../../../data/models/candidate.dart';
@@ -10,7 +8,6 @@ import 'candidates_list_state.dart';
 
 const _pageSize = 10;
 
-@injectable
 class CandidatesListCubit extends Cubit<CandidatesListState> {
   CandidatesListCubit(this._repository) : super(const CandidatesListState());
 
