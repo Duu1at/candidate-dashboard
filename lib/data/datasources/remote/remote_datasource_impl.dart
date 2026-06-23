@@ -6,7 +6,7 @@ import '../../models/candidate.dart';
 import 'remote_datasource.dart';
 
 @LazySingleton(as: RemoteDatasource)
-class RemoteDatasourceImpl implements RemoteDatasource {
+final class RemoteDatasourceImpl implements RemoteDatasource {
   RemoteDatasourceImpl(this._dio);
 
   final Dio _dio;
