@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../../core/utils/candidate_filter.dart';
+import 'package:candidate_dashboard/core/core.dart';
 
 class SortBottomSheet extends StatelessWidget {
   const SortBottomSheet({

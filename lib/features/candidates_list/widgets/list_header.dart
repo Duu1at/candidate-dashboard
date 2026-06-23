@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:candidate_dashboard/core/core.dart';
-
-import '../cubit/candidates_list_cubit.dart';
-import '../cubit/candidates_list_state.dart';
-import 'candidates_search_field.dart';
-import 'filter_chips_row.dart';
+import 'package:candidate_dashboard/features/candidates_list/candidates_list.dart';
 
 class ListHeader extends StatelessWidget {
   const ListHeader({
@@ -33,6 +29,12 @@ class ListHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          BlocBuilder<CandidatesListCubit, CandidatesListState>(
+            buildWhen: (a, b) => a.isOffline != b.isOffline,
+            builder: (_, state) => state.isOffline
+                ? const OfflineBanner()
+                : const SizedBox.shrink(),
+          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(
               AppSpacing.x5,
@@ -66,7 +68,7 @@ class ListHeader extends StatelessWidget {
               AppSpacing.x5,
               AppSpacing.x3,
               AppSpacing.x5,
-              0,
+              AppSpacing.x2,
             ),
             child: CandidatesSearchField(
               controller: searchController,
@@ -75,9 +77,10 @@ class ListHeader extends StatelessWidget {
             ),
           ),
           BlocBuilder<CandidatesListCubit, CandidatesListState>(
-            buildWhen: (a, b) =>
-                a.verdictFilter != b.verdictFilter ||
-                a.allCandidates != b.allCandidates,
+            buildWhen: (a, b) {
+              return a.verdictFilter != b.verdictFilter ||
+                  a.allCandidates != b.allCandidates;
+            },
             builder: (context, state) {
               return FilterChipsRow(
                 selected: state.verdictFilter,

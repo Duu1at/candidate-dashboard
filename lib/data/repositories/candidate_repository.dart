@@ -1,4 +1,4 @@
-import '../models/candidate.dart';
+import 'package:candidate_dashboard/data/data.dart';
 
 abstract class CandidateRepository {
   Future<List<Candidate>> getCandidates({bool forceRefresh = false});

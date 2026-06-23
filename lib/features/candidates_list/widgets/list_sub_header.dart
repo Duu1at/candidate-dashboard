@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:candidate_dashboard/core/core.dart';
-
-import '../../../core/utils/candidate_filter.dart';
-import '../cubit/candidates_list_cubit.dart';
-import 'sort_bottom_sheet.dart';
+import 'package:candidate_dashboard/features/candidates_list/candidates_list.dart';
 
 class ListSubHeader extends StatelessWidget {
   const ListSubHeader({
@@ -35,15 +32,17 @@ class ListSubHeader extends StatelessWidget {
           ),
           const Spacer(),
           GestureDetector(
-            onTap: () => showModalBottomSheet<void>(
-              context: context,
-              builder: (_) {
-                return SortBottomSheet(
-                  current: sortOption,
-                  onSelect: context.read<CandidatesListCubit>().sortBy,
-                );
-              },
-            ),
+            onTap: () {
+              showModalBottomSheet<void>(
+                context: context,
+                builder: (_) {
+                  return SortBottomSheet(
+                    current: sortOption,
+                    onSelect: context.read<CandidatesListCubit>().sortBy,
+                  );
+                },
+              );
+            },
             behavior: HitTestBehavior.opaque,
             child: Row(
               mainAxisSize: MainAxisSize.min,

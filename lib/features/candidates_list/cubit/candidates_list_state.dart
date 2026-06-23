@@ -1,8 +1,6 @@
+import 'package:candidate_dashboard/core/core.dart';
+import 'package:candidate_dashboard/data/data.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '../../../core/utils/candidate_filter.dart';
-import '../../../data/models/candidate.dart';
-
 part 'candidates_list_state.freezed.dart';
 
 enum CandidatesListStatus { initial, loading, loaded, error }

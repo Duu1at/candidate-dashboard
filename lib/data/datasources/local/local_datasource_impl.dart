@@ -1,9 +1,7 @@
 import 'dart:convert';
+import 'package:candidate_dashboard/data/data.dart';
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
-
-import '../../models/candidate.dart';
-import 'local_datasource.dart';
 
 const _kCandidatesKey = 'candidates_list';
 const _kStatusesKey = 'statuses_map';

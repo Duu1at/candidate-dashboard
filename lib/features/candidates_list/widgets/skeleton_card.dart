@@ -50,11 +50,13 @@ class _SkeletonCardState extends State<SkeletonCard>
           ),
           child: AnimatedBuilder(
             animation: _controller,
-            builder: (_, _) => _SkeletonContent(
-              t: _controller.value,
-              base: base,
-              highlight: highlight,
-            ),
+            builder: (_, _) {
+              return _SkeletonContent(
+                t: _controller.value,
+                base: base,
+                highlight: highlight,
+              );
+            },
           ),
         ),
       ),
@@ -79,16 +81,18 @@ class _SkeletonContent extends StatelessWidget {
     colors: [base, highlight, base],
   );
 
-  Widget _bar(double w, double h, double radius) => SizedBox(
-    width: w,
-    height: h,
-    child: DecoratedBox(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(radius),
-        gradient: _gradient,
+  Widget _bar(double w, double h, double radius) {
+    return SizedBox(
+      width: w,
+      height: h,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(radius),
+          gradient: _gradient,
+        ),
       ),
-    ),
-  );
+    );
+  }
 
   Widget _circle(double size) => SizedBox(
     width: size,

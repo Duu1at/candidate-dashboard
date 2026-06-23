@@ -1,10 +1,8 @@
 import 'dart:async';
+import 'package:candidate_dashboard/core/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../core/utils/candidate_filter.dart';
-import '../../../data/models/candidate.dart';
-import '../../../data/repositories/candidate_repository.dart';
-import 'candidates_list_state.dart';
+import 'package:candidate_dashboard/data/data.dart';
+import 'package:candidate_dashboard/features/candidates_list/candidates_list.dart';
 
 const _pageSize = 10;
 

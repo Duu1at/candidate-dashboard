@@ -1,7 +1,6 @@
+import 'package:candidate_dashboard/data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:candidate_dashboard/core/core.dart';
-
-import '../../../data/models/candidate.dart';
 
 const _kOptions = [
   (null, 'Все', null),
@@ -55,9 +54,17 @@ class FilterChipsRow extends StatelessWidget {
               label: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(label, style: context.textTheme.labelMedium?.copyWith(color: fg)),
+                  Text(
+                    label,
+                    style: context.textTheme.labelMedium?.copyWith(color: fg),
+                  ),
                   const SizedBox(width: 6),
-                  Text('$count', style: context.textTheme.labelSmall?.copyWith(color: countFg)),
+                  Text(
+                    '$count',
+                    style: context.textTheme.labelSmall?.copyWith(
+                      color: countFg,
+                    ),
+                  ),
                 ],
               ),
               selected: isSelected,

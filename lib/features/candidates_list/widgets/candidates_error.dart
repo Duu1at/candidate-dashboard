@@ -32,6 +32,9 @@ class CandidatesError extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.x4),
             FilledButton.icon(
+              style: FilledButton.styleFrom(
+                backgroundColor: context.colors.error,
+              ),
               onPressed: onRetry,
               icon: const Icon(Icons.refresh_rounded),
               label: const Text('Повторить'),
