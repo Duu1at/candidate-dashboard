@@ -5,8 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:candidate_dashboard/core/core.dart';
 import 'package:candidate_dashboard/features/candidates_list/candidates_list.dart';
 
-// ListHeader content height: title(55) + topPad(8) + searchPad(12) + search(48) + chips(56)
-const _kHeaderHeight = 140.0;
+// ListHeader content height: title(55) + topPad(8) + searchPad(12) + search(48) + chips(16)
+const _kHeaderHeight = 138.0;
 // OfflineBanner: vertical padding(8×2) + labelMedium lineHeight(18)
 const _kOfflineBannerHeight = 34.0;
 

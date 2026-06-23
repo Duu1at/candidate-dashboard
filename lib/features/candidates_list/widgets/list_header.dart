@@ -68,7 +68,7 @@ class ListHeader extends StatelessWidget {
               AppSpacing.x5,
               AppSpacing.x3,
               AppSpacing.x5,
-              AppSpacing.x2,
+              AppSpacing.x1,
             ),
             child: CandidatesSearchField(
               controller: searchController,
