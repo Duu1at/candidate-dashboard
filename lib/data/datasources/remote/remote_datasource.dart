@@ -1,4 +1,4 @@
-import '../../models/candidate.dart';
+import 'package:candidate_dashboard/data/data.dart';
 
 abstract interface class RemoteDatasource {
   Future<List<Candidate>> getCandidates();

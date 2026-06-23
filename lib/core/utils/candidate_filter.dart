@@ -1,4 +1,4 @@
-import '../../data/models/candidate.dart';
+import 'package:candidate_dashboard/data/models/candidate.dart';
 
 enum SortOption {
   name('По имени'),
@@ -15,7 +15,7 @@ List<Candidate> filterAndSort({
   required String? verdictFilter,
   required SortOption sortBy,
 }) {
-  var result = candidates.where((c) {
+  final result = candidates.where((c) {
     final matchesQuery =
         query.isEmpty || c.name.toLowerCase().contains(query.toLowerCase());
     final matchesVerdict = verdictFilter == null || c.verdict == verdictFilter;
@@ -26,7 +26,9 @@ List<Candidate> filterAndSort({
     case SortOption.name:
       result.sort((a, b) => a.name.compareTo(b.name));
     case SortOption.experience:
-      result.sort((a, b) => _parseYears(b.totalExp).compareTo(_parseYears(a.totalExp)));
+      result.sort(
+        (a, b) => _parseYears(b.totalExp).compareTo(_parseYears(a.totalExp)),
+      );
     case SortOption.dateAdded:
       result.sort((a, b) => (b.dateAdded ?? '').compareTo(a.dateAdded ?? ''));
   }

@@ -2,11 +2,7 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:injectable/injectable.dart';
-
-import '../datasources/local/local_datasource.dart';
-import '../datasources/remote/remote_datasource.dart';
-import '../models/candidate.dart';
-import 'candidate_repository.dart';
+import 'package:candidate_dashboard/data/data.dart';
 
 @LazySingleton(as: CandidateRepository)
 class CandidateRepositoryImpl implements CandidateRepository {
@@ -36,15 +32,13 @@ class CandidateRepositoryImpl implements CandidateRepository {
       try {
         var candidates = await _remote.getCandidates();
         final statuses = await _local.getLocalStatuses();
-        candidates =
-            candidates
-                .map(
-                  (c) =>
-                      statuses.containsKey(c.id)
-                          ? c.copyWith(status: statuses[c.id]!)
-                          : c,
-                )
-                .toList();
+        candidates = candidates
+            .map(
+              (c) => statuses.containsKey(c.id)
+                  ? c.copyWith(status: statuses[c.id]!)
+                  : c,
+            )
+            .toList();
         _cache = candidates;
         _isOffline = false;
         await _local.cacheCandidates(_cache);
@@ -75,8 +69,9 @@ class CandidateRepositoryImpl implements CandidateRepository {
   @override
   Future<void> updateStatus(String id, String status) async {
     // optimistic update
-    _cache =
-        _cache.map((c) => c.id == id ? c.copyWith(status: status) : c).toList();
+    _cache = _cache
+        .map((c) => c.id == id ? c.copyWith(status: status) : c)
+        .toList();
     _controller.add(List.unmodifiable(_cache));
 
     // persist locally so it survives restart

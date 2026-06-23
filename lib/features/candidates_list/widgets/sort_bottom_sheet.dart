@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-
-import '../../../core/utils/candidate_filter.dart';
+import 'package:candidate_dashboard/core/core.dart';
 
 class SortBottomSheet extends StatelessWidget {
-  const SortBottomSheet({required this.current, required this.onSelect, super.key});
+  const SortBottomSheet({
+    required this.current,
+    required this.onSelect,
+    super.key,
+  });
 
   final SortOption current;
   final ValueChanged<SortOption> onSelect;
@@ -31,12 +34,12 @@ class SortBottomSheet extends StatelessWidget {
               }
             },
             child: Column(
-              children: SortOption.values.map(
-                (option) => RadioListTile<SortOption>(
+              children: SortOption.values.map((option) {
+                return RadioListTile<SortOption>(
                   title: Text(option.label),
                   value: option,
-                ),
-              ).toList(),
+                );
+              }).toList(),
             ),
           ),
           const SizedBox(height: 8),

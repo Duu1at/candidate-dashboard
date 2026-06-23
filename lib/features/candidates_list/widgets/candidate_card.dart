@@ -1,7 +1,10 @@
+import 'package:candidate_dashboard/data/data.dart';
 import 'package:flutter/material.dart';
+import 'package:candidate_dashboard/core/core.dart';
+import 'package:candidate_dashboard/features/candidates_list/candidates_list.dart';
 
-import '../../../core/utils/verdict_colors.dart';
-import '../../../data/models/candidate.dart';
+const _kCardVerticalMargin = 6.0;
+const _kDividerHeight = 14.0;
 
 class CandidateCard extends StatelessWidget {
   const CandidateCard({
@@ -15,71 +18,33 @@ class CandidateCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final status = CandidateStatus.fromValue(candidate.status);
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      candidate.name,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  _VerdictChip(vc: candidate.vc, verdict: candidate.verdict),
-                ],
-              ),
-              const SizedBox(height: 4),
-              Row(
-                children: [
-                  Icon(
-                    Icons.location_on_outlined,
-                    size: 14,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                  const SizedBox(width: 2),
-                  Text(
-                    candidate.city,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
-                  ),
-                  const SizedBox(width: 12),
-                  Icon(
-                    Icons.work_outline_rounded,
-                    size: 14,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                  const SizedBox(width: 2),
-                  Text(
-                    candidate.totalExp,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Text(
-                candidate.stack,
-                style: Theme.of(context).textTheme.bodySmall,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 8),
-              _StatusBadge(status: status),
-            ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.x4,
+        vertical: _kCardVerticalMargin,
+      ),
+      child: Ink(
+        decoration: BoxDecoration(
+          color: context.colors.surface,
+          borderRadius: AppRadius.cardBorderRadius,
+          boxShadow: context.appColors.shadowSm,
+        ),
+        child: InkWell(
+          borderRadius: AppRadius.cardBorderRadius,
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.x4,
+              vertical: AppSpacing.x3,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _CardHeader(candidate),
+                const SizedBox(height: AppSpacing.x3),
+                _CardFooter(candidate),
+              ],
+            ),
           ),
         ),
       ),
@@ -87,60 +52,81 @@ class CandidateCard extends StatelessWidget {
   }
 }
 
-class _VerdictChip extends StatelessWidget {
-  const _VerdictChip({required this.vc, required this.verdict});
+class _CardHeader extends StatelessWidget {
+  const _CardHeader(this.candidate);
 
-  final String vc;
-  final String verdict;
+  final Candidate candidate;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: verdictContainerColor(context, vc),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        verdict,
-        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: onVerdictContainerColor(context, vc),
-              fontWeight: FontWeight.w600,
-            ),
-      ),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CandidateAvatar(candidate.name),
+        const SizedBox(width: AppSpacing.x3),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                candidate.name,
+                style: context.textTheme.bodyLarge,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 3),
+              Text(
+                '${candidate.city} · ${candidate.totalExp}',
+                style: context.appTextStyles.muted.bodySmall,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(width: AppSpacing.x2),
+        VerdictPill(vc: candidate.vc, verdict: candidate.verdict),
+      ],
     );
   }
 }
 
-class _StatusBadge extends StatelessWidget {
-  const _StatusBadge({required this.status});
+class _CardFooter extends StatelessWidget {
+  const _CardFooter(this.candidate);
 
-  final CandidateStatus status;
+  final Candidate candidate;
 
   @override
   Widget build(BuildContext context) {
-    final (bg, fg) = _colors(context, status);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: BorderRadius.circular(4),
-        border: Border.all(color: fg.withValues(alpha: 0.3)),
-      ),
-      child: Text(
-        status.label,
-        style: Theme.of(context).textTheme.labelSmall?.copyWith(color: fg),
-      ),
-    );
-  }
+    final status = CandidateStatus.fromValue(candidate.status);
+    final tags = candidate.stack
+        .split(', ')
+        .where((t) => t.isNotEmpty)
+        .toList();
+    final visibleTags = tags.take(4).toList();
+    final extra = tags.length - visibleTags.length;
 
-  (Color, Color) _colors(BuildContext context, CandidateStatus s) {
-    final cs = Theme.of(context).colorScheme;
-    return switch (s) {
-      CandidateStatus.newCandidate => (cs.surfaceContainerHighest, cs.onSurfaceVariant),
-      CandidateStatus.review => (cs.tertiaryContainer, cs.onTertiaryContainer),
-      CandidateStatus.invited => (cs.secondaryContainer, cs.onSecondaryContainer),
-      CandidateStatus.rejected => (cs.errorContainer, cs.onErrorContainer),
-    };
+    return Row(
+      children: [
+        StatusPill(status),
+        const SizedBox(width: AppSpacing.x2),
+        SizedBox(
+          width: 1,
+          height: _kDividerHeight,
+          child: ColoredBox(color: context.colors.outlineVariant),
+        ),
+        const SizedBox(width: AppSpacing.x2),
+        Expanded(
+          child: Wrap(
+            spacing: AppSpacing.x2,
+            runSpacing: AppSpacing.x1,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              ...visibleTags.map(StackTag.new),
+              if (extra > 0)
+                Text('+$extra', style: context.appTextStyles.muted.labelSmall),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }

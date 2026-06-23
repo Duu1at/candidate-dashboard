@@ -24,8 +24,9 @@ _Candidate _$CandidateFromJson(Map<String, dynamic> json) => _Candidate(
   vc: json['vc'] as String,
   criteria: _expFromJson(json['criteria'] as List),
   summary: json['summary'] as String,
-  questions:
-      (json['questions'] as List<dynamic>).map((e) => e as String).toList(),
+  questions: (json['questions'] as List<dynamic>)
+      .map((e) => e as String)
+      .toList(),
   status: json['status'] as String? ?? 'new',
   dateAdded: json['date_added'] as String?,
 );

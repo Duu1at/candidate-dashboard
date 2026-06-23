@@ -1,4 +1,4 @@
-import '../../models/candidate.dart';
+import 'package:candidate_dashboard/data/data.dart';
 
 abstract class LocalDatasource {
   Future<List<Candidate>?> getCachedCandidates();

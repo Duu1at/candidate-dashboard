@@ -1,16 +1,11 @@
 import 'dart:async';
-
+import 'package:candidate_dashboard/core/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:injectable/injectable.dart';
-
-import '../../../core/utils/candidate_filter.dart';
-import '../../../data/models/candidate.dart';
-import '../../../data/repositories/candidate_repository.dart';
-import 'candidates_list_state.dart';
+import 'package:candidate_dashboard/data/data.dart';
+import 'package:candidate_dashboard/features/candidates_list/candidates_list.dart';
 
 const _pageSize = 10;
 
-@injectable
 class CandidatesListCubit extends Cubit<CandidatesListState> {
   CandidatesListCubit(this._repository) : super(const CandidatesListState());
 
@@ -20,15 +15,19 @@ class CandidatesListCubit extends Cubit<CandidatesListState> {
   Future<void> load({bool forceRefresh = false}) async {
     emit(state.copyWith(status: CandidatesListStatus.loading));
     try {
-      final candidates = await _repository.getCandidates(forceRefresh: forceRefresh);
+      final candidates = await _repository.getCandidates(
+        forceRefresh: forceRefresh,
+      );
       _sub?.cancel();
       _sub = _repository.candidatesStream.listen(_onRemoteUpdate);
       _emitLoaded(candidates, _repository.isOffline);
     } catch (e) {
-      emit(state.copyWith(
-        status: CandidatesListStatus.error,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(
+          status: CandidatesListStatus.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
@@ -43,15 +42,17 @@ class CandidatesListCubit extends Cubit<CandidatesListState> {
       verdictFilter: state.verdictFilter,
       sortBy: state.sortBy,
     );
-    emit(state.copyWith(
-      status: CandidatesListStatus.loaded,
-      allCandidates: all,
-      filteredCandidates: filtered,
-      displayedCandidates: _page(filtered, 1),
-      currentPage: 1,
-      hasMore: filtered.length > _pageSize,
-      isOffline: offline,
-    ));
+    emit(
+      state.copyWith(
+        status: CandidatesListStatus.loaded,
+        allCandidates: all,
+        filteredCandidates: filtered,
+        displayedCandidates: _page(filtered, 1),
+        currentPage: 1,
+        hasMore: filtered.length > _pageSize,
+        isOffline: offline,
+      ),
+    );
   }
 
   void search(String query) {
@@ -61,13 +62,15 @@ class CandidatesListCubit extends Cubit<CandidatesListState> {
       verdictFilter: state.verdictFilter,
       sortBy: state.sortBy,
     );
-    emit(state.copyWith(
-      searchQuery: query,
-      filteredCandidates: filtered,
-      displayedCandidates: _page(filtered, 1),
-      currentPage: 1,
-      hasMore: filtered.length > _pageSize,
-    ));
+    emit(
+      state.copyWith(
+        searchQuery: query,
+        filteredCandidates: filtered,
+        displayedCandidates: _page(filtered, 1),
+        currentPage: 1,
+        hasMore: filtered.length > _pageSize,
+      ),
+    );
   }
 
   void filterByVerdict(String? verdict) {
@@ -77,13 +80,15 @@ class CandidatesListCubit extends Cubit<CandidatesListState> {
       verdictFilter: verdict,
       sortBy: state.sortBy,
     );
-    emit(state.copyWith(
-      verdictFilter: verdict,
-      filteredCandidates: filtered,
-      displayedCandidates: _page(filtered, 1),
-      currentPage: 1,
-      hasMore: filtered.length > _pageSize,
-    ));
+    emit(
+      state.copyWith(
+        verdictFilter: verdict,
+        filteredCandidates: filtered,
+        displayedCandidates: _page(filtered, 1),
+        currentPage: 1,
+        hasMore: filtered.length > _pageSize,
+      ),
+    );
   }
 
   void sortBy(SortOption option) {
@@ -93,13 +98,15 @@ class CandidatesListCubit extends Cubit<CandidatesListState> {
       verdictFilter: state.verdictFilter,
       sortBy: option,
     );
-    emit(state.copyWith(
-      sortBy: option,
-      filteredCandidates: filtered,
-      displayedCandidates: _page(filtered, 1),
-      currentPage: 1,
-      hasMore: filtered.length > _pageSize,
-    ));
+    emit(
+      state.copyWith(
+        sortBy: option,
+        filteredCandidates: filtered,
+        displayedCandidates: _page(filtered, 1),
+        currentPage: 1,
+        hasMore: filtered.length > _pageSize,
+      ),
+    );
   }
 
   void loadNextPage() {
@@ -107,11 +114,13 @@ class CandidatesListCubit extends Cubit<CandidatesListState> {
     final more = _page(state.filteredCandidates, nextPage);
     if (more.isEmpty) return;
     final combined = [...state.displayedCandidates, ...more];
-    emit(state.copyWith(
-      displayedCandidates: combined,
-      currentPage: nextPage,
-      hasMore: combined.length < state.filteredCandidates.length,
-    ));
+    emit(
+      state.copyWith(
+        displayedCandidates: combined,
+        currentPage: nextPage,
+        hasMore: combined.length < state.filteredCandidates.length,
+      ),
+    );
   }
 
   List<Candidate> _page(List<Candidate> list, int page) {
