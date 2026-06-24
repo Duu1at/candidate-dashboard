@@ -5,7 +5,7 @@ import 'package:candidate_dashboard/data/data.dart';
 
 @LazySingleton(as: RemoteDatasource)
 final class RemoteDatasourceImpl implements RemoteDatasource {
-  RemoteDatasourceImpl(this._dio);
+const  RemoteDatasourceImpl(this._dio);
 
   final Dio _dio;
 

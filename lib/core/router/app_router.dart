@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../features/candidate_detail/view/candidate_detail_screen.dart';
-import '../../features/candidates_list/view/candidates_list_view.dart';
-import 'app_routes.dart';
+import 'package:candidate_dashboard/core/core.dart';
+import 'package:candidate_dashboard/features/candidate_detail/candidate_detail.dart';
+import 'package:candidate_dashboard/features/candidates_list/candidates_list.dart';
 
 final appRouter = GoRouter(
   initialLocation: AppRoutes.candidatesList,
@@ -14,7 +14,11 @@ final appRouter = GoRouter(
       routes: [
         GoRoute(
           path: AppRoutes.candidateDetail,
-          builder: (_, _) => const CandidateDetailScreen(),
+          builder: (_, state) => BlocProvider(
+            create: (_) => getIt<CandidateDetailCubit>()
+              ..load(state.pathParameters['id']!),
+            child: const CandidateDetailView(),
+          ),
         ),
       ],
     ),

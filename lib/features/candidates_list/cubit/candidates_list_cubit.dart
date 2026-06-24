@@ -6,8 +6,10 @@ import 'package:candidate_dashboard/features/candidates_list/candidates_list.dar
 
 const _pageSize = 10;
 
-class CandidatesListCubit extends Cubit<CandidatesListState> {
-  CandidatesListCubit(this._repository) : super(const CandidatesListState());
+final class CandidatesListCubit extends Cubit<CandidatesListState> {
+  CandidatesListCubit(CandidateRepository repository)
+    : _repository = repository,
+      super(const CandidatesListState());
 
   final CandidateRepository _repository;
   StreamSubscription<List<Candidate>>? _sub;

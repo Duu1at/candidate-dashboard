@@ -31,36 +31,27 @@ class ListSubHeader extends StatelessWidget {
             style: context.appTextStyles.muted.labelMedium,
           ),
           const Spacer(),
-          GestureDetector(
-            onTap: () {
-              showModalBottomSheet<void>(
-                context: context,
-                builder: (_) {
-                  return SortBottomSheet(
-                    current: sortOption,
-                    onSelect: context.read<CandidatesListCubit>().sortBy,
-                  );
-                },
-              );
-            },
-            behavior: HitTestBehavior.opaque,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.sort_rounded,
-                  size: 16,
-                  color: context.colors.primary,
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  sortOption.label,
-                  style: context.textTheme.labelMedium?.copyWith(
-                    color: context.colors.primary,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
+          TextButton.icon(
+            onPressed: () => showModalBottomSheet<void>(
+              context: context,
+              builder: (_) => SortBottomSheet(
+                current: sortOption,
+                onSelect: context.read<CandidatesListCubit>().sortBy,
+              ),
+            ),
+            icon: const Icon(Icons.sort_rounded, size: 16),
+            label: Text(
+              sortOption.label,
+              style: context.textTheme.labelMedium?.copyWith(
+                color: context.colors.primary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            style: TextButton.styleFrom(
+              foregroundColor: context.colors.primary,
+              padding: EdgeInsets.zero,
+              minimumSize: Size.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
           ),
         ],
