@@ -5,7 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:candidate_dashboard/data/data.dart';
 
 @LazySingleton(as: CandidateRepository)
-class CandidateRepositoryImpl implements CandidateRepository {
+final class CandidateRepositoryImpl implements CandidateRepository {
   CandidateRepositoryImpl(this._remote, this._local);
 
   final RemoteDatasource _remote;

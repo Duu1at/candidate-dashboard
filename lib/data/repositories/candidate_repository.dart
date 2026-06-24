@@ -1,6 +1,6 @@
 import 'package:candidate_dashboard/data/data.dart';
 
-abstract class CandidateRepository {
+abstract interface class CandidateRepository {
   Future<List<Candidate>> getCandidates({bool forceRefresh = false});
   Future<Candidate?> getById(String id);
   Future<void> updateStatus(String id, String status);

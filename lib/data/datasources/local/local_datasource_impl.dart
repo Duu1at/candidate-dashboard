@@ -7,8 +7,8 @@ const _kCandidatesKey = 'candidates_list';
 const _kStatusesKey = 'statuses_map';
 
 @LazySingleton(as: LocalDatasource)
-class LocalDatasourceImpl implements LocalDatasource {
-  LocalDatasourceImpl(
+final class LocalDatasourceImpl implements LocalDatasource {
+ const LocalDatasourceImpl(
     @Named('candidates_box') this._candidatesBox,
     @Named('statuses_box') this._statusesBox,
   );
