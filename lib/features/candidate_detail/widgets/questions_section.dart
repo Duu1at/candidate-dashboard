@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:candidate_dashboard/core/core.dart';
 import 'package:candidate_dashboard/features/candidate_detail/candidate_detail.dart';
 
-class CriteriaSection extends StatelessWidget {
-  const CriteriaSection(this.criteria, {super.key});
+class QuestionsSection extends StatelessWidget {
+  const QuestionsSection(this.questions, {super.key});
 
-  final List<List<String>> criteria;
+  final List<String> questions;
 
   @override
   Widget build(BuildContext context) {
-    if (criteria.isEmpty) return const SizedBox.shrink();
+    if (questions.isEmpty) return const SizedBox.shrink();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SectionLabel('Критерии оценки'),
+        const SectionLabel('Вопросы для собеседования'),
         const SizedBox(height: AppSpacing.x2),
         DecoratedBox(
           decoration: BoxDecoration(
@@ -24,7 +24,7 @@ class CriteriaSection extends StatelessWidget {
           ),
           child: Column(
             children: [
-              for (int i = 0; i < criteria.length; i++) ...[
+              for (int i = 0; i < questions.length; i++) ...[
                 if (i != 0)
                   Divider(
                     height: 1,
@@ -32,10 +32,7 @@ class CriteriaSection extends StatelessWidget {
                     endIndent: AppSpacing.x4,
                     color: context.colors.surfaceContainerHighest,
                   ),
-                _CriteriaItem(
-                  status: criteria[i].elementAtOrNull(0) ?? '',
-                  text: criteria[i].elementAtOrNull(1) ?? '',
-                ),
+                _QuestionItem(number: i + 1, text: questions[i]),
               ],
             ],
           ),
@@ -45,15 +42,14 @@ class CriteriaSection extends StatelessWidget {
   }
 }
 
-class _CriteriaItem extends StatelessWidget {
-  const _CriteriaItem({required this.status, required this.text});
+class _QuestionItem extends StatelessWidget {
+  const _QuestionItem({required this.number, required this.text});
 
-  final String status;
+  final int number;
   final String text;
 
   @override
   Widget build(BuildContext context) {
-    final palette = criteriaPalette(context, status);
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.x4,
@@ -63,12 +59,14 @@ class _CriteriaItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CircleAvatar(
-            radius: 13,
-            backgroundColor: palette.background,
-            child: Icon(
-              criteriaIcon(status),
-              size: 15,
-              color: palette.foreground,
+            radius: 12,
+            backgroundColor: context.colors.surfaceContainerHighest,
+            child: Text(
+              '$number',
+              style: context.textTheme.labelSmall?.copyWith(
+                color: context.colors.onSurfaceVariant,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
           const SizedBox(width: AppSpacing.x3),
