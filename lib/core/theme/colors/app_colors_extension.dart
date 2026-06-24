@@ -13,11 +13,13 @@ final class VerdictPalette {
   final Color foreground;
   final Color dot;
 
-  VerdictPalette _lerp(VerdictPalette other, double t) => VerdictPalette(
+  VerdictPalette _lerp(VerdictPalette other, double t) {
+    return VerdictPalette(
     background: Color.lerp(background, other.background, t)!,
     foreground: Color.lerp(foreground, other.foreground, t)!,
     dot: Color.lerp(dot, other.dot, t)!,
   );
+  }
 }
 
 @immutable

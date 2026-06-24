@@ -1,25 +1,26 @@
-import 'dart:convert';
-import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:candidate_dashboard/core/core.dart';
 import 'package:candidate_dashboard/data/data.dart';
 
 @LazySingleton(as: RemoteDatasource)
 final class RemoteDatasourceImpl implements RemoteDatasource {
-const  RemoteDatasourceImpl(this._dio);
+  const RemoteDatasourceImpl(this._apiClient);
 
-  final Dio _dio;
+  final ApiClient _apiClient;
 
   @override
-  Future<List<Candidate>> getCandidates() async {
-    final response = await _dio.get<String>('/candidates');
-    final data = jsonDecode(response.data!) as List<dynamic>;
-    return data
-        .map((e) => Candidate.fromJson(e as Map<String, dynamic>))
-        .toList();
+  Future<List<Candidate>> getCandidates() {
+    return _apiClient.getListOfType(
+      '/candidates',
+      fromJson: Candidate.fromJson,
+    );
   }
 
   @override
-  Future<void> updateStatus(String id, String status) async {
-    await _dio.patch<void>('/candidates/$id/status', data: {'status': status});
+  Future<void> updateStatus(String id, String status) {
+    return _apiClient.patch<void>(
+      '/candidates/$id/status',
+      data: {'status': status},
+    );
   }
 }

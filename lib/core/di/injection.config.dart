@@ -9,13 +9,11 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:candidate_dashboard/core/di/register_module.dart' as _i436;
-import 'package:candidate_dashboard/data/datasources/local/local_datasource.dart'
-    as _i128;
+import 'package:candidate_dashboard/core/core.dart' as _i712;
+import 'package:candidate_dashboard/core/di/network_module.dart' as _i839;
+import 'package:candidate_dashboard/data/data.dart' as _i846;
 import 'package:candidate_dashboard/data/datasources/local/local_datasource_impl.dart'
     as _i581;
-import 'package:candidate_dashboard/data/datasources/remote/remote_datasource.dart'
-    as _i868;
 import 'package:candidate_dashboard/data/datasources/remote/remote_datasource_impl.dart'
     as _i673;
 import 'package:candidate_dashboard/data/repositories/candidate_repository.dart'
@@ -24,8 +22,6 @@ import 'package:candidate_dashboard/data/repositories/candidate_repository_impl.
     as _i367;
 import 'package:candidate_dashboard/features/candidate_detail/cubit/candidate_detail_cubit.dart'
     as _i160;
-import 'package:candidate_dashboard/features/candidates_list/cubit/candidates_list_cubit.dart'
-    as _i864;
 import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:hive/hive.dart' as _i979;
@@ -38,39 +34,50 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
-    final registerModule = _$RegisterModule();
-    gh.lazySingleton<_i361.Dio>(() => registerModule.dio);
+    final networkModule = _$NetworkModule();
+    gh.lazySingleton<_i712.MockInterceptor>(
+      () => networkModule.mockInterceptor,
+    );
+    gh.lazySingleton<_i712.ConnectionService>(
+      () => networkModule.connectionService,
+    );
     gh.lazySingleton<_i979.Box<String>>(
-      () => registerModule.candidatesBox(),
+      () => networkModule.candidatesBox(),
       instanceName: 'candidates_box',
     );
-    gh.lazySingleton<_i868.RemoteDatasource>(
-      () => _i673.RemoteDatasourceImpl(gh<_i361.Dio>()),
-    );
     gh.lazySingleton<_i979.Box<String>>(
-      () => registerModule.statusesBox(),
+      () => networkModule.statusesBox(),
       instanceName: 'statuses_box',
     );
-    gh.lazySingleton<_i128.LocalDatasource>(
+    gh.lazySingleton<_i361.Dio>(
+      () => networkModule.dio(gh<_i712.MockInterceptor>()),
+    );
+    gh.lazySingleton<_i712.ApiClient>(
+      () => networkModule.apiClient(
+        gh<_i361.Dio>(),
+        gh<_i712.ConnectionService>(),
+      ),
+    );
+    gh.lazySingleton<_i846.LocalDatasource>(
       () => _i581.LocalDatasourceImpl(
         gh<_i979.Box<String>>(instanceName: 'candidates_box'),
         gh<_i979.Box<String>>(instanceName: 'statuses_box'),
       ),
     );
-    gh.lazySingleton<_i891.CandidateRepository>(
+    gh.lazySingleton<_i846.RemoteDatasource>(
+      () => _i673.RemoteDatasourceImpl(gh<_i712.ApiClient>()),
+    );
+    gh.lazySingleton<_i846.CandidateRepository>(
       () => _i367.CandidateRepositoryImpl(
-        gh<_i868.RemoteDatasource>(),
-        gh<_i128.LocalDatasource>(),
+        gh<_i846.RemoteDatasource>(),
+        gh<_i846.LocalDatasource>(),
       ),
     );
     gh.factory<_i160.CandidateDetailCubit>(
       () => _i160.CandidateDetailCubit(gh<_i891.CandidateRepository>()),
     );
-    gh.factory<_i864.CandidatesListCubit>(
-      () => _i864.CandidatesListCubit(gh<_i891.CandidateRepository>()),
-    );
     return this;
   }
 }
 
-class _$RegisterModule extends _i436.RegisterModule {}
+class _$NetworkModule extends _i839.NetworkModule {}
