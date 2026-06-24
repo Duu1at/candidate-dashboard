@@ -16,73 +16,41 @@ class QuestionsSection extends StatelessWidget {
       children: [
         const SectionLabel('Вопросы для собеседования'),
         const SizedBox(height: AppSpacing.x2),
-        DecoratedBox(
-          decoration: BoxDecoration(
-            color: context.colors.surface,
-            borderRadius: AppRadius.cardBorderRadius,
-            boxShadow: context.appColors.shadowSm,
-          ),
+        Card(
+          margin: EdgeInsets.zero,
           child: Column(
-            children: [
-              for (int i = 0; i < questions.length; i++) ...[
-                if (i != 0)
-                  Divider(
-                    height: 1,
-                    indent: AppSpacing.x4,
-                    endIndent: AppSpacing.x4,
-                    color: context.colors.surfaceContainerHighest,
+            children: ListTile.divideTiles(
+              context: context,
+              color: context.colors.surfaceContainerHighest,
+              tiles: questions.indexed.map((record) {
+                final (i, question) = record;
+                return ListTile(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.x4,
                   ),
-                _QuestionItem(number: i + 1, text: questions[i]),
-              ],
-            ],
+                  leading: CircleAvatar(
+                    radius: 12,
+                    backgroundColor: context.colors.surfaceContainerHighest,
+                    child: Text(
+                      '${i + 1}',
+                      style: context.textTheme.labelSmall?.copyWith(
+                        color: context.colors.onSurfaceVariant,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  title: Text(
+                    question,
+                    style: context.textTheme.bodySmall?.copyWith(
+                      color: context.colors.onSurface,
+                    ),
+                  ),
+                );
+              }),
+            ).toList(),
           ),
         ),
       ],
-    );
-  }
-}
-
-class _QuestionItem extends StatelessWidget {
-  const _QuestionItem({required this.number, required this.text});
-
-  final int number;
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.x4,
-        vertical: AppSpacing.x3,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CircleAvatar(
-            radius: 12,
-            backgroundColor: context.colors.surfaceContainerHighest,
-            child: Text(
-              '$number',
-              style: context.textTheme.labelSmall?.copyWith(
-                color: context.colors.onSurfaceVariant,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-          const SizedBox(width: AppSpacing.x3),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(top: AppSpacing.x1),
-              child: Text(
-                text,
-                style: context.textTheme.bodySmall?.copyWith(
-                  color: context.colors.onSurface,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

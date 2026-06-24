@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:candidate_dashboard/data/data.dart';
 import 'package:candidate_dashboard/core/core.dart';
+import 'status_stepper.dart';
 
 class StatusSelector extends StatelessWidget {
   const StatusSelector({
@@ -40,7 +41,7 @@ class StatusSelector extends StatelessWidget {
             children: [
               _StatusHeader(status: status),
               const SizedBox(height: AppSpacing.x3),
-              _StatusStepper(statuses: statuses, currentIndex: currentIndex),
+              StatusStepper(statuses: statuses, currentIndex: currentIndex),
               const SizedBox(height: AppSpacing.x4),
               _ActionRow(
                 status: status,
@@ -60,31 +61,8 @@ class _StatusHeader extends StatelessWidget {
 
   final CandidateStatus status;
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          'СТАТУС ОБРАБОТКИ',
-          style: context.textTheme.labelSmall?.copyWith(
-            color: context.colors.onSurfaceVariant,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.5,
-          ),
-        ),
-        _StatusPill(status: status),
-      ],
-    );
-  }
-}
-
-class _StatusPill extends StatelessWidget {
-  const _StatusPill({required this.status});
-
-  final CandidateStatus status;
-
-  (Color, Color, Color) _colors(BuildContext context) => switch (status) {
+  (Color, Color, Color) _pillColors(BuildContext context) {
+    return switch (status) {
     CandidateStatus.invited => (
       context.appColors.verdictGreen.background,
       context.appColors.verdictGreen.foreground,
@@ -106,158 +84,38 @@ class _StatusPill extends StatelessWidget {
       context.colors.primary,
     ),
   };
-
-  @override
-  Widget build(BuildContext context) {
-    final (bg, fg, dot) = _colors(context);
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: AppRadius.chipBorderRadius,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.x3,
-          vertical: AppSpacing.x1,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CircleAvatar(radius: 3.5, backgroundColor: dot),
-            const SizedBox(width: AppSpacing.x1 + 2),
-            Text(
-              status.label,
-              style: context.textTheme.labelSmall?.copyWith(
-                color: fg,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
-}
-
-class _StatusStepper extends StatelessWidget {
-  const _StatusStepper({required this.statuses, required this.currentIndex});
-
-  final List<CandidateStatus> statuses;
-  final int currentIndex;
-
-  static String _shortLabel(CandidateStatus s) => switch (s) {
-    CandidateStatus.newCandidate => 'Новый',
-    CandidateStatus.review => 'Рассмотр.',
-    CandidateStatus.invited => 'Приглашён',
-    CandidateStatus.rejected => 'Отклонён',
-  };
 
   @override
   Widget build(BuildContext context) {
+    final (bg, fg, dot) = _pillColors(context);
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        for (int i = 0; i < statuses.length; i++) ...[
-          _StepNode(
-            label: _shortLabel(statuses[i]),
-            isPast: i < currentIndex,
-            isCurrent: i == currentIndex,
-          ),
-          if (i < statuses.length - 1)
-            Expanded(
-              child: Padding(
-                // 9 = circle_radius(10) − half_line(1): aligns connector to circle centre
-                padding: const EdgeInsets.only(top: 9, bottom: AppSpacing.x5),
-                child: Divider(
-                  height: 2,
-                  thickness: 2,
-                  color: i < currentIndex
-                      ? context.appColors.verdictGreen.dot
-                      : context.colors.outlineVariant,
-                ),
-              ),
-            ),
-        ],
-      ],
-    );
-  }
-}
-
-class _StepNode extends StatelessWidget {
-  const _StepNode({
-    required this.label,
-    required this.isPast,
-    required this.isCurrent,
-  });
-
-  final String label;
-  final bool isPast;
-  final bool isCurrent;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _StepCircle(isPast: isPast, isCurrent: isCurrent),
-        const SizedBox(height: AppSpacing.x1),
         Text(
-          label,
+          'СТАТУС ОБРАБОТКИ',
           style: context.textTheme.labelSmall?.copyWith(
-            color: isCurrent
-                ? context.colors.primary
-                : context.colors.onSurfaceVariant,
-            fontWeight: isCurrent ? FontWeight.w700 : FontWeight.w500,
+            color: context.colors.onSurfaceVariant,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.5,
           ),
-          maxLines: 1,
+        ),
+        Chip(
+          avatar: CircleAvatar(radius: 3.5, backgroundColor: dot),
+          label: Text(
+            status.label,
+            style: context.textTheme.labelSmall?.copyWith(
+              color: fg,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          backgroundColor: bg,
+          side: BorderSide.none,
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          visualDensity: VisualDensity.compact,
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.x1),
         ),
       ],
-    );
-  }
-}
-
-class _StepCircle extends StatelessWidget {
-  const _StepCircle({required this.isPast, required this.isCurrent});
-
-  final bool isPast;
-  final bool isCurrent;
-
-  static const _checkColor = Color(0xFFFFFFFF);
-
-  @override
-  Widget build(BuildContext context) {
-    if (isPast) {
-      return CircleAvatar(
-        radius: 10,
-        backgroundColor: context.appColors.verdictGreen.dot,
-        child: const Icon(Icons.check, size: 12, color: _checkColor),
-      );
-    }
-    if (isCurrent) {
-      return Container(
-        width: 20,
-        height: 20,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: context.colors.primary,
-          boxShadow: [
-            BoxShadow(
-              color: context.appColors.accentBlueSoft,
-              spreadRadius: 4,
-              blurRadius: 0,
-            ),
-          ],
-        ),
-      );
-    }
-    return Container(
-      width: 20,
-      height: 20,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: context.colors.surface,
-        border: Border.all(color: context.colors.outlineVariant, width: 2),
-      ),
     );
   }
 }

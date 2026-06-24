@@ -22,45 +22,29 @@ class EducationSection extends StatelessWidget {
       children: [
         const SectionLabel('Образование'),
         const SizedBox(height: AppSpacing.x2),
-        DecoratedBox(
-          decoration: BoxDecoration(
-            color: context.colors.surface,
-            borderRadius: AppRadius.cardBorderRadius,
-            boxShadow: context.appColors.shadowSm,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(AppSpacing.x4),
-            child: Row(
-              children: [
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: context.colors.surfaceContainerHighest,
-                    borderRadius: AppRadius.buttonBorderRadius,
-                  ),
-                  child: const SizedBox(
-                    width: 38,
-                    height: 38,
-                    child: Center(child: Icon(Icons.school_outlined, size: 20)),
-                  ),
-                ),
-                const SizedBox(width: AppSpacing.x3),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(institution, style: context.textTheme.titleSmall),
-                      if (details.isNotEmpty)
-                        Text(
-                          details,
-                          style: context.textTheme.bodySmall?.copyWith(
-                            color: context.colors.onSurfaceVariant,
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ],
+        Card(
+          margin: EdgeInsets.zero,
+          child: ListTile(
+            leading: DecoratedBox(
+              decoration: BoxDecoration(
+                color: context.colors.surfaceContainerHighest,
+                borderRadius: AppRadius.buttonBorderRadius,
+              ),
+              child: const SizedBox(
+                width: 38,
+                height: 38,
+                child: Center(child: Icon(Icons.school_outlined, size: 20)),
+              ),
             ),
+            title: Text(institution, style: context.textTheme.titleSmall),
+            subtitle: details.isNotEmpty
+                ? Text(
+                    details,
+                    style: context.textTheme.bodySmall?.copyWith(
+                      color: context.colors.onSurfaceVariant,
+                    ),
+                  )
+                : null,
           ),
         ),
       ],

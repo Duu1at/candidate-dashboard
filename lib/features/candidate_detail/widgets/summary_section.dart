@@ -17,12 +17,8 @@ class SummarySection extends StatelessWidget {
       children: [
         const SectionLabel('Summary'),
         const SizedBox(height: AppSpacing.x2),
-        DecoratedBox(
-          decoration: BoxDecoration(
-            color: context.colors.surface,
-            borderRadius: AppRadius.cardBorderRadius,
-            boxShadow: context.appColors.shadowSm,
-          ),
+        Card(
+          margin: EdgeInsets.zero,
           child: Padding(
             padding: const EdgeInsets.all(AppSpacing.x4),
             child: Text(

@@ -16,29 +16,23 @@ class ExperienceSection extends StatelessWidget {
       children: [
         const SectionLabel('Опыт работы'),
         const SizedBox(height: AppSpacing.x2),
-        DecoratedBox(
-          decoration: BoxDecoration(
-            color: context.colors.surface,
-            borderRadius: AppRadius.cardBorderRadius,
-            boxShadow: context.appColors.shadowSm,
-          ),
+        Card(
+          margin: EdgeInsets.zero,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.x4),
             child: Column(
-              children: [
-                for (int i = 0; i < exp.length; i++) ...[
-                  if (i != 0)
-                    Divider(
-                      height: 1,
-                      color: context.colors.surfaceContainerHighest,
-                    ),
-                  _ExpEntry(
-                    entry: exp[i],
+              children: ListTile.divideTiles(
+                context: context,
+                color: context.colors.surfaceContainerHighest,
+                tiles: exp.indexed.map((record) {
+                  final (i, entry) = record;
+                  return _ExpEntry(
+                    entry: entry,
                     isFirst: i == 0,
                     isLast: i == exp.length - 1,
-                  ),
-                ],
-              ],
+                  );
+                }),
+              ).toList(),
             ),
           ),
         ),
@@ -120,24 +114,19 @@ class _ExpEntry extends StatelessWidget {
             const SizedBox(width: AppSpacing.x2),
             Padding(
               padding: const EdgeInsets.only(top: AppSpacing.x3),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: context.colors.surfaceContainerHighest,
-                  borderRadius: AppRadius.chipBorderRadius,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.x2,
-                    vertical: AppSpacing.x1,
-                  ),
-                  child: Text(
-                    duration,
-                    style: context.textTheme.labelSmall?.copyWith(
-                      color: context.colors.onSurfaceVariant,
-                      fontWeight: FontWeight.w600,
-                    ),
+              child: Chip(
+                label: Text(
+                  duration,
+                  style: context.textTheme.labelSmall?.copyWith(
+                    color: context.colors.onSurfaceVariant,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
+                backgroundColor: context.colors.surfaceContainerHighest,
+                side: BorderSide.none,
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                visualDensity: VisualDensity.compact,
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.x1),
               ),
             ),
           ],

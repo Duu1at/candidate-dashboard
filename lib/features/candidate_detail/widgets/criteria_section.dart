@@ -16,75 +16,40 @@ class CriteriaSection extends StatelessWidget {
       children: [
         const SectionLabel('Критерии оценки'),
         const SizedBox(height: AppSpacing.x2),
-        DecoratedBox(
-          decoration: BoxDecoration(
-            color: context.colors.surface,
-            borderRadius: AppRadius.cardBorderRadius,
-            boxShadow: context.appColors.shadowSm,
-          ),
+        Card(
+          margin: EdgeInsets.zero,
           child: Column(
-            children: [
-              for (int i = 0; i < criteria.length; i++) ...[
-                if (i != 0)
-                  Divider(
-                    height: 1,
-                    indent: AppSpacing.x4,
-                    endIndent: AppSpacing.x4,
-                    color: context.colors.surfaceContainerHighest,
+            children: ListTile.divideTiles(
+              context: context,
+              color: context.colors.surfaceContainerHighest,
+              tiles: criteria.map((item) {
+                final status = item.elementAtOrNull(0) ?? '';
+                final palette = criteriaPalette(context, status);
+                return ListTile(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.x4,
                   ),
-                _CriteriaItem(
-                  status: criteria[i].elementAtOrNull(0) ?? '',
-                  text: criteria[i].elementAtOrNull(1) ?? '',
-                ),
-              ],
-            ],
+                  leading: CircleAvatar(
+                    radius: 13,
+                    backgroundColor: palette.background,
+                    child: Icon(
+                      criteriaIcon(status),
+                      size: 15,
+                      color: palette.foreground,
+                    ),
+                  ),
+                  title: Text(
+                    item.elementAtOrNull(1) ?? '',
+                    style: context.textTheme.bodySmall?.copyWith(
+                      color: context.colors.onSurface,
+                    ),
+                  ),
+                );
+              }),
+            ).toList(),
           ),
         ),
       ],
-    );
-  }
-}
-
-class _CriteriaItem extends StatelessWidget {
-  const _CriteriaItem({required this.status, required this.text});
-
-  final String status;
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    final palette = criteriaPalette(context, status);
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.x4,
-        vertical: AppSpacing.x3,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CircleAvatar(
-            radius: 13,
-            backgroundColor: palette.background,
-            child: Icon(
-              criteriaIcon(status),
-              size: 15,
-              color: palette.foreground,
-            ),
-          ),
-          const SizedBox(width: AppSpacing.x3),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(top: AppSpacing.x1),
-              child: Text(
-                text,
-                style: context.textTheme.bodySmall?.copyWith(
-                  color: context.colors.onSurface,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

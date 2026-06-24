@@ -21,51 +21,34 @@ class StackSection extends StatelessWidget {
       children: [
         const SectionLabel('Стек технологий'),
         const SizedBox(height: AppSpacing.x2),
-        DecoratedBox(
-          decoration: BoxDecoration(
-            color: context.colors.surface,
-            borderRadius: AppRadius.cardBorderRadius,
-            boxShadow: context.appColors.shadowSm,
-          ),
+        Card(
+          margin: EdgeInsets.zero,
           child: Padding(
             padding: const EdgeInsets.all(AppSpacing.x3),
             child: Wrap(
               spacing: AppSpacing.x2,
               runSpacing: AppSpacing.x2,
-              children: skills.map(_SkillTag.new).toList(),
+              children: skills
+                  .map(
+                    (skill) => Chip(
+                      label: Text(
+                        skill,
+                        style: context.textTheme.bodySmall?.copyWith(
+                          color: context.colors.onSurface,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      backgroundColor: context.colors.surfaceContainerHighest,
+                      side: BorderSide.none,
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      visualDensity: VisualDensity.compact,
+                    ),
+                  )
+                  .toList(),
             ),
           ),
         ),
       ],
-    );
-  }
-}
-
-class _SkillTag extends StatelessWidget {
-  const _SkillTag(this.label);
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: context.colors.surfaceContainerHighest,
-        borderRadius: AppRadius.tagBorderRadius,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.x3,
-          vertical: AppSpacing.x1,
-        ),
-        child: Text(
-          label,
-          style: context.textTheme.bodySmall?.copyWith(
-            color: context.colors.onSurface,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
     );
   }
 }
