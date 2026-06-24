@@ -1,6 +1,6 @@
 export 'cubit/candidate_detail_cubit.dart';
 export 'cubit/candidate_detail_state.dart';
-export 'view/candidate_detail_screen.dart';
+export 'view/candidate_detail_view.dart';
 export 'widgets/candidate_hero.dart';
 export 'widgets/contact_buttons.dart';
 export 'widgets/criteria_section.dart';
