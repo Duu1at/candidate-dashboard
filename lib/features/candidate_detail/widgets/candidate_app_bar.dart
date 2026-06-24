@@ -1,37 +1,116 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:candidate_dashboard/core/core.dart';
-import 'package:candidate_dashboard/data/data.dart';
 
-class CandidateAppBar extends StatelessWidget {
-  const CandidateAppBar({required this.candidate, super.key});
+import '../../../core/core.dart';
+import '../../../data/models/candidate.dart';
+
+class CandidateHeader extends StatelessWidget {
+  const CandidateHeader({required this.candidate, super.key});
 
   final Candidate candidate;
 
   @override
   Widget build(BuildContext context) {
-    return SliverAppBar(
-      pinned: true,
-      expandedHeight: 200,
-      leading: _CircleIconButton(
-        icon: Icons.arrow_back_ios_new,
-        iconSize: 18,
-        onPressed: () => context.pop(),
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: context.colors.surface,
+        border: Border(
+          bottom: BorderSide(color: context.colors.outlineVariant),
+        ),
       ),
-      title: const Text('Кандидат'),
-      centerTitle: true,
-      actions: [
+      child: SafeArea(
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.x4,
+            AppSpacing.x2,
+            AppSpacing.x4,
+            AppSpacing.x4,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _NavRow(onBack: () => context.pop()),
+              const SizedBox(height: AppSpacing.x3),
+              Row(
+                children: [
+                  _InitialsAvatar(candidate.name),
+                  const SizedBox(width: AppSpacing.x4),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          candidate.name,
+                          style: context.textTheme.headlineSmall,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: AppSpacing.x1),
+                        Text(
+                          candidate.posLabel,
+                          style: context.textTheme.bodySmall?.copyWith(
+                            color: context.colors.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.x3),
+              Row(
+                children: [
+                  _VerdictBadge(vc: candidate.vc, verdict: candidate.verdict),
+                  const SizedBox(width: AppSpacing.x3),
+                  Expanded(
+                    child: Text(
+                      '${candidate.city} · ${candidate.totalExp}',
+                      style: context.textTheme.bodySmall?.copyWith(
+                        color: context.colors.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _NavRow extends StatelessWidget {
+  const _NavRow({required this.onBack});
+
+  final VoidCallback onBack;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        _CircleIconButton(
+          icon: Icons.arrow_back_ios_new,
+          iconSize: 18,
+          onPressed: onBack,
+        ),
+        Expanded(
+          child: Center(
+            child: Text(
+              'Кандидат',
+              style: context.textTheme.labelLarge?.copyWith(
+                color: context.colors.onSurfaceVariant,
+              ),
+            ),
+          ),
+        ),
         _CircleIconButton(
           icon: Icons.more_horiz,
           iconSize: 20,
           onPressed: () {},
         ),
-        const SizedBox(width: AppSpacing.x2),
       ],
-      flexibleSpace: FlexibleSpaceBar(
-        background: _CandidateHero(candidate: candidate),
-        collapseMode: CollapseMode.pin,
-      ),
     );
   }
 }
@@ -57,70 +136,6 @@ class _CircleIconButton extends StatelessWidget {
         minimumSize: const Size(38, 38),
       ),
       onPressed: onPressed,
-    );
-  }
-}
-
-class _CandidateHero extends StatelessWidget {
-  const _CandidateHero({required this.candidate});
-
-  final Candidate candidate;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.x4,
-        kToolbarHeight + AppSpacing.x2,
-        AppSpacing.x4,
-        AppSpacing.x4,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              _InitialsAvatar(candidate.name),
-              const SizedBox(width: AppSpacing.x4),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      candidate.name,
-                      style: context.textTheme.headlineSmall,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: AppSpacing.x1),
-                    Text(
-                      candidate.posLabel,
-                      style: context.textTheme.bodySmall?.copyWith(
-                        color: context.colors.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.x3),
-          Row(
-            children: [
-              _VerdictBadge(vc: candidate.vc, verdict: candidate.verdict),
-              const SizedBox(width: AppSpacing.x3),
-              Expanded(
-                child: Text(
-                  '${candidate.city} · ${candidate.totalExp}',
-                  style: context.textTheme.bodySmall?.copyWith(
-                    color: context.colors.onSurfaceVariant,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
     );
   }
 }
@@ -173,7 +188,10 @@ class _VerdictBadge extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CircleAvatar(radius: 4, backgroundColor: verdictColor(context, vc)),
+            CircleAvatar(
+              radius: 4,
+              backgroundColor: verdictColor(context, vc),
+            ),
             const SizedBox(width: AppSpacing.x2),
             Text(
               verdict,

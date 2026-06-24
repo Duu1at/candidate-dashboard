@@ -60,28 +60,34 @@ class _DetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          CandidateAppBar(candidate: candidate),
-          SliverPadding(
-            padding: const EdgeInsets.all(AppSpacing.x4),
-            sliver: SliverList.list(
-              children: [
-                ContactButtons(candidate),
-                const SizedBox(height: AppSpacing.x4),
-                ExperienceSection(candidate.exp),
-                const SizedBox(height: AppSpacing.x4),
-                if (candidate.edu.isNotEmpty) ...[
-                  EducationSection(candidate.edu),
-                  const SizedBox(height: AppSpacing.x4),
-                ],
-                StackSection(candidate.stack),
-                const SizedBox(height: AppSpacing.x4),
-                CriteriaSection(candidate.criteria),
-                const SizedBox(height: AppSpacing.x4),
-                QuestionsSection(candidate.questions),
-                const SizedBox(height: AppSpacing.x4),
-                SummarySection(candidate.summary),
+      body: Column(
+        children: [
+          CandidateHeader(candidate: candidate),
+          Expanded(
+            child: CustomScrollView(
+              slivers: [
+                SliverPadding(
+                  padding: const EdgeInsets.all(AppSpacing.x4),
+                  sliver: SliverList.list(
+                    children: [
+                      ContactButtons(candidate),
+                      const SizedBox(height: AppSpacing.x4),
+                      ExperienceSection(candidate.exp),
+                      const SizedBox(height: AppSpacing.x4),
+                      if (candidate.edu.isNotEmpty) ...[
+                        EducationSection(candidate.edu),
+                        const SizedBox(height: AppSpacing.x4),
+                      ],
+                      StackSection(candidate.stack),
+                      const SizedBox(height: AppSpacing.x4),
+                      CriteriaSection(candidate.criteria),
+                      const SizedBox(height: AppSpacing.x4),
+                      QuestionsSection(candidate.questions),
+                      const SizedBox(height: AppSpacing.x4),
+                      SummarySection(candidate.summary),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
