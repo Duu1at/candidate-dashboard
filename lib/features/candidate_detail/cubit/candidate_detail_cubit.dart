@@ -25,11 +25,11 @@ class CandidateDetailCubit extends Cubit<CandidateDetailState> {
           candidate: candidate,
         ),
       );
-    } catch (e) {
+    } catch (_) {
       emit(
         state.copyWith(
           status: CandidateDetailStatus.error,
-          errorMessage: e.toString(),
+          errorMessage: 'Не удалось загрузить кандидата. Проверьте соединение.',
         ),
       );
     }

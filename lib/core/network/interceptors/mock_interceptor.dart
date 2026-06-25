@@ -16,7 +16,7 @@ class MockInterceptor extends Interceptor {
     await Future<void>.delayed(Duration(milliseconds: delay));
 
     if (options.method == 'GET' && options.path.contains('/candidates')) {
-      final jsonString = await rootBundle.loadString('mock/candidates.json');
+      final jsonString = await rootBundle.loadString('mock/candidates-large.json');
       return handler.resolve(
         Response(
           requestOptions: options,
