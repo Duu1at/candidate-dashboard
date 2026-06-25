@@ -12,7 +12,7 @@ final class CandidatesListCubit extends Cubit<CandidatesListState> {
       super(const CandidatesListState());
 
   final CandidateRepository _repository;
-  StreamSubscription<List<Candidate>>? _sub;
+  StreamSubscription<List<CandidateModel>>? _sub;
 
   Future<void> load({bool forceRefresh = false}) async {
     emit(state.copyWith(status: CandidatesListStatus.loading));
@@ -33,11 +33,11 @@ final class CandidatesListCubit extends Cubit<CandidatesListState> {
     }
   }
 
-  void _onRemoteUpdate(List<Candidate> candidates) {
+  void _onRemoteUpdate(List<CandidateModel> candidates) {
     _emitLoaded(candidates, _repository.isOffline);
   }
 
-  void _emitLoaded(List<Candidate> all, bool offline) {
+  void _emitLoaded(List<CandidateModel> all, bool offline) {
     final filtered = filterAndSort(
       candidates: all,
       query: state.searchQuery,
@@ -125,7 +125,7 @@ final class CandidatesListCubit extends Cubit<CandidatesListState> {
     );
   }
 
-  List<Candidate> _page(List<Candidate> list, int page) {
+  List<CandidateModel> _page(List<CandidateModel> list, int page) {
     final start = (page - 1) * _pageSize;
     if (start >= list.length) return [];
     return list.sublist(start, (start + _pageSize).clamp(0, list.length));

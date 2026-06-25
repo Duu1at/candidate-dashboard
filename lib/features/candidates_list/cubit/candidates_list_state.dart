@@ -9,9 +9,9 @@ enum CandidatesListStatus { initial, loading, loaded, error }
 abstract class CandidatesListState with _$CandidatesListState {
   const factory CandidatesListState({
     @Default(CandidatesListStatus.initial) CandidatesListStatus status,
-    @Default([]) List<Candidate> allCandidates,
-    @Default([]) List<Candidate> filteredCandidates,
-    @Default([]) List<Candidate> displayedCandidates,
+    @Default([]) List<CandidateModel> allCandidates,
+    @Default([]) List<CandidateModel> filteredCandidates,
+    @Default([]) List<CandidateModel> displayedCandidates,
     @Default('') String searchQuery,
     String? verdictFilter,
     @Default(SortOption.dateAdded) SortOption sortBy,

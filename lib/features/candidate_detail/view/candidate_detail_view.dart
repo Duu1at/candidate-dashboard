@@ -55,7 +55,7 @@ class CandidateDetailView extends StatelessWidget {
 class _DetailView extends StatelessWidget {
   const _DetailView(this.candidate);
 
-  final Candidate candidate;
+  final CandidateModel candidate;
 
   @override
   Widget build(BuildContext context) {

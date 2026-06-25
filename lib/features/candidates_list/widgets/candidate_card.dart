@@ -13,7 +13,7 @@ class CandidateCard extends StatelessWidget {
     super.key,
   });
 
-  final Candidate candidate;
+  final CandidateModel candidate;
   final VoidCallback onTap;
 
   @override
@@ -55,7 +55,7 @@ class CandidateCard extends StatelessWidget {
 class _CardHeader extends StatelessWidget {
   const _CardHeader(this.candidate);
 
-  final Candidate candidate;
+  final CandidateModel candidate;
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +92,7 @@ class _CardHeader extends StatelessWidget {
 class _CardFooter extends StatelessWidget {
   const _CardFooter(this.candidate);
 
-  final Candidate candidate;
+  final CandidateModel candidate;
 
   @override
   Widget build(BuildContext context) {

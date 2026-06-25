@@ -1,3 +1,3 @@
 export 'injection.config.dart';
-export 'register_module.dart';
+export 'network_module.dart';
 export 'injection.dart';

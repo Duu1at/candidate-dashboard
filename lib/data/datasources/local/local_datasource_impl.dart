@@ -17,17 +17,17 @@ final class LocalDatasourceImpl implements LocalDatasource {
   final Box<String> _statusesBox;
 
   @override
-  Future<List<Candidate>?> getCachedCandidates() async {
+  Future<List<CandidateModel>?> getCachedCandidates() async {
     final raw = _candidatesBox.get(_kCandidatesKey);
     if (raw == null) return null;
     final list = jsonDecode(raw) as List<dynamic>;
     return list
-        .map((e) => Candidate.fromJson(e as Map<String, dynamic>))
+        .map((e) => CandidateModel.fromJson(e as Map<String, dynamic>))
         .toList();
   }
 
   @override
-  Future<void> cacheCandidates(List<Candidate> candidates) async {
+  Future<void> cacheCandidates(List<CandidateModel> candidates) async {
     final json = jsonEncode(candidates.map((c) => c.toJson()).toList());
     await _candidatesBox.put(_kCandidatesKey, json);
   }
