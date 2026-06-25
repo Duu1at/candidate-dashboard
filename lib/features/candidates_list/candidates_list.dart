@@ -1,5 +1,4 @@
 export 'cubit/candidates_list_cubit.dart';
-export 'cubit/candidates_list_state.dart';
 export 'view/candidates_list_view.dart';
 export 'widgets/candidate_list_body.dart';
 export 'widgets/list_header.dart';
