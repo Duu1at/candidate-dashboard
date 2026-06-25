@@ -49,9 +49,7 @@ class _CandidatesListViewState extends State<CandidatesListView> {
 
   void _resetFilters() {
     _searchController.clear();
-    _cubit
-      ..search('')
-      ..filterByVerdict(null);
+    _cubit.resetFilters();
   }
 
   @override
@@ -111,17 +109,17 @@ class _CandidatesListViewState extends State<CandidatesListView> {
                   BlocBuilder<CandidatesListCubit, CandidatesListState>(
                     buildWhen: (a, b) =>
                         a.status != b.status ||
-                        a.displayedCandidates.length !=
-                            b.displayedCandidates.length ||
-                        a.filteredCandidates.length !=
-                            b.filteredCandidates.length ||
+                        a.items.length != b.items.length ||
+                        a.totalItems != b.totalItems ||
                         a.sortBy != b.sortBy,
                     builder: (_, state) {
                       return SliverToBoxAdapter(
-                        child: state.status == CandidatesListStatus.loaded
+                        child: state.status == CandidatesListStatus.loaded ||
+                                state.status ==
+                                    CandidatesListStatus.loadingMore
                             ? ListSubHeader(
-                                shown: state.displayedCandidates.length,
-                                total: state.filteredCandidates.length,
+                                shown: state.items.length,
+                                total: state.totalItems,
                                 sortOption: state.sortBy,
                               )
                             : const SizedBox.shrink(),

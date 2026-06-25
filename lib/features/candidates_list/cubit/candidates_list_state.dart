@@ -1,59 +1,53 @@
 part of 'candidates_list_cubit.dart';
 
-enum CandidatesListStatus { initial, loading, loaded, error }
+enum CandidatesListStatus { initial, loading, loadingMore, loaded, error }
 
 class CandidatesListState extends Equatable {
   const CandidatesListState({
     this.status = CandidatesListStatus.initial,
-    this.allCandidates = const [],
-    this.filteredCandidates = const [],
-    this.displayedCandidates = const [],
+    this.items = const [],
     this.searchQuery = '',
     this.verdictFilter,
     this.sortBy = SortOption.dateAdded,
     this.currentPage = 1,
-    this.hasMore = false,
+    this.totalItems = 0,
     this.isOffline = false,
     this.errorMessage,
   });
 
   final CandidatesListStatus status;
-  final List<CandidateModel> allCandidates;
-  final List<CandidateModel> filteredCandidates;
-  final List<CandidateModel> displayedCandidates;
+  final List<CandidateModel> items;
   final String searchQuery;
   final String? verdictFilter;
   final SortOption sortBy;
   final int currentPage;
-  final bool hasMore;
+  final int totalItems;
   final bool isOffline;
   final String? errorMessage;
 
+  bool get hasMore => items.length < totalItems;
+
   CandidatesListState copyWith({
     CandidatesListStatus? status,
-    List<CandidateModel>? allCandidates,
-    List<CandidateModel>? filteredCandidates,
-    List<CandidateModel>? displayedCandidates,
+    List<CandidateModel>? items,
     String? searchQuery,
     Object? verdictFilter = _sentinel,
     SortOption? sortBy,
     int? currentPage,
-    bool? hasMore,
+    int? totalItems,
     bool? isOffline,
     Object? errorMessage = _sentinel,
   }) {
     return CandidatesListState(
       status: status ?? this.status,
-      allCandidates: allCandidates ?? this.allCandidates,
-      filteredCandidates: filteredCandidates ?? this.filteredCandidates,
-      displayedCandidates: displayedCandidates ?? this.displayedCandidates,
+      items: items ?? this.items,
       searchQuery: searchQuery ?? this.searchQuery,
       verdictFilter: identical(verdictFilter, _sentinel)
           ? this.verdictFilter
           : verdictFilter as String?,
       sortBy: sortBy ?? this.sortBy,
       currentPage: currentPage ?? this.currentPage,
-      hasMore: hasMore ?? this.hasMore,
+      totalItems: totalItems ?? this.totalItems,
       isOffline: isOffline ?? this.isOffline,
       errorMessage: identical(errorMessage, _sentinel)
           ? this.errorMessage
@@ -64,14 +58,12 @@ class CandidatesListState extends Equatable {
   @override
   List<Object?> get props => [
     status,
-    allCandidates,
-    filteredCandidates,
-    displayedCandidates,
+    items,
     searchQuery,
     verdictFilter,
     sortBy,
     currentPage,
-    hasMore,
+    totalItems,
     isOffline,
     errorMessage,
   ];

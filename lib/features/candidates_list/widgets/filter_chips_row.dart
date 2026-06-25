@@ -1,30 +1,24 @@
-import 'package:candidate_dashboard/data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:candidate_dashboard/core/core.dart';
 
 const _kOptions = [
   (null, 'Все', null),
-  ('ПОДХОДИТ', 'ПОДХОДИТ', 'verdict-green'),
-  ('ЧАСТИЧНО', 'ЧАСТИЧНО', 'verdict-orange'),
-  ('НЕ ПОДХОДИТ', 'НЕ ПОДХОДИТ', 'verdict-red'),
+  ('verdict-green', 'ПОДХОДИТ', null),
+  ('verdict-orange', 'ЧАСТИЧНО', null),
+  ('verdict-red', 'НЕ ПОДХОДИТ', null),
 ];
 
 class FilterChipsRow extends StatelessWidget {
   const FilterChipsRow({
     required this.selected,
     required this.onSelected,
-    required this.allCandidates,
+    required this.total,
     super.key,
   });
 
   final String? selected;
   final ValueChanged<String?> onSelected;
-  final List<CandidateModel> allCandidates;
-
-  int _count(String? vc) {
-    if (vc == null) return allCandidates.length;
-    return allCandidates.where((c) => c.vc == vc).length;
-  }
+  final int total;
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +32,8 @@ class FilterChipsRow extends StatelessWidget {
       ),
       child: Row(
         children: _kOptions.map((opt) {
-          final (value, label, vc) = opt;
+          final (value, label, _) = opt;
           final isSelected = selected == value;
-          final count = _count(vc);
           final fg = isSelected
               ? context.colors.surface
               : context.colors.onSurfaceVariant;
@@ -58,13 +51,15 @@ class FilterChipsRow extends StatelessWidget {
                     label,
                     style: context.textTheme.labelMedium?.copyWith(color: fg),
                   ),
-                  const SizedBox(width: AppSpacing.x2),
-                  Text(
-                    '$count',
-                    style: context.textTheme.labelSmall?.copyWith(
-                      color: countFg,
+                  if (isSelected) ...[
+                    const SizedBox(width: AppSpacing.x2),
+                    Text(
+                      '$total',
+                      style: context.textTheme.labelSmall?.copyWith(
+                        color: countFg,
+                      ),
                     ),
-                  ),
+                  ],
                 ],
               ),
               selected: isSelected,

@@ -1,6 +1,8 @@
 import 'package:injectable/injectable.dart';
 import 'package:candidate_dashboard/core/core.dart';
-import 'package:candidate_dashboard/data/data.dart';
+import 'package:candidate_dashboard/data/datasources/remote/remote_datasource.dart';
+import 'package:candidate_dashboard/data/models/candidate_model.dart';
+import 'package:candidate_dashboard/data/models/candidates_page.dart';
 
 @LazySingleton(as: RemoteDatasource)
 final class RemoteDatasourceImpl implements RemoteDatasource {
@@ -9,11 +11,39 @@ final class RemoteDatasourceImpl implements RemoteDatasource {
   final ApiClient _apiClient;
 
   @override
-  Future<List<CandidateModel>> getCandidates() {
-    return _apiClient.getListOfType(
+  Future<CandidatesPage> getCandidates({
+    required int page,
+    required int limit,
+    String search = '',
+    String? filter,
+    String sort = 'date_added',
+  }) {
+    return _apiClient.getType(
       '/candidates',
-      fromJson: CandidateModel.fromJson,
+      fromJson: CandidatesPage.fromJson,
+      params: GetApiParams(
+        queryParameters: {
+          'page': page,
+          'limit': limit,
+          if (search.isNotEmpty) 'search': search,
+          'filter': ?filter,
+          'sort': sort,
+        },
+      ),
     );
+  }
+
+  @override
+  Future<CandidateModel?> getById(String id) async {
+    try {
+      return await _apiClient.getType(
+        '/candidates/$id',
+        fromJson: CandidateModel.fromJson,
+      );
+    } on ApiClientException catch (e) {
+      if (e.error.response?.statusCode == 404) return null;
+      rethrow;
+    }
   }
 
   @override

@@ -17,120 +17,207 @@ final class CandidatesListCubit extends Cubit<CandidatesListState> {
   StreamSubscription<List<CandidateModel>>? _sub;
 
   Future<void> load({bool forceRefresh = false}) async {
-    emit(state.copyWith(status: CandidatesListStatus.loading));
+    final search = state.searchQuery;
+    final filter = state.verdictFilter;
+    final sort = state.sortBy.value;
+    emit(state.copyWith(
+      status: CandidatesListStatus.loading,
+      items: [],
+      currentPage: 1,
+      totalItems: 0,
+    ));
     try {
-      final candidates = await _repository.getCandidates(
-        forceRefresh: forceRefresh,
+      final page = await _repository.getCandidates(
+        page: 1,
+        limit: _pageSize,
+        search: search,
+        filter: filter,
+        sort: sort,
       );
       _sub?.cancel();
-      _sub = _repository.candidatesStream.listen(_onRemoteUpdate);
-      _emitLoaded(candidates, _repository.isOffline);
+      _sub = _repository.candidatesStream.listen(_onStreamUpdate);
+      emit(state.copyWith(
+        status: CandidatesListStatus.loaded,
+        items: page.items,
+        totalItems: page.total,
+        currentPage: 1,
+        isOffline: _repository.isOffline,
+      ));
     } catch (e) {
-      emit(
-        state.copyWith(
-          status: CandidatesListStatus.error,
-          errorMessage: e.toString(),
-        ),
-      );
+      emit(state.copyWith(
+        status: CandidatesListStatus.error,
+        errorMessage: e.toString(),
+      ));
     }
   }
 
-  void _onRemoteUpdate(List<CandidateModel> candidates) {
-    _emitLoaded(candidates, _repository.isOffline);
+  void _onStreamUpdate(List<CandidateModel> updated) {
+    if (state.status == CandidatesListStatus.loaded ||
+        state.status == CandidatesListStatus.loadingMore) {
+      emit(state.copyWith(items: updated));
+    }
   }
 
-  void _emitLoaded(List<CandidateModel> all, bool offline) {
-    final filtered = filterAndSort(
-      candidates: all,
-      query: state.searchQuery,
-      verdictFilter: state.verdictFilter,
-      sortBy: state.sortBy,
-    );
-    emit(
-      state.copyWith(
-        status: CandidatesListStatus.loaded,
-        allCandidates: all,
-        filteredCandidates: filtered,
-        displayedCandidates: _page(filtered, 1),
-        currentPage: 1,
-        hasMore: filtered.length > _pageSize,
-        isOffline: offline,
-      ),
-    );
-  }
+  Future<void> loadNextPage() async {
+    if (!state.hasMore || state.status == CandidatesListStatus.loadingMore) {
+      return;
+    }
 
-  void search(String query) {
-    final filtered = filterAndSort(
-      candidates: state.allCandidates,
-      query: query,
-      verdictFilter: state.verdictFilter,
-      sortBy: state.sortBy,
-    );
-    emit(
-      state.copyWith(
-        searchQuery: query,
-        filteredCandidates: filtered,
-        displayedCandidates: _page(filtered, 1),
-        currentPage: 1,
-        hasMore: filtered.length > _pageSize,
-      ),
-    );
-  }
-
-  void filterByVerdict(String? verdict) {
-    final filtered = filterAndSort(
-      candidates: state.allCandidates,
-      query: state.searchQuery,
-      verdictFilter: verdict,
-      sortBy: state.sortBy,
-    );
-    emit(
-      state.copyWith(
-        verdictFilter: verdict,
-        filteredCandidates: filtered,
-        displayedCandidates: _page(filtered, 1),
-        currentPage: 1,
-        hasMore: filtered.length > _pageSize,
-      ),
-    );
-  }
-
-  void setSortBy(SortOption option) {
-    final filtered = filterAndSort(
-      candidates: state.allCandidates,
-      query: state.searchQuery,
-      verdictFilter: state.verdictFilter,
-      sortBy: option,
-    );
-    emit(
-      state.copyWith(
-        sortBy: option,
-        filteredCandidates: filtered,
-        displayedCandidates: _page(filtered, 1),
-        currentPage: 1,
-        hasMore: filtered.length > _pageSize,
-      ),
-    );
-  }
-
-  void loadNextPage() {
     final nextPage = state.currentPage + 1;
-    final more = _page(state.filteredCandidates, nextPage);
-    if (more.isEmpty) return;
-    final combined = [...state.displayedCandidates, ...more];
-    emit(
-      state.copyWith(
-        displayedCandidates: combined,
+    final search = state.searchQuery;
+    final filter = state.verdictFilter;
+    final sort = state.sortBy.value;
+    emit(state.copyWith(status: CandidatesListStatus.loadingMore));
+
+    try {
+      final page = await _repository.getCandidates(
+        page: nextPage,
+        limit: _pageSize,
+        search: search,
+        filter: filter,
+        sort: sort,
+      );
+      emit(state.copyWith(
+        status: CandidatesListStatus.loaded,
+        items: [...state.items, ...page.items],
+        totalItems: page.total,
         currentPage: nextPage,
-        hasMore: combined.length < state.filteredCandidates.length,
-      ),
-    );
+      ));
+    } catch (_) {
+      emit(state.copyWith(status: CandidatesListStatus.loaded));
+    }
   }
 
-  List<CandidateModel> _page(List<CandidateModel> list, int page) {
-    final start = (page - 1) * _pageSize;
-    if (start >= list.length) return [];
-    return list.sublist(start, (start + _pageSize).clamp(0, list.length));
+  Future<void> search(String query) async {
+    final filter = state.verdictFilter;
+    final sort = state.sortBy.value;
+    emit(state.copyWith(
+      searchQuery: query,
+      status: CandidatesListStatus.loading,
+      items: [],
+      currentPage: 1,
+      totalItems: 0,
+    ));
+    try {
+      final page = await _repository.getCandidates(
+        page: 1,
+        limit: _pageSize,
+        search: query,
+        filter: filter,
+        sort: sort,
+      );
+      emit(state.copyWith(
+        status: CandidatesListStatus.loaded,
+        items: page.items,
+        totalItems: page.total,
+        currentPage: 1,
+        isOffline: _repository.isOffline,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: CandidatesListStatus.error,
+        errorMessage: e.toString(),
+      ));
+    }
+  }
+
+  Future<void> filterByVerdict(String? verdict) async {
+    final search = state.searchQuery;
+    final sort = state.sortBy.value;
+    emit(state.copyWith(
+      verdictFilter: verdict,
+      status: CandidatesListStatus.loading,
+      items: [],
+      currentPage: 1,
+      totalItems: 0,
+    ));
+    try {
+      final page = await _repository.getCandidates(
+        page: 1,
+        limit: _pageSize,
+        search: search,
+        filter: verdict,
+        sort: sort,
+      );
+      emit(state.copyWith(
+        status: CandidatesListStatus.loaded,
+        items: page.items,
+        totalItems: page.total,
+        currentPage: 1,
+        isOffline: _repository.isOffline,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: CandidatesListStatus.error,
+        errorMessage: e.toString(),
+      ));
+    }
+  }
+
+  Future<void> setSortBy(SortOption option) async {
+    final search = state.searchQuery;
+    final filter = state.verdictFilter;
+    emit(state.copyWith(
+      sortBy: option,
+      status: CandidatesListStatus.loading,
+      items: [],
+      currentPage: 1,
+      totalItems: 0,
+    ));
+    try {
+      final page = await _repository.getCandidates(
+        page: 1,
+        limit: _pageSize,
+        search: search,
+        filter: filter,
+        sort: option.value,
+      );
+      emit(state.copyWith(
+        status: CandidatesListStatus.loaded,
+        items: page.items,
+        totalItems: page.total,
+        currentPage: 1,
+        isOffline: _repository.isOffline,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: CandidatesListStatus.error,
+        errorMessage: e.toString(),
+      ));
+    }
+  }
+
+  Future<void> resetFilters() async {
+    final sort = state.sortBy.value;
+    emit(state.copyWith(
+      searchQuery: '',
+      verdictFilter: null,
+      status: CandidatesListStatus.loading,
+      items: [],
+      currentPage: 1,
+      totalItems: 0,
+    ));
+    try {
+      final page = await _repository.getCandidates(
+        page: 1,
+        limit: _pageSize,
+        search: '',
+        filter: null,
+        sort: sort,
+      );
+      emit(state.copyWith(
+        status: CandidatesListStatus.loaded,
+        items: page.items,
+        totalItems: page.total,
+        currentPage: 1,
+        isOffline: _repository.isOffline,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: CandidatesListStatus.error,
+        errorMessage: e.toString(),
+      ));
+    }
   }
 
   @override

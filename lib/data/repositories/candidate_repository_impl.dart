@@ -18,7 +18,7 @@ final class CandidateRepositoryImpl implements CandidateRepository {
   final LocalDatasource _local;
   final ConnectionService _connection;
 
-  List<CandidateModel> _cache = [];
+  List<CandidateModel> _currentItems = [];
   bool _isOffline = false;
   final _controller = StreamController<List<CandidateModel>>.broadcast();
 
@@ -29,65 +29,97 @@ final class CandidateRepositoryImpl implements CandidateRepository {
   Stream<List<CandidateModel>> get candidatesStream => _controller.stream;
 
   @override
-  Future<List<CandidateModel>> getCandidates({
-    bool forceRefresh = false,
+  Future<CandidatesPage> getCandidates({
+    required int page,
+    required int limit,
+    String search = '',
+    String? filter,
+    String sort = 'date_added',
   }) async {
-    if (_cache.isNotEmpty && !forceRefresh) return List.unmodifiable(_cache);
-
     final hasNetwork = await _connection.checkInternetConnection();
 
     if (hasNetwork) {
       try {
-        var candidates = await _remote.getCandidates();
+        final result = await _remote.getCandidates(
+          page: page,
+          limit: limit,
+          search: search,
+          filter: filter,
+          sort: sort,
+        );
+
         final statuses = await _local.getLocalStatuses();
-        candidates = candidates
+        final items = result.items
             .map(
               (c) => statuses.containsKey(c.id)
                   ? c.copyWith(status: statuses[c.id]!)
                   : c,
             )
             .toList();
-        _cache = candidates;
+
+        if (page == 1) {
+          _currentItems = items;
+        } else {
+          _currentItems = [..._currentItems, ...items];
+        }
         _isOffline = false;
-        await _local.cacheCandidates(_cache);
-        _controller.add(List.unmodifiable(_cache));
-        return List.unmodifiable(_cache);
+
+        if (page == 1 && search.isEmpty && filter == null) {
+          await _local.cacheCandidates(items);
+        }
+
+        return CandidatesPage(
+          items: items,
+          total: result.total,
+          page: result.page,
+          limit: result.limit,
+        );
       } on Exception catch (_) {}
     }
 
-    final cached = await _local.getCachedCandidates();
-    if (cached != null && cached.isNotEmpty) {
-      _cache = cached;
-      _isOffline = true;
-      _controller.add(List.unmodifiable(_cache));
-      return List.unmodifiable(_cache);
+    if (page == 1 && search.isEmpty && filter == null) {
+      final cached = await _local.getCachedCandidates();
+      if (cached != null && cached.isNotEmpty) {
+        _currentItems = cached;
+        _isOffline = true;
+        return CandidatesPage(
+          items: cached,
+          total: cached.length,
+          page: 1,
+          limit: cached.length,
+        );
+      }
     }
 
     throw Exception('Нет данных. Проверьте соединение с интернетом.');
   }
 
   @override
-  Future<CandidateModel?> getById(String id) async {
-    if (_cache.isEmpty) await getCandidates();
-    return _cache.firstWhereOrNull((c) => c.id == id);
+  Future<CandidateModel?> getById(String id) {
+    return _remote.getById(id);
   }
 
   @override
   Future<void> updateStatus(String id, String status) async {
-    final prev = _cache.firstWhereOrNull((c) => c.id == id);
+    final prev = _currentItems.firstWhereOrNull((c) => c.id == id);
 
-    _cache = _cache
-        .map((c) => c.id == id ? c.copyWith(status: status) : c)
-        .toList();
-    _controller.add(List.unmodifiable(_cache));
+    if (prev != null) {
+      _currentItems = _currentItems
+          .map((c) => c.id == id ? c.copyWith(status: status) : c)
+          .toList();
+      _controller.add(List.unmodifiable(_currentItems));
+    }
+
     await _local.saveLocalStatus(id, status);
 
     try {
       await _remote.updateStatus(id, status);
     } catch (e) {
       if (prev != null) {
-        _cache = _cache.map((c) => c.id == id ? prev : c).toList();
-        _controller.add(List.unmodifiable(_cache));
+        _currentItems = _currentItems
+            .map((c) => c.id == id ? prev : c)
+            .toList();
+        _controller.add(List.unmodifiable(_currentItems));
         await _local.saveLocalStatus(id, prev.status);
       }
       rethrow;
