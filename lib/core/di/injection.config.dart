@@ -71,6 +71,7 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i367.CandidateRepositoryImpl(
         gh<_i846.RemoteDatasource>(),
         gh<_i846.LocalDatasource>(),
+        gh<_i712.ConnectionService>(),
       ),
     );
     gh.factory<_i160.CandidateDetailCubit>(

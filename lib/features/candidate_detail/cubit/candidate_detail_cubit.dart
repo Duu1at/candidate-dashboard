@@ -13,17 +13,26 @@ class CandidateDetailCubit extends Cubit<CandidateDetailState> {
 
   Future<void> load(String id) async {
     emit(state.copyWith(status: CandidateDetailStatus.loading));
-    final candidate = await _repository.getById(id);
-    if (candidate == null) {
-      emit(state.copyWith(status: CandidateDetailStatus.notFound));
-      return;
+    try {
+      final candidate = await _repository.getById(id);
+      if (candidate == null) {
+        emit(state.copyWith(status: CandidateDetailStatus.notFound));
+        return;
+      }
+      emit(
+        state.copyWith(
+          status: CandidateDetailStatus.loaded,
+          candidate: candidate,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: CandidateDetailStatus.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
-    emit(
-      state.copyWith(
-        status: CandidateDetailStatus.loaded,
-        candidate: candidate,
-      ),
-    );
   }
 
   Future<void> updateStatus(String newStatus) async {

@@ -17,8 +17,8 @@ abstract class NetworkModule {
         BaseOptions(
           baseUrl: 'https://mock.api/',
           contentType: 'application/json; charset=utf-8',
-          connectTimeout: const Duration(seconds: 120),
-          receiveTimeout: const Duration(seconds: 120),
+          connectTimeout: const Duration(seconds: 15),
+          receiveTimeout: const Duration(seconds: 15),
         ),
       )..interceptors.addAll([
         const BaseInterceptor(),

@@ -58,7 +58,7 @@ class FilterChipsRow extends StatelessWidget {
                     label,
                     style: context.textTheme.labelMedium?.copyWith(color: fg),
                   ),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: AppSpacing.x2),
                   Text(
                     '$count',
                     style: context.textTheme.labelSmall?.copyWith(

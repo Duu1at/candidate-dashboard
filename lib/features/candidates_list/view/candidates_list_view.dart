@@ -57,6 +57,7 @@ class _CandidatesListViewState extends State<CandidatesListView> {
 
   @override
   void dispose() {
+    _cubit.close();
     _searchController.dispose();
     _scrollController.dispose();
     _debouncer.dispose();
@@ -128,7 +129,9 @@ class _CandidatesListViewState extends State<CandidatesListView> {
               ),
               CandidateListBodySliver(
                 onReset: _resetFilters,
-                onCardTap: (id) => context.push('/candidates/candidate/$id'),
+                onCardTap: (id) => context.push(
+                '${AppRoutes.candidatesList}/${AppRoutes.candidateDetail.replaceFirst(':id', id)}',
+              ),
               ),
               SliverToBoxAdapter(child: SizedBox(height: padding.bottom)),
             ],

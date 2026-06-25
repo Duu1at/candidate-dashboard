@@ -19,10 +19,15 @@ class SortBottomSheet extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(24, 20, 24, 8),
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.x6,
+              AppSpacing.x5,
+              AppSpacing.x6,
+              AppSpacing.x2,
+            ),
             child: Text(
               'Сортировка',
-              style: Theme.of(context).textTheme.titleMedium,
+              style: context.textTheme.titleMedium,
             ),
           ),
           RadioGroup<SortOption>(
@@ -42,7 +47,7 @@ class SortBottomSheet extends StatelessWidget {
               }).toList(),
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.x2),
         ],
       ),
     );

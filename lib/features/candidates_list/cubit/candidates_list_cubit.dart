@@ -95,7 +95,7 @@ final class CandidatesListCubit extends Cubit<CandidatesListState> {
     );
   }
 
-  void sortBy(SortOption option) {
+  void setSortBy(SortOption option) {
     final filtered = filterAndSort(
       candidates: state.allCandidates,
       query: state.searchQuery,

@@ -61,34 +61,30 @@ class _StatusHeader extends StatelessWidget {
 
   final CandidateStatus status;
 
-  (Color, Color, Color) _pillColors(BuildContext context) {
-    return switch (status) {
-    CandidateStatus.invited => (
-      context.appColors.verdictGreen.background,
-      context.appColors.verdictGreen.foreground,
-      context.appColors.verdictGreen.dot,
-    ),
-    CandidateStatus.rejected => (
-      context.appColors.verdictRed.background,
-      context.appColors.verdictRed.foreground,
-      context.appColors.verdictRed.dot,
-    ),
-    CandidateStatus.review => (
-      context.appColors.verdictOrange.background,
-      context.appColors.verdictOrange.foreground,
-      context.appColors.verdictOrange.dot,
-    ),
-    CandidateStatus.newCandidate => (
-      context.colors.primaryContainer,
-      context.colors.onPrimaryContainer,
-      context.colors.primary,
-    ),
-  };
-  }
-
   @override
   Widget build(BuildContext context) {
-    final (bg, fg, dot) = _pillColors(context);
+    final (bg, fg, dot) = switch (status) {
+      CandidateStatus.invited => (
+        context.appColors.verdictGreen.background,
+        context.appColors.verdictGreen.foreground,
+        context.appColors.verdictGreen.dot,
+      ),
+      CandidateStatus.rejected => (
+        context.appColors.verdictRed.background,
+        context.appColors.verdictRed.foreground,
+        context.appColors.verdictRed.dot,
+      ),
+      CandidateStatus.review => (
+        context.appColors.verdictOrange.background,
+        context.appColors.verdictOrange.foreground,
+        context.appColors.verdictOrange.dot,
+      ),
+      CandidateStatus.newCandidate => (
+        context.colors.primaryContainer,
+        context.colors.onPrimaryContainer,
+        context.colors.primary,
+      ),
+    };
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

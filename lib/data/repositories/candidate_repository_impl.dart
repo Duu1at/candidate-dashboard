@@ -1,17 +1,22 @@
 import 'dart:async';
 import 'package:collection/collection.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:injectable/injectable.dart';
+import 'package:candidate_dashboard/core/core.dart';
 import 'package:candidate_dashboard/data/data.dart';
 
 @LazySingleton(as: CandidateRepository)
 final class CandidateRepositoryImpl implements CandidateRepository {
-  CandidateRepositoryImpl(RemoteDatasource remote, LocalDatasource local)
-    : _remote = remote,
-      _local = local;
+  CandidateRepositoryImpl(
+    RemoteDatasource remote,
+    LocalDatasource local,
+    ConnectionService connection,
+  ) : _remote = remote,
+      _local = local,
+      _connection = connection;
 
   final RemoteDatasource _remote;
   final LocalDatasource _local;
+  final ConnectionService _connection;
 
   List<CandidateModel> _cache = [];
   bool _isOffline = false;
@@ -24,11 +29,12 @@ final class CandidateRepositoryImpl implements CandidateRepository {
   Stream<List<CandidateModel>> get candidatesStream => _controller.stream;
 
   @override
-  Future<List<CandidateModel>> getCandidates({bool forceRefresh = false}) async {
+  Future<List<CandidateModel>> getCandidates({
+    bool forceRefresh = false,
+  }) async {
     if (_cache.isNotEmpty && !forceRefresh) return List.unmodifiable(_cache);
 
-    final connectivity = await Connectivity().checkConnectivity();
-    final hasNetwork = !connectivity.contains(ConnectivityResult.none);
+    final hasNetwork = await _connection.checkInternetConnection();
 
     if (hasNetwork) {
       try {
@@ -46,9 +52,7 @@ final class CandidateRepositoryImpl implements CandidateRepository {
         await _local.cacheCandidates(_cache);
         _controller.add(List.unmodifiable(_cache));
         return List.unmodifiable(_cache);
-      } catch (_) {
-        // fall through to cache
-      }
+      } on Exception catch (_) {}
     }
 
     final cached = await _local.getCachedCandidates();
@@ -70,16 +74,23 @@ final class CandidateRepositoryImpl implements CandidateRepository {
 
   @override
   Future<void> updateStatus(String id, String status) async {
-    // optimistic update
+    final prev = _cache.firstWhereOrNull((c) => c.id == id);
+
     _cache = _cache
         .map((c) => c.id == id ? c.copyWith(status: status) : c)
         .toList();
     _controller.add(List.unmodifiable(_cache));
-
-    // persist locally so it survives restart
     await _local.saveLocalStatus(id, status);
 
-    // mock API call — may throw (~10%)
-    await _remote.updateStatus(id, status);
+    try {
+      await _remote.updateStatus(id, status);
+    } catch (e) {
+      if (prev != null) {
+        _cache = _cache.map((c) => c.id == id ? prev : c).toList();
+        _controller.add(List.unmodifiable(_cache));
+        await _local.saveLocalStatus(id, prev.status);
+      }
+      rethrow;
+    }
   }
 }
