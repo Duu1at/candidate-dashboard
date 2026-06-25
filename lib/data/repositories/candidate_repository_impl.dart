@@ -95,8 +95,11 @@ final class CandidateRepositoryImpl implements CandidateRepository {
   }
 
   @override
-  Future<CandidateModel?> getById(String id) {
-    return _remote.getById(id);
+  Future<CandidateModel?> getById(String id) async {
+    final candidate = await _remote.getById(id);
+    if (candidate == null) return null;
+    final statuses = await _local.getLocalStatuses();
+    return statuses.containsKey(id) ? candidate.copyWith(status: statuses[id]!) : candidate;
   }
 
   @override

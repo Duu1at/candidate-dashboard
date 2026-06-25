@@ -11,7 +11,7 @@ class StatusPill extends StatelessWidget {
     CandidateStatus.newCandidate => context.colors.primary,
     CandidateStatus.review => context.appColors.verdictOrange.dot,
     CandidateStatus.invited => context.appColors.verdictGreen.dot,
-    CandidateStatus.rejected => context.appColors.statusRejected,
+    CandidateStatus.rejected => context.appColors.verdictRed.dot,
   };
 
   @override
