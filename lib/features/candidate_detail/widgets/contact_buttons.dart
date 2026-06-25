@@ -6,7 +6,7 @@ import 'package:candidate_dashboard/data/data.dart';
 class ContactButtons extends StatelessWidget {
   const ContactButtons(this.candidate, {super.key});
 
-  final Candidate candidate;
+  final CandidateModel candidate;
 
   @override
   Widget build(BuildContext context) {

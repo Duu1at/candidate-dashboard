@@ -9,10 +9,10 @@ final class RemoteDatasourceImpl implements RemoteDatasource {
   final ApiClient _apiClient;
 
   @override
-  Future<List<Candidate>> getCandidates() {
+  Future<List<CandidateModel>> getCandidates() {
     return _apiClient.getListOfType(
       '/candidates',
-      fromJson: Candidate.fromJson,
+      fromJson: CandidateModel.fromJson,
     );
   }
 

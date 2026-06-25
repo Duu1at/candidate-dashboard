@@ -13,18 +13,18 @@ final class CandidateRepositoryImpl implements CandidateRepository {
   final RemoteDatasource _remote;
   final LocalDatasource _local;
 
-  List<Candidate> _cache = [];
+  List<CandidateModel> _cache = [];
   bool _isOffline = false;
-  final _controller = StreamController<List<Candidate>>.broadcast();
+  final _controller = StreamController<List<CandidateModel>>.broadcast();
 
   @override
   bool get isOffline => _isOffline;
 
   @override
-  Stream<List<Candidate>> get candidatesStream => _controller.stream;
+  Stream<List<CandidateModel>> get candidatesStream => _controller.stream;
 
   @override
-  Future<List<Candidate>> getCandidates({bool forceRefresh = false}) async {
+  Future<List<CandidateModel>> getCandidates({bool forceRefresh = false}) async {
     if (_cache.isNotEmpty && !forceRefresh) return List.unmodifiable(_cache);
 
     final connectivity = await Connectivity().checkConnectivity();
@@ -63,7 +63,7 @@ final class CandidateRepositoryImpl implements CandidateRepository {
   }
 
   @override
-  Future<Candidate?> getById(String id) async {
+  Future<CandidateModel?> getById(String id) async {
     if (_cache.isEmpty) await getCandidates();
     return _cache.firstWhereOrNull((c) => c.id == id);
   }

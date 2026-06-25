@@ -5,7 +5,7 @@ import 'package:candidate_dashboard/data/data.dart';
 class CandidateHero extends StatelessWidget {
   const CandidateHero(this.candidate, {super.key});
 
-  final Candidate candidate;
+  final CandidateModel candidate;
 
   static String _initials(String name) {
     final words = name.trim().split(RegExp(r'\s+'));

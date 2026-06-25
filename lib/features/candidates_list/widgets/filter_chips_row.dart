@@ -19,7 +19,7 @@ class FilterChipsRow extends StatelessWidget {
 
   final String? selected;
   final ValueChanged<String?> onSelected;
-  final List<Candidate> allCandidates;
+  final List<CandidateModel> allCandidates;
 
   int _count(String? vc) {
     if (vc == null) return allCandidates.length;

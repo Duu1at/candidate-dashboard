@@ -1,4 +1,4 @@
-import 'package:candidate_dashboard/data/models/candidate.dart';
+import 'package:candidate_dashboard/data/models/candidate_model.dart';
 
 enum SortOption {
   name('По имени'),
@@ -9,8 +9,8 @@ enum SortOption {
   final String label;
 }
 
-List<Candidate> filterAndSort({
-  required List<Candidate> candidates,
+List<CandidateModel> filterAndSort({
+  required List<CandidateModel> candidates,
   required String query,
   required String? verdictFilter,
   required SortOption sortBy,
