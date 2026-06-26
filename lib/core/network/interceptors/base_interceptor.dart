@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 
-//
 class BaseInterceptor extends Interceptor {
   const BaseInterceptor();
 
