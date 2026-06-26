@@ -1,25 +1,25 @@
 import 'dart:async';
-import 'package:candidate_dashboard/core/core.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:candidate_dashboard/data/data.dart';
+import 'candidate_filters_cubit.dart';
 
 part 'candidates_list_state.dart';
 
 const _pageSize = 10;
 
 final class CandidatesListCubit extends Cubit<CandidatesListState> {
-  CandidatesListCubit(CandidateRepository repository)
-    : _repository = repository,
-      super(const CandidatesListState());
+  CandidatesListCubit(this._repository, this._filters)
+    : super(const CandidatesListState()) {
+    _filterSub = _filters.stream.listen((_) => _onFiltersChanged());
+  }
 
   final CandidateRepository _repository;
+  final CandidateFiltersCubit _filters;
+  StreamSubscription<CandidateFiltersState>? _filterSub;
   StreamSubscription<List<CandidateModel>>? _sub;
 
   Future<void> load({bool forceRefresh = false}) async {
-    final search = state.searchQuery;
-    final filter = state.verdictFilter;
-    final sort = state.sortBy.value;
     emit(
       state.copyWith(
         status: CandidatesListStatus.loading,
@@ -28,34 +28,20 @@ final class CandidatesListCubit extends Cubit<CandidatesListState> {
         totalItems: 0,
       ),
     );
+    _sub?.cancel();
+    _sub = _repository.candidatesStream.listen(_onStreamUpdate);
+    await _reloadPage1();
+  }
+
+  Future<void> loadNextPage() async {
+    if (!state.hasMore || state.status == CandidatesListStatus.loadingMore) {
+      return;
+    }
+    emit(state.copyWith(status: CandidatesListStatus.loadingMore));
     try {
-      final page = await _repository.getCandidates(
-        GetCandidatesParams(
-          page: 1,
-          limit: _pageSize,
-          search: search,
-          filter: filter,
-          sort: sort,
-        ),
-      );
-      _sub?.cancel();
-      _sub = _repository.candidatesStream.listen(_onStreamUpdate);
-      emit(
-        state.copyWith(
-          status: CandidatesListStatus.loaded,
-          items: page.items,
-          totalItems: page.total,
-          currentPage: 1,
-          isOffline: _repository.isOffline,
-        ),
-      );
-    } catch (e) {
-      emit(
-        state.copyWith(
-          status: CandidatesListStatus.error,
-          errorMessage: e.toString(),
-        ),
-      );
+      await _fetchPage(state.currentPage + 1);
+    } catch (_) {
+      emit(state.copyWith(status: CandidatesListStatus.loaded));
     }
   }
 
@@ -66,71 +52,21 @@ final class CandidatesListCubit extends Cubit<CandidatesListState> {
     }
   }
 
-  Future<void> loadNextPage() async {
-    if (!state.hasMore || state.status == CandidatesListStatus.loadingMore) {
-      return;
-    }
-
-    final nextPage = state.currentPage + 1;
-    final search = state.searchQuery;
-    final filter = state.verdictFilter;
-    final sort = state.sortBy.value;
-    emit(state.copyWith(status: CandidatesListStatus.loadingMore));
-
-    try {
-      final page = await _repository.getCandidates(
-        GetCandidatesParams(
-          page: nextPage,
-          limit: _pageSize,
-          search: search,
-          filter: filter,
-          sort: sort,
-        ),
-      );
-      emit(
-        state.copyWith(
-          status: CandidatesListStatus.loaded,
-          items: [...state.items, ...page.items],
-          totalItems: page.total,
-          currentPage: nextPage,
-        ),
-      );
-    } catch (_) {
-      emit(state.copyWith(status: CandidatesListStatus.loaded));
-    }
-  }
-
-  Future<void> search(String query) async {
-    final filter = state.verdictFilter;
-    final sort = state.sortBy.value;
+  Future<void> _onFiltersChanged() async {
     emit(
       state.copyWith(
-        searchQuery: query,
         status: CandidatesListStatus.loading,
         items: [],
         currentPage: 1,
         totalItems: 0,
       ),
     );
+    await _reloadPage1();
+  }
+
+  Future<void> _reloadPage1() async {
     try {
-      final page = await _repository.getCandidates(
-        GetCandidatesParams(
-          page: 1,
-          limit: _pageSize,
-          search: query,
-          filter: filter,
-          sort: sort,
-        ),
-      );
-      emit(
-        state.copyWith(
-          status: CandidatesListStatus.loaded,
-          items: page.items,
-          totalItems: page.total,
-          currentPage: 1,
-          isOffline: _repository.isOffline,
-        ),
-      );
+      await _fetchPage(1);
     } catch (e) {
       emit(
         state.copyWith(
@@ -141,129 +77,30 @@ final class CandidatesListCubit extends Cubit<CandidatesListState> {
     }
   }
 
-  Future<void> filterByVerdict(String? verdict) async {
-    final search = state.searchQuery;
-    final sort = state.sortBy.value;
-    emit(
-      state.copyWith(
-        verdictFilter: verdict,
-        status: CandidatesListStatus.loading,
-        items: [],
-        currentPage: 1,
-        totalItems: 0,
+  Future<void> _fetchPage(int page) async {
+    final result = await _repository.getCandidates(
+      GetCandidatesParams(
+        page: page,
+        limit: _pageSize,
+        search: _filters.state.searchQuery,
+        filter: _filters.state.verdictFilter,
+        sort: _filters.state.sortBy.value,
       ),
     );
-    try {
-      final page = await _repository.getCandidates(
-        GetCandidatesParams(
-          page: 1,
-          limit: _pageSize,
-          search: search,
-          filter: verdict,
-          sort: sort,
-        ),
-      );
-      emit(
-        state.copyWith(
-          status: CandidatesListStatus.loaded,
-          items: page.items,
-          totalItems: page.total,
-          currentPage: 1,
-          isOffline: _repository.isOffline,
-        ),
-      );
-    } catch (e) {
-      emit(
-        state.copyWith(
-          status: CandidatesListStatus.error,
-          errorMessage: e.toString(),
-        ),
-      );
-    }
-  }
-
-  Future<void> setSortBy(SortOption option) async {
-    final search = state.searchQuery;
-    final filter = state.verdictFilter;
     emit(
       state.copyWith(
-        sortBy: option,
-        status: CandidatesListStatus.loading,
-        items: [],
-        currentPage: 1,
-        totalItems: 0,
+        status: CandidatesListStatus.loaded,
+        items: page == 1 ? result.items : [...state.items, ...result.items],
+        totalItems: result.total,
+        currentPage: page,
+        isOffline: _repository.isOffline,
       ),
     );
-    try {
-      final page = await _repository.getCandidates(
-        GetCandidatesParams(
-          page: 1,
-          limit: _pageSize,
-          search: search,
-          filter: filter,
-          sort: option.value,
-        ),
-      );
-      emit(
-        state.copyWith(
-          status: CandidatesListStatus.loaded,
-          items: page.items,
-          totalItems: page.total,
-          currentPage: 1,
-          isOffline: _repository.isOffline,
-        ),
-      );
-    } catch (e) {
-      emit(
-        state.copyWith(
-          status: CandidatesListStatus.error,
-          errorMessage: e.toString(),
-        ),
-      );
-    }
-  }
-
-  Future<void> resetFilters() async {
-    final sort = state.sortBy.value;
-    emit(
-      state.copyWith(
-        searchQuery: '',
-        verdictFilter: null,
-        status: CandidatesListStatus.loading,
-        items: [],
-        currentPage: 1,
-        totalItems: 0,
-      ),
-    );
-    try {
-      final page = await _repository.getCandidates(
-        GetCandidatesParams(
-          page: 1,
-          limit: _pageSize,
-          sort: sort,
-        ),
-      );
-      emit(
-        state.copyWith(
-          status: CandidatesListStatus.loaded,
-          items: page.items,
-          totalItems: page.total,
-          currentPage: 1,
-          isOffline: _repository.isOffline,
-        ),
-      );
-    } catch (e) {
-      emit(
-        state.copyWith(
-          status: CandidatesListStatus.error,
-          errorMessage: e.toString(),
-        ),
-      );
-    }
   }
 
   @override
   Future<void> close() {
+    _filterSub?.cancel();
     _sub?.cancel();
     return super.close();
   }

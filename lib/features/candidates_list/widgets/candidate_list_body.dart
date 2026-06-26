@@ -16,13 +16,8 @@ class CandidateListBodySliver extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CandidatesListCubit, CandidatesListState>(
-      buildWhen: (a, b) {
-        return a.status != b.status ||
-            a.items != b.items ||
-            a.hasMore != b.hasMore ||
-            a.searchQuery != b.searchQuery ||
-            a.verdictFilter != b.verdictFilter;
-      },
+      buildWhen: (a, b) =>
+          a.status != b.status || a.items != b.items || a.hasMore != b.hasMore,
       builder: (context, state) {
         return switch (state.status) {
           CandidatesListStatus.initial ||
@@ -41,7 +36,10 @@ class CandidateListBodySliver extends StatelessWidget {
             ),
           ),
           _ when state.items.isEmpty => SliverFillRemaining(
-            child: CandidatesEmpty(query: state.searchQuery, onReset: onReset),
+            child: CandidatesEmpty(
+              query: context.read<CandidateFiltersCubit>().state.searchQuery,
+              onReset: onReset,
+            ),
           ),
           _ => SliverPadding(
             padding: const EdgeInsets.only(

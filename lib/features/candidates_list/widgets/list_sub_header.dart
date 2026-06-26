@@ -36,7 +36,7 @@ class ListSubHeader extends StatelessWidget {
               context: context,
               builder: (_) => SortBottomSheet(
                 current: sortOption,
-                onSelect: context.read<CandidatesListCubit>().setSortBy,
+                onSelect: context.read<CandidateFiltersCubit>().setSortBy,
               ),
             ),
             icon: const Icon(Icons.sort_rounded, size: 16),

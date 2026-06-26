@@ -75,14 +75,17 @@ class ListHeader extends StatelessWidget {
             ),
           ),
           BlocBuilder<CandidatesListCubit, CandidatesListState>(
-            buildWhen: (a, b) =>
-                a.verdictFilter != b.verdictFilter ||
-                a.totalItems != b.totalItems,
-            builder: (context, state) {
-              return FilterChipsRow(
-                selected: state.verdictFilter,
-                total: state.totalItems,
-                onSelected: onFilterSelected,
+            buildWhen: (a, b) => a.totalItems != b.totalItems,
+            builder: (context, listState) {
+              return BlocBuilder<CandidateFiltersCubit, CandidateFiltersState>(
+                buildWhen: (a, b) => a.verdictFilter != b.verdictFilter,
+                builder: (context, filtersState) {
+                  return FilterChipsRow(
+                    selected: filtersState.verdictFilter,
+                    total: listState.totalItems,
+                    onSelected: onFilterSelected,
+                  );
+                },
               );
             },
           ),

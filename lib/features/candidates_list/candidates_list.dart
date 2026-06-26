@@ -1,3 +1,4 @@
+export 'cubit/candidate_filters_cubit.dart';
 export 'cubit/candidates_list_cubit.dart';
 export 'view/candidates_list_view.dart';
 export 'widgets/candidate_list_body.dart';

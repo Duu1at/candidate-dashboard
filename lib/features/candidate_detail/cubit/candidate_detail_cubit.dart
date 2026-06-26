@@ -1,12 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:injectable/injectable.dart';
 import 'package:candidate_dashboard/data/data.dart';
 import 'package:equatable/equatable.dart';
 
 part 'candidate_detail_state.dart';
 
-@injectable
-class CandidateDetailCubit extends Cubit<CandidateDetailState> {
+final class CandidateDetailCubit extends Cubit<CandidateDetailState> {
   CandidateDetailCubit(this._repository) : super(const CandidateDetailState());
 
   final CandidateRepository _repository;
@@ -47,7 +45,12 @@ class CandidateDetailCubit extends Cubit<CandidateDetailState> {
     );
 
     try {
-      await _repository.updateStatus(UpdateStatusParams(id: prev.id, status: newStatus));
+      await _repository.updateStatus(
+        UpdateStatusParams(
+          id: prev.id,
+          status: newStatus,
+        ),
+      );
       emit(state.copyWith(status: CandidateDetailStatus.loaded));
     } catch (_) {
       emit(
