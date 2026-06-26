@@ -1,6 +1,5 @@
 import 'package:candidate_dashboard/core/core.dart';
 import 'package:dio/dio.dart';
-import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 
 @module
@@ -38,12 +37,4 @@ abstract class NetworkModule {
       connection: connection,
     );
   }
-
-  @Named('candidates_box')
-  @lazySingleton
-  Box<String> candidatesBox() => Hive.box<String>('candidates');
-
-  @Named('statuses_box')
-  @lazySingleton
-  Box<String> statusesBox() => Hive.box<String>('statuses');
 }

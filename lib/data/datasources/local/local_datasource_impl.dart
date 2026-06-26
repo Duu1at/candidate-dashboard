@@ -1,6 +1,5 @@
-import 'dart:convert';
-import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
+import 'package:candidate_dashboard/core/core.dart';
 import 'package:candidate_dashboard/data/data.dart';
 
 const _kCandidatesKey = 'candidates_list';
@@ -9,46 +8,54 @@ const _kStatusesKey = 'statuses_map';
 @LazySingleton(as: LocalDatasource)
 final class LocalDatasourceImpl implements LocalDatasource {
   const LocalDatasourceImpl(
-    @Named('candidates_box') this._candidatesBox,
-    @Named('statuses_box') this._statusesBox,
+    @Named('candidates_kv') this._candidates,
+    @Named('statuses_kv') this._statuses,
   );
 
-  final Box<String> _candidatesBox;
-  final Box<String> _statusesBox;
+  final KVStore _candidates;
+  final KVStore _statuses;
 
   @override
-  Future<List<CandidateModel>?> getCachedCandidates() async {
-    final raw = _candidatesBox.get(_kCandidatesKey);
-    if (raw == null) return null;
-    final list = jsonDecode(raw) as List<dynamic>;
-    return list
-        .map((e) => CandidateModel.fromJson(e as Map<String, dynamic>))
-        .toList();
+  Future<List<CandidateModel>?> getCachedCandidates() {
+    return _candidates.readList(
+      _kCandidatesKey,
+      fromJson: CandidateModel.fromJson,
+    );
   }
 
   @override
-  Future<void> cacheCandidates(List<CandidateModel> candidates) async {
-    final json = jsonEncode(candidates.map((c) => c.toJson()).toList());
-    await _candidatesBox.put(_kCandidatesKey, json);
+  Future<void> cacheCandidates(List<CandidateModel> candidates) {
+    return _candidates.writeList(
+      _kCandidatesKey,
+      candidates,
+      toJson: (c) => c.toJson(),
+    );
   }
 
   @override
   Future<Map<String, String>> getLocalStatuses() async {
-    final raw = _statusesBox.get(_kStatusesKey);
-    if (raw == null) return {};
-    final map = jsonDecode(raw) as Map<String, dynamic>;
-    return map.map((k, v) => MapEntry(k, v as String));
+    final result = await _statuses.readObject(
+      _kStatusesKey,
+      fromJson: (json) => json.map(
+        (k, v) => MapEntry(k, v as String),
+      ),
+    );
+    return result ?? {};
   }
 
   @override
   Future<void> saveLocalStatus(String id, String status) async {
     final statuses = await getLocalStatuses();
     statuses[id] = status;
-    await _statusesBox.put(_kStatusesKey, jsonEncode(statuses));
+    await _statuses.writeObject<Map<String, String>>(
+      _kStatusesKey,
+      statuses,
+      toJson: Map<String, dynamic>.from,
+    );
   }
 
   @override
-  Future<void> clearCache() async {
-    await _candidatesBox.delete(_kCandidatesKey);
+  Future<void> clearCache() {
+    return _candidates.delete(_kCandidatesKey);
   }
 }
