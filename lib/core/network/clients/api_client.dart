@@ -42,7 +42,11 @@ class ApiClient with ConverterMixin {
   }
 
   Future<T> get<T>(String path, {Object? data, GetApiParams? params}) async {
-    final response = await getResponse<T>(path, data: data, params: params);
+    final response = await getResponse<T>(
+      path,
+      data: data,
+      params: params,
+    );
     if (T == _voidType) return response as T;
     return response.data as T;
   }
@@ -91,7 +95,11 @@ class ApiClient with ConverterMixin {
   }
 
   Future<T> post<T>(String path, {Object? data, PostApiParams? params}) async {
-    final response = await postResponse<T>(path, data: data, params: params);
+    final response = await postResponse<T>(
+      path,
+      data: data,
+      params: params,
+    );
     if (T == _voidType) return response as T;
     return response.data as T;
   }
@@ -140,7 +148,11 @@ class ApiClient with ConverterMixin {
   }
 
   Future<T> put<T>(String path, {Object? data, PutApiParams? params}) async {
-    final response = await putResponse<T>(path, data: data, params: params);
+    final response = await putResponse<T>(
+      path,
+      data: data,
+      params: params,
+    );
     if (T == _voidType) return response as T;
     return response.data as T;
   }
@@ -193,7 +205,11 @@ class ApiClient with ConverterMixin {
     Object? data,
     PatchApiParams? params,
   }) async {
-    final response = await patchResponse<T>(path, data: data, params: params);
+    final response = await patchResponse<T>(
+      path,
+      data: data,
+      params: params,
+    );
     if (T == _voidType) return response as T;
     return response.data as T;
   }
@@ -244,7 +260,11 @@ class ApiClient with ConverterMixin {
     Object? data,
     DeleteApiParams? params,
   }) async {
-    final response = await deleteResponse<T>(path, data: data, params: params);
+    final response = await deleteResponse<T>(
+      path,
+      data: data,
+      params: params,
+    );
     if (T == _voidType) return response as T;
     return response.data as T;
   }

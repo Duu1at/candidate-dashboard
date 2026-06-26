@@ -13,7 +13,10 @@ final class ApiClientException implements Exception {
 }
 
 final class ApiClientUnknownException implements Exception {
-  const ApiClientUnknownException(this.cause, {this.stackTrace});
+  const ApiClientUnknownException(
+    this.cause, {
+    this.stackTrace,
+  });
 
   final Object cause;
   final StackTrace? stackTrace;

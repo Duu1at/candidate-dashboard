@@ -47,7 +47,7 @@ class CandidateDetailCubit extends Cubit<CandidateDetailState> {
     );
 
     try {
-      await _repository.updateStatus(prev.id, newStatus);
+      await _repository.updateStatus(UpdateStatusParams(id: prev.id, status: newStatus));
       emit(state.copyWith(status: CandidateDetailStatus.loaded));
     } catch (_) {
       emit(

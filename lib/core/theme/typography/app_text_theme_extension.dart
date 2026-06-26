@@ -15,7 +15,9 @@ final class AppTextThemeExt extends ThemeExtension<AppTextThemeExt> {
     return AppTextThemeExt(
       error: AppTextTheme.from(colors.error),
       disabled: AppTextTheme.from(
-        colors.onSurface.withValues(alpha: AppOpacity.disabledForeground),
+        colors.onSurface.withValues(
+          alpha: AppOpacity.disabledForeground,
+        ),
       ),
       muted: AppTextTheme.from(colors.onSurfaceVariant),
       onPrimary: AppTextTheme.from(colors.onPrimary),

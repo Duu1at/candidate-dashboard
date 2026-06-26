@@ -9,23 +9,17 @@ final class RemoteDatasourceImpl implements RemoteDatasource {
   final ApiClient _apiClient;
 
   @override
-  Future<CandidatesPage> getCandidates({
-    required int page,
-    required int limit,
-    String search = '',
-    String? filter,
-    String sort = 'date_added',
-  }) {
+  Future<CandidatesPage> getCandidates(GetCandidatesParams params) {
     return _apiClient.getType(
       '/candidates',
       fromJson: CandidatesPage.fromJson,
       params: GetApiParams(
         queryParameters: {
-          'page': page,
-          'limit': limit,
-          if (search.isNotEmpty) 'search': search,
-          'filter': ?filter,
-          'sort': sort,
+          'page': params.page,
+          'limit': params.limit,
+          if (params.search.isNotEmpty) 'search': params.search,
+          'filter': ?params.filter,
+          'sort': params.sort,
         },
       ),
     );
@@ -45,10 +39,10 @@ final class RemoteDatasourceImpl implements RemoteDatasource {
   }
 
   @override
-  Future<void> updateStatus(String id, String status) {
+  Future<void> updateStatus(UpdateStatusParams params) {
     return _apiClient.patch<void>(
-      '/candidates/$id/status',
-      data: {'status': status},
+      '/candidates/${params.id}/status',
+      data: {'status': params.status},
     );
   }
 }

@@ -82,7 +82,12 @@ class MockInterceptor extends Interceptor {
       Response(
         requestOptions: options,
         statusCode: 200,
-        data: {'items': items, 'total': total, 'page': page, 'limit': limit},
+        data: {
+          'items': items,
+          'total': total,
+          'page': page,
+          'limit': limit,
+        },
       ),
     );
   }
@@ -109,13 +114,20 @@ class MockInterceptor extends Interceptor {
         DioException(
           requestOptions: options,
           type: DioExceptionType.badResponse,
-          response: Response(requestOptions: options, statusCode: 404),
+          response: Response(
+            requestOptions: options,
+            statusCode: 404,
+          ),
         ),
       );
     }
 
     return handler.resolve(
-      Response(requestOptions: options, statusCode: 200, data: candidate),
+      Response(
+        requestOptions: options,
+        statusCode: 200,
+        data: candidate,
+      ),
     );
   }
 
@@ -128,12 +140,19 @@ class MockInterceptor extends Interceptor {
         DioException(
           requestOptions: options,
           type: DioExceptionType.badResponse,
-          response: Response(requestOptions: options, statusCode: 500),
+          response: Response(
+            requestOptions: options,
+            statusCode: 500,
+          ),
         ),
       );
     }
     return handler.resolve(
-      Response(requestOptions: options, statusCode: 200, data: null),
+      Response(
+        requestOptions: options,
+        statusCode: 200,
+        data: null,
+      ),
     );
   }
 

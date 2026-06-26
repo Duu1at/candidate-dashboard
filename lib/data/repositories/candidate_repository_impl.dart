@@ -6,13 +6,11 @@ import 'package:candidate_dashboard/data/data.dart';
 
 @LazySingleton(as: CandidateRepository)
 final class CandidateRepositoryImpl implements CandidateRepository {
-  CandidateRepositoryImpl(
-    RemoteDatasource remote,
-    LocalDatasource local,
-    ConnectionService connection,
-  ) : _remote = remote,
-      _local = local,
-      _connection = connection;
+  CandidateRepositoryImpl({
+    required this._remote,
+    required this._local,
+    required this._connection,
+  });
 
   final RemoteDatasource _remote;
   final LocalDatasource _local;
@@ -31,24 +29,12 @@ final class CandidateRepositoryImpl implements CandidateRepository {
   Stream<List<CandidateModel>> get candidatesStream => _controller.stream;
 
   @override
-  Future<CandidatesPage> getCandidates({
-    required int page,
-    required int limit,
-    String search = '',
-    String? filter,
-    String sort = 'date_added',
-  }) async {
+  Future<CandidatesPage> getCandidates(GetCandidatesParams params) async {
     final hasNetwork = await _connection.checkInternetConnection();
 
     if (hasNetwork) {
       try {
-        final result = await _remote.getCandidates(
-          page: page,
-          limit: limit,
-          search: search,
-          filter: filter,
-          sort: sort,
-        );
+        final result = await _remote.getCandidates(params);
 
         final statuses = await _local.getLocalStatuses();
         final items = result.items
@@ -59,14 +45,14 @@ final class CandidateRepositoryImpl implements CandidateRepository {
             )
             .toList();
 
-        if (page == 1) {
+        if (params.page == 1) {
           _currentItems = items;
         } else {
           _currentItems = [..._currentItems, ...items];
         }
         _isOffline = false;
 
-        if (page == 1 && search.isEmpty && filter == null) {
+        if (params.page == 1 && params.search.isEmpty && params.filter == null) {
           await _local.cacheCandidates(items);
         }
 
@@ -79,7 +65,7 @@ final class CandidateRepositoryImpl implements CandidateRepository {
       } on Exception catch (_) {}
     }
 
-    if (page == 1 && search.isEmpty && filter == null) {
+    if (params.page == 1 && params.search.isEmpty && params.filter == null) {
       final cached = await _local.getCachedCandidates();
       if (cached != null && cached.isNotEmpty) {
         _currentItems = cached;
@@ -107,27 +93,27 @@ final class CandidateRepositoryImpl implements CandidateRepository {
   }
 
   @override
-  Future<void> updateStatus(String id, String status) async {
-    final prev = _currentItems.firstWhereOrNull((c) => c.id == id);
+  Future<void> updateStatus(UpdateStatusParams params) async {
+    final prev = _currentItems.firstWhereOrNull((c) => c.id == params.id);
 
     if (prev != null) {
       _currentItems = _currentItems
-          .map((c) => c.id == id ? c.copyWith(status: status) : c)
+          .map((c) => c.id == params.id ? c.copyWith(status: params.status) : c)
           .toList();
       _controller.add(List.unmodifiable(_currentItems));
     }
 
-    await _local.saveLocalStatus(id, status);
+    await _local.saveLocalStatus(params.id, params.status);
 
     try {
-      await _remote.updateStatus(id, status);
+      await _remote.updateStatus(params);
     } catch (e) {
       if (prev != null) {
         _currentItems = _currentItems
-            .map((c) => c.id == id ? prev : c)
+            .map((c) => c.id == params.id ? prev : c)
             .toList();
         _controller.add(List.unmodifiable(_currentItems));
-        await _local.saveLocalStatus(id, prev.status);
+        await _local.saveLocalStatus(params.id, prev.status);
       }
       rethrow;
     }

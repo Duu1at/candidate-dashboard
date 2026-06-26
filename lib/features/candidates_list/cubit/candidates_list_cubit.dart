@@ -30,11 +30,13 @@ final class CandidatesListCubit extends Cubit<CandidatesListState> {
     );
     try {
       final page = await _repository.getCandidates(
-        page: 1,
-        limit: _pageSize,
-        search: search,
-        filter: filter,
-        sort: sort,
+        GetCandidatesParams(
+          page: 1,
+          limit: _pageSize,
+          search: search,
+          filter: filter,
+          sort: sort,
+        ),
       );
       _sub?.cancel();
       _sub = _repository.candidatesStream.listen(_onStreamUpdate);
@@ -77,11 +79,13 @@ final class CandidatesListCubit extends Cubit<CandidatesListState> {
 
     try {
       final page = await _repository.getCandidates(
-        page: nextPage,
-        limit: _pageSize,
-        search: search,
-        filter: filter,
-        sort: sort,
+        GetCandidatesParams(
+          page: nextPage,
+          limit: _pageSize,
+          search: search,
+          filter: filter,
+          sort: sort,
+        ),
       );
       emit(
         state.copyWith(
@@ -110,11 +114,13 @@ final class CandidatesListCubit extends Cubit<CandidatesListState> {
     );
     try {
       final page = await _repository.getCandidates(
-        page: 1,
-        limit: _pageSize,
-        search: query,
-        filter: filter,
-        sort: sort,
+        GetCandidatesParams(
+          page: 1,
+          limit: _pageSize,
+          search: query,
+          filter: filter,
+          sort: sort,
+        ),
       );
       emit(
         state.copyWith(
@@ -149,11 +155,13 @@ final class CandidatesListCubit extends Cubit<CandidatesListState> {
     );
     try {
       final page = await _repository.getCandidates(
-        page: 1,
-        limit: _pageSize,
-        search: search,
-        filter: verdict,
-        sort: sort,
+        GetCandidatesParams(
+          page: 1,
+          limit: _pageSize,
+          search: search,
+          filter: verdict,
+          sort: sort,
+        ),
       );
       emit(
         state.copyWith(
@@ -188,11 +196,13 @@ final class CandidatesListCubit extends Cubit<CandidatesListState> {
     );
     try {
       final page = await _repository.getCandidates(
-        page: 1,
-        limit: _pageSize,
-        search: search,
-        filter: filter,
-        sort: option.value,
+        GetCandidatesParams(
+          page: 1,
+          limit: _pageSize,
+          search: search,
+          filter: filter,
+          sort: option.value,
+        ),
       );
       emit(
         state.copyWith(
@@ -227,11 +237,11 @@ final class CandidatesListCubit extends Cubit<CandidatesListState> {
     );
     try {
       final page = await _repository.getCandidates(
-        page: 1,
-        limit: _pageSize,
-        search: '',
-        filter: null,
-        sort: sort,
+        GetCandidatesParams(
+          page: 1,
+          limit: _pageSize,
+          sort: sort,
+        ),
       );
       emit(
         state.copyWith(
