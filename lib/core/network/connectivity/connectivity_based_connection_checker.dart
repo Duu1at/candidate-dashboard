@@ -21,4 +21,15 @@ final class ConnectivityBasedConnectionChecker implements ConnectionService {
       throw ConnectionException(e, s);
     }
   }
+
+  @override
+  Stream<bool> get onConnectivityChanged =>
+      connectivity.onConnectivityChanged.map(
+        (results) => results.any(
+          (e) =>
+              e == ConnectivityResult.mobile ||
+              e == ConnectivityResult.ethernet ||
+              e == ConnectivityResult.wifi,
+        ),
+      );
 }

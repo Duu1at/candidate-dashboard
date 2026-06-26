@@ -1,84 +1,42 @@
 # Candidate Dashboard
 
-HR candidate review app built with Flutter. Displays a list of candidates pre-screened by an AI model, lets a recruiter filter, sort, and change candidate statuses.
+HR-приложение для просмотра списка кандидатов. Рекрутер может фильтровать, сортировать, просматривать детали и менять статус обработки резюме — включая работу в офлайн-режиме.
 
 ---
 
-## Tech stack
+## Пакеты
 
-| | |
-| --- | --- |
-| UI | Flutter 3.44 · Material 3 · custom design system |
-| State | flutter_bloc (Cubit) |
-| Navigation | go_router |
-| DI | get_it + injectable |
-| Network | dio + MockInterceptor (no real backend) |
-| Persistence | hive_flutter (offline cache + local status overrides) |
-| Models | freezed + json_serializable |
+`flutter_bloc` · `go_router` · `get_it` · `injectable` · `dio` · `freezed` · `json_serializable` · `hive_flutter` · `connectivity_plus` · `url_launcher` · `collection` · `flutter_test` · `bloc_test` · `mocktail`
 
 ---
 
-## Features
+## Запуск
 
-- Candidate list with search, verdict filter, and sort (name / experience / date)
-- Infinite scroll pagination (10 per page)
-- Offline mode — falls back to Hive cache, shows banner
-- Candidate detail: contacts, AI verdict badge, criteria checklist, experience, stack, interview questions
-- Status selector with optimistic update and rollback on API error
-- Light / dark theme (follows system)
-
----
-
-## Getting started
-
-**Prerequisites:** Flutter 3.44+ · Dart 3.12+
+**Требования:** Flutter 3.44+ · Dart 3.12+
 
 ```bash
-# Install dependencies
 flutter pub get
-
-# Run on a connected device or simulator
+dart run build_runner build --delete-conflicting-outputs
 flutter run
 ```
 
-No backend setup required — all network traffic is intercepted by `MockInterceptor`,
-which serves data from `mock/candidates.json`.
+Реальный backend не нужен — все запросы перехватывает `MockInterceptor`, данные берутся из `mock/candidates.json`.
 
 ---
 
-## Code generation
-
-Run after editing any `@freezed`, `@JsonSerializable`, or `@injectable` annotated file:
+## Тесты
 
 ```bash
-dart run build_runner build --delete-conflicting-outputs
+flutter test
 ```
 
-Generated files (`*.g.dart`, `*.freezed.dart`, `injection.config.dart`) are committed to git.
+107 тестов: unit (cubits, repository, models, storage, network) + widget.
 
 ---
 
-## Project structure
+### State management — BLoC/Cubit
 
-```
-lib/
-├── core/          # DI, router, theme, utils
-├── data/          # models, datasources (remote/local), repository
-├── features/
-│   ├── candidates_list/   # list screen + cubit + widgets
-│   └── candidate_detail/  # detail screen + cubit + widgets
-├── app.dart
-└── main.dart
-mock/
-└── candidates.json        # mock API data
-```
+### Хранилище — Hive через KVStore-абстракцию
 
----
+### Архитектура — feature-first, два слоя (data / features)
 
-## Docs
-
-| File | What it covers |
-| --- | --- |
-| [docs/architecture.md](docs/architecture.md) | Folder layout, layers, data flow, DI, navigation |
-| [docs/theme-system.md](docs/theme-system.md) | Color tokens, typography, spacing, radii, shadows |
-| [docs/code-rules.md](docs/code-rules.md) | Naming, Freezed patterns, Cubit conventions, widget rules |

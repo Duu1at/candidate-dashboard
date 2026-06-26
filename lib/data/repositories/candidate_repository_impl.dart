@@ -12,7 +12,12 @@ final class CandidateRepositoryImpl implements CandidateRepository {
     required ConnectionService connection,
   }) : _remote = remote,
        _local = local,
-       _connection = connection;
+       _connection = connection {
+    _connection.onConnectivityChanged.listen((isOnline) {
+      if (isOnline) _flushQueue();
+    });
+    _flushQueue();
+  }
 
   final RemoteDatasource _remote;
   final LocalDatasource _local;
@@ -74,7 +79,7 @@ final class CandidateRepositoryImpl implements CandidateRepository {
       if (cached != null && cached.isNotEmpty) {
         _currentItems = cached;
         _isOffline = true;
-        
+
         return CandidatesPage(
           items: cached,
           total: cached.length,
@@ -111,6 +116,12 @@ final class CandidateRepositoryImpl implements CandidateRepository {
 
     await _local.saveLocalStatus(params.id, params.status);
 
+    final hasNetwork = await _connection.checkInternetConnection();
+    if (!hasNetwork) {
+      await _local.addToPendingQueue(params.id, params.status);
+      return;
+    }
+
     try {
       await _remote.updateStatus(params);
     } catch (e) {
@@ -122,6 +133,23 @@ final class CandidateRepositoryImpl implements CandidateRepository {
         await _local.saveLocalStatus(params.id, prev.status);
       }
       rethrow;
+    }
+  }
+
+  Future<void> _flushQueue() async {
+    final queue = await _local.getPendingQueue();
+    if (queue.isEmpty) return;
+
+    for (final entry in queue.entries) {
+      try {
+        await _remote.updateStatus(
+          UpdateStatusParams(
+            id: entry.key,
+            status: entry.value,
+          ),
+        );
+        await _local.removeFromPendingQueue(entry.key);
+      } catch (_) {}
     }
   }
 }
