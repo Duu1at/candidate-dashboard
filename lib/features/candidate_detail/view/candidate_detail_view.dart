@@ -4,8 +4,6 @@ import 'package:candidate_dashboard/core/core.dart';
 import 'package:candidate_dashboard/data/data.dart';
 import 'package:candidate_dashboard/features/candidate_detail/candidate_detail.dart';
 
-const _kMaxContentWidth = 700.0;
-
 class CandidateDetailView extends StatefulWidget {
   const CandidateDetailView({super.key, required this.id});
   final String id;
@@ -58,9 +56,12 @@ class _CandidateDetailViewState extends State<CandidateDetailView> {
             return switch (state.status) {
               CandidateDetailStatus.initial || CandidateDetailStatus.loading =>
                 const Center(child: CircularProgressIndicator()),
-              CandidateDetailStatus.notFound => const _NotFoundBody(),
-              _ when state.candidate != null => _DetailBody(state.candidate!),
-              _ => const SizedBox.shrink(),
+              CandidateDetailStatus.notFound => const NotFoundBody(),
+              _ when state.candidate != null => DetailBody(state.candidate!),
+              _ => ErrorBody(
+                message: state.errorMessage,
+                onRetry: () => _cubit.load(widget.id),
+              ),
             };
           },
         ),
@@ -97,71 +98,6 @@ class _CandidateDetailViewState extends State<CandidateDetailView> {
   void _onSuccess(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Статус обновлён')),
-    );
-  }
-}
-
-class _NotFoundBody extends StatelessWidget {
-  const _NotFoundBody();
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            Icons.person_off_outlined,
-            size: 64,
-            color: context.colors.outlineVariant,
-          ),
-          const SizedBox(height: AppSpacing.x4),
-          Text('Кандидат не найден', style: context.textTheme.titleLarge),
-        ],
-      ),
-    );
-  }
-}
-
-class _DetailBody extends StatelessWidget {
-  const _DetailBody(this.candidate);
-
-  final CandidateModel candidate;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: _kMaxContentWidth),
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.x4),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CandidateHero(candidate),
-              const SizedBox(height: AppSpacing.x4),
-              ContactButtons(candidate),
-              const SizedBox(height: AppSpacing.x4),
-              ExperienceSection(candidate.exp),
-              const SizedBox(height: AppSpacing.x4),
-              if (candidate.edu.isNotEmpty) ...[
-                EducationSection(
-                  institution: candidate.eduInstitution,
-                  details: candidate.eduDetails,
-                ),
-                const SizedBox(height: AppSpacing.x4),
-              ],
-              StackSection(candidate.stackTags),
-              const SizedBox(height: AppSpacing.x4),
-              CriteriaSection(candidate.criteria),
-              const SizedBox(height: AppSpacing.x4),
-              QuestionsSection(candidate.questions),
-              const SizedBox(height: AppSpacing.x4),
-              SummarySection(candidate.summary),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }
