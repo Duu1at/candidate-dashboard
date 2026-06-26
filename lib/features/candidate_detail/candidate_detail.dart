@@ -10,3 +10,6 @@ export 'widgets/section_label.dart';
 export 'widgets/stack_section.dart';
 export 'widgets/status_selector.dart';
 export 'widgets/summary_section.dart';
+export 'widgets/detail_body.dart';
+export 'widgets/error_body.dart';
+export 'widgets/not_found_body.dart';

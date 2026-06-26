@@ -74,6 +74,7 @@ final class CandidateRepositoryImpl implements CandidateRepository {
       if (cached != null && cached.isNotEmpty) {
         _currentItems = cached;
         _isOffline = true;
+        
         return CandidatesPage(
           items: cached,
           total: cached.length,
@@ -91,6 +92,7 @@ final class CandidateRepositoryImpl implements CandidateRepository {
     final candidate = await _remote.getById(id);
     if (candidate == null) return null;
     final statuses = await _local.getLocalStatuses();
+
     return statuses.containsKey(id)
         ? candidate.copyWith(status: statuses[id]!)
         : candidate;
