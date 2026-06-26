@@ -1,4 +1,7 @@
-part of 'candidate_detail_cubit.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:candidate_dashboard/data/data.dart';
+
+part 'candidate_detail_state.freezed.dart';
 
 enum CandidateDetailStatus {
   initial,
@@ -9,35 +12,11 @@ enum CandidateDetailStatus {
   error,
 }
 
-class CandidateDetailState extends Equatable {
-  const CandidateDetailState({
-    this.status = CandidateDetailStatus.initial,
-    this.candidate,
-    this.errorMessage,
-  });
-
-  final CandidateDetailStatus status;
-  final CandidateModel? candidate;
-  final String? errorMessage;
-
-  CandidateDetailState copyWith({
-    CandidateDetailStatus? status,
-    Object? candidate = _sentinel,
-    Object? errorMessage = _sentinel,
-  }) {
-    return CandidateDetailState(
-      status: status ?? this.status,
-      candidate: identical(candidate, _sentinel)
-          ? this.candidate
-          : candidate as CandidateModel?,
-      errorMessage: identical(errorMessage, _sentinel)
-          ? this.errorMessage
-          : errorMessage as String?,
-    );
-  }
-
-  @override
-  List<Object?> get props => [status, candidate, errorMessage];
+@freezed
+abstract class CandidateDetailState with _$CandidateDetailState {
+  const factory CandidateDetailState({
+    @Default(CandidateDetailStatus.initial) CandidateDetailStatus status,
+    CandidateModel? candidate,
+    String? errorMessage,
+}) = _CandidateDetailState;
 }
-
-const _sentinel = Object();

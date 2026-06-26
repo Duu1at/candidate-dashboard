@@ -1,8 +1,8 @@
-import 'package:candidate_dashboard/core/core.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:candidate_dashboard/core/core.dart';
+import 'candidate_filters_state.dart';
 
-part 'candidate_filters_state.dart';
+export 'candidate_filters_state.dart';
 
 final class CandidateFiltersCubit extends Cubit<CandidateFiltersState> {
   CandidateFiltersCubit() : super(const CandidateFiltersState());

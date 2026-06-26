@@ -1,10 +1,9 @@
 import 'dart:async';
-import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:candidate_dashboard/data/data.dart';
-import 'candidate_filters_cubit.dart';
+import 'package:candidate_dashboard/features/candidates_list/candidates_list.dart';
 
-part 'candidates_list_state.dart';
+export 'candidates_list_state.dart';
 
 const _pageSize = 10;
 

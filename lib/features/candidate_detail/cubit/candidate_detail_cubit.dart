@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:candidate_dashboard/data/data.dart';
-import 'package:equatable/equatable.dart';
+import 'candidate_detail_state.dart';
 
-part 'candidate_detail_state.dart';
+export 'candidate_detail_state.dart';
 
 final class CandidateDetailCubit extends Cubit<CandidateDetailState> {
   CandidateDetailCubit(this._repository) : super(const CandidateDetailState());
