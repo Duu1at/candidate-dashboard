@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -9,6 +10,7 @@ List<List<String>> _expFromJson(List<dynamic> json) =>
 List<dynamic> _expToJson(List<List<String>> list) => list;
 
 @JsonSerializable()
+@immutable
 final class CandidateModel extends Equatable {
   const CandidateModel({
     required this.id,
@@ -115,25 +117,25 @@ final class CandidateModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        name,
-        position,
-        posLabel,
-        file,
-        email,
-        phone,
-        city,
-        tg,
-        exp,
-        totalExp,
-        stack,
-        edu,
-        verdict,
-        vc,
-        criteria,
-        summary,
-        questions,
-        status,
-        dateAdded,
-      ];
+    id,
+    name,
+    position,
+    posLabel,
+    file,
+    email,
+    phone,
+    city,
+    tg,
+    exp,
+    totalExp,
+    stack,
+    edu,
+    verdict,
+    vc,
+    criteria,
+    summary,
+    questions,
+    status,
+    dateAdded,
+  ];
 }

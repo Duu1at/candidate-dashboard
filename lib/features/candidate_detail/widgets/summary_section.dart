@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:candidate_dashboard/core/core.dart';
 import 'package:candidate_dashboard/features/candidate_detail/candidate_detail.dart';
 
-
 class SummarySection extends StatelessWidget {
   const SummarySection(this.summary, {super.key});
 

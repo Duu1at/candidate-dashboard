@@ -1,6 +1,13 @@
-import 'package:candidate_dashboard/data/models/candidate_model.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+import 'package:candidate_dashboard/data/data.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class CandidatesPage {
+part 'candidates_page.g.dart';
+
+@JsonSerializable()
+@immutable
+final class CandidatesPage extends Equatable {
   const CandidatesPage({
     required this.items,
     required this.total,
@@ -14,13 +21,13 @@ class CandidatesPage {
   final int limit;
 
   factory CandidatesPage.fromJson(Map<String, dynamic> json) {
-    return CandidatesPage(
-      items: (json['items'] as List<dynamic>)
-          .map((e) => CandidateModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      total: json['total'] as int,
-      page: json['page'] as int,
-      limit: json['limit'] as int,
-    );
+    return _$CandidatesPageFromJson(json);
   }
+
+  Map<String, dynamic> toJson() {
+    return _$CandidatesPageToJson(this);
+  }
+
+  @override
+  List<Object?> get props => [items, total, page, limit];
 }

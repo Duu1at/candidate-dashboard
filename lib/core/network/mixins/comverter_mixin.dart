@@ -2,12 +2,8 @@ import 'dart:developer';
 
 import 'package:candidate_dashboard/core/core.dart';
 
-
 mixin ConverterMixin {
-  T convertType<T>(
-    Map<String, dynamic> jsonData,
-    FromJson<T> fromJson,
-  ) {
+  T convertType<T>(Map<String, dynamic> jsonData, FromJson<T> fromJson) {
     try {
       return fromJson(jsonData);
     } catch (e, s) {
@@ -16,10 +12,7 @@ mixin ConverterMixin {
     }
   }
 
-  List<T> convertListOfType<T>(
-    List<dynamic> jsonData,
-    FromJson<T> fromJson,
-  ) {
+  List<T> convertListOfType<T>(List<dynamic> jsonData, FromJson<T> fromJson) {
     try {
       return jsonData.map((e) => fromJson(e as Map<String, dynamic>)).toList();
     } catch (e, s) {

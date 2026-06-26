@@ -16,8 +16,6 @@ import 'package:candidate_dashboard/data/datasources/local/local_datasource_impl
     as _i581;
 import 'package:candidate_dashboard/data/datasources/remote/remote_datasource_impl.dart'
     as _i673;
-import 'package:candidate_dashboard/data/repositories/candidate_repository.dart'
-    as _i891;
 import 'package:candidate_dashboard/data/repositories/candidate_repository_impl.dart'
     as _i367;
 import 'package:candidate_dashboard/features/candidate_detail/cubit/candidate_detail_cubit.dart'
@@ -75,7 +73,7 @@ extension GetItInjectableX on _i174.GetIt {
       ),
     );
     gh.factory<_i160.CandidateDetailCubit>(
-      () => _i160.CandidateDetailCubit(gh<_i891.CandidateRepository>()),
+      () => _i160.CandidateDetailCubit(gh<_i846.CandidateRepository>()),
     );
     return this;
   }

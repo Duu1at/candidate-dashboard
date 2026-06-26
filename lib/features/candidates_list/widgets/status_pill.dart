@@ -17,10 +17,7 @@ class StatusPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Chip(
-      avatar: CircleAvatar(
-        radius: 3.5,
-        backgroundColor: _dotColor(context),
-      ),
+      avatar: CircleAvatar(radius: 3.5, backgroundColor: _dotColor(context)),
       label: Text(
         status.label,
         style: context.textTheme.labelSmall?.copyWith(

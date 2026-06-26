@@ -54,7 +54,10 @@ class CandidateHero extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.x2),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.x4, vertical: AppSpacing.x2),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.x4,
+              vertical: AppSpacing.x2,
+            ),
             child: Row(
               children: [
                 Chip(
@@ -74,7 +77,9 @@ class CandidateHero extends StatelessWidget {
                   side: BorderSide.none,
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   visualDensity: VisualDensity.compact,
-                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.x1),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.x1,
+                  ),
                 ),
                 const SizedBox(width: AppSpacing.x3),
                 Expanded(

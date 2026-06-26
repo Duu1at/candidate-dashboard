@@ -3,7 +3,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 
 final class ConnectivityBasedConnectionChecker implements ConnectionService {
   ConnectivityBasedConnectionChecker([Connectivity? connectivity])
-      : connectivity = connectivity ?? Connectivity();
+    : connectivity = connectivity ?? Connectivity();
 
   final Connectivity connectivity;
 

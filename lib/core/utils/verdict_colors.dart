@@ -1,5 +1,5 @@
-import 'package:candidate_dashboard/core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:candidate_dashboard/core/core.dart';
 
 AppColorsExt _ext(BuildContext context) {
   return Theme.of(context).extension<AppColorsExt>()!;

@@ -114,9 +114,9 @@ class _CandidatesListViewState extends State<CandidatesListView> {
                         a.sortBy != b.sortBy,
                     builder: (_, state) {
                       return SliverToBoxAdapter(
-                        child: state.status == CandidatesListStatus.loaded ||
-                                state.status ==
-                                    CandidatesListStatus.loadingMore
+                        child:
+                            state.status == CandidatesListStatus.loaded ||
+                                state.status == CandidatesListStatus.loadingMore
                             ? ListSubHeader(
                                 shown: state.items.length,
                                 total: state.totalItems,

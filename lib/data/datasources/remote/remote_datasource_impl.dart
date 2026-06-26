@@ -1,8 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:candidate_dashboard/core/core.dart';
-import 'package:candidate_dashboard/data/datasources/remote/remote_datasource.dart';
-import 'package:candidate_dashboard/data/models/candidate_model.dart';
-import 'package:candidate_dashboard/data/models/candidates_page.dart';
+import 'package:candidate_dashboard/data/data.dart';
 
 @LazySingleton(as: RemoteDatasource)
 final class RemoteDatasourceImpl implements RemoteDatasource {

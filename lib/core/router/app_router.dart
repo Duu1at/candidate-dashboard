@@ -15,8 +15,9 @@ final appRouter = GoRouter(
         GoRoute(
           path: AppRoutes.candidateDetail,
           builder: (_, state) => BlocProvider(
-            create: (_) => getIt<CandidateDetailCubit>()
-              ..load(state.pathParameters['id']!),
+            create: (_) =>
+                getIt<CandidateDetailCubit>()
+                  ..load(state.pathParameters['id']!),
             child: const CandidateDetailView(),
           ),
         ),

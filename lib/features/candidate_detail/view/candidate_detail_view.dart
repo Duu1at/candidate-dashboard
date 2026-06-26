@@ -19,7 +19,9 @@ class CandidateDetailView extends StatelessWidget {
       );
     } else if (state.status == CandidateDetailStatus.loaded) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Статус обновлён')),
+        const SnackBar(
+          content: Text('Статус обновлён'),
+        ),
       );
     }
   }
@@ -111,17 +113,20 @@ class _DetailView extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: BlocBuilder<CandidateDetailCubit, CandidateDetailState>(
-        buildWhen: (a, b) =>
-            a.candidate?.status != b.candidate?.status || a.status != b.status,
-        builder: (context, state) {
-          return StatusSelector(
-            currentStatus: state.candidate?.status ?? candidate.status,
-            isUpdating: state.status == CandidateDetailStatus.updatingStatus,
-            onChanged: context.read<CandidateDetailCubit>().updateStatus,
-          );
-        },
-      ),
+      bottomNavigationBar:
+          BlocBuilder<CandidateDetailCubit, CandidateDetailState>(
+            buildWhen: (a, b) =>
+                a.candidate?.status != b.candidate?.status ||
+                a.status != b.status,
+            builder: (context, state) {
+              return StatusSelector(
+                currentStatus: state.candidate?.status ?? candidate.status,
+                isUpdating:
+                    state.status == CandidateDetailStatus.updatingStatus,
+                onChanged: context.read<CandidateDetailCubit>().updateStatus,
+              );
+            },
+          ),
     );
   }
 }

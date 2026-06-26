@@ -56,8 +56,9 @@ class MockInterceptor extends Interceptor {
     switch (sort) {
       case 'name':
         result.sort(
-          (a, b) => (a['name'] as String? ?? '')
-              .compareTo(b['name'] as String? ?? ''),
+          (a, b) => (a['name'] as String? ?? '').compareTo(
+            b['name'] as String? ?? '',
+          ),
         );
       case 'experience':
         result.sort(
@@ -67,8 +68,9 @@ class MockInterceptor extends Interceptor {
       case 'date_added':
       default:
         result.sort(
-          (a, b) => (b['date_added'] as String? ?? '')
-              .compareTo(a['date_added'] as String? ?? ''),
+          (a, b) => (b['date_added'] as String? ?? '').compareTo(
+            a['date_added'] as String? ?? '',
+          ),
         );
     }
 

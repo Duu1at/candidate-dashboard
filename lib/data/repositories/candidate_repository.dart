@@ -1,5 +1,4 @@
-import 'package:candidate_dashboard/data/models/candidate_model.dart';
-import 'package:candidate_dashboard/data/models/candidates_page.dart';
+import 'package:candidate_dashboard/data/data.dart';
 
 abstract interface class CandidateRepository {
   Future<CandidatesPage> getCandidates({

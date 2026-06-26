@@ -25,10 +25,7 @@ class SortBottomSheet extends StatelessWidget {
               AppSpacing.x6,
               AppSpacing.x2,
             ),
-            child: Text(
-              'Сортировка',
-              style: context.textTheme.titleMedium,
-            ),
+            child: Text('Сортировка', style: context.textTheme.titleMedium),
           ),
           RadioGroup<SortOption>(
             groupValue: current,

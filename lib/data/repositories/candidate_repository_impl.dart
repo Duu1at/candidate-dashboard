@@ -99,7 +99,9 @@ final class CandidateRepositoryImpl implements CandidateRepository {
     final candidate = await _remote.getById(id);
     if (candidate == null) return null;
     final statuses = await _local.getLocalStatuses();
-    return statuses.containsKey(id) ? candidate.copyWith(status: statuses[id]!) : candidate;
+    return statuses.containsKey(id)
+        ? candidate.copyWith(status: statuses[id]!)
+        : candidate;
   }
 
   @override

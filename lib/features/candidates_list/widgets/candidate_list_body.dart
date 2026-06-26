@@ -41,10 +41,7 @@ class CandidateListBodySliver extends StatelessWidget {
             ),
           ),
           _ when state.items.isEmpty => SliverFillRemaining(
-            child: CandidatesEmpty(
-              query: state.searchQuery,
-              onReset: onReset,
-            ),
+            child: CandidatesEmpty(query: state.searchQuery, onReset: onReset),
           ),
           _ => SliverPadding(
             padding: const EdgeInsets.only(

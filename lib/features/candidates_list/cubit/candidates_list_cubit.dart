@@ -20,12 +20,14 @@ final class CandidatesListCubit extends Cubit<CandidatesListState> {
     final search = state.searchQuery;
     final filter = state.verdictFilter;
     final sort = state.sortBy.value;
-    emit(state.copyWith(
-      status: CandidatesListStatus.loading,
-      items: [],
-      currentPage: 1,
-      totalItems: 0,
-    ));
+    emit(
+      state.copyWith(
+        status: CandidatesListStatus.loading,
+        items: [],
+        currentPage: 1,
+        totalItems: 0,
+      ),
+    );
     try {
       final page = await _repository.getCandidates(
         page: 1,
@@ -36,18 +38,22 @@ final class CandidatesListCubit extends Cubit<CandidatesListState> {
       );
       _sub?.cancel();
       _sub = _repository.candidatesStream.listen(_onStreamUpdate);
-      emit(state.copyWith(
-        status: CandidatesListStatus.loaded,
-        items: page.items,
-        totalItems: page.total,
-        currentPage: 1,
-        isOffline: _repository.isOffline,
-      ));
+      emit(
+        state.copyWith(
+          status: CandidatesListStatus.loaded,
+          items: page.items,
+          totalItems: page.total,
+          currentPage: 1,
+          isOffline: _repository.isOffline,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: CandidatesListStatus.error,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(
+          status: CandidatesListStatus.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
@@ -77,12 +83,14 @@ final class CandidatesListCubit extends Cubit<CandidatesListState> {
         filter: filter,
         sort: sort,
       );
-      emit(state.copyWith(
-        status: CandidatesListStatus.loaded,
-        items: [...state.items, ...page.items],
-        totalItems: page.total,
-        currentPage: nextPage,
-      ));
+      emit(
+        state.copyWith(
+          status: CandidatesListStatus.loaded,
+          items: [...state.items, ...page.items],
+          totalItems: page.total,
+          currentPage: nextPage,
+        ),
+      );
     } catch (_) {
       emit(state.copyWith(status: CandidatesListStatus.loaded));
     }
@@ -91,13 +99,15 @@ final class CandidatesListCubit extends Cubit<CandidatesListState> {
   Future<void> search(String query) async {
     final filter = state.verdictFilter;
     final sort = state.sortBy.value;
-    emit(state.copyWith(
-      searchQuery: query,
-      status: CandidatesListStatus.loading,
-      items: [],
-      currentPage: 1,
-      totalItems: 0,
-    ));
+    emit(
+      state.copyWith(
+        searchQuery: query,
+        status: CandidatesListStatus.loading,
+        items: [],
+        currentPage: 1,
+        totalItems: 0,
+      ),
+    );
     try {
       final page = await _repository.getCandidates(
         page: 1,
@@ -106,31 +116,37 @@ final class CandidatesListCubit extends Cubit<CandidatesListState> {
         filter: filter,
         sort: sort,
       );
-      emit(state.copyWith(
-        status: CandidatesListStatus.loaded,
-        items: page.items,
-        totalItems: page.total,
-        currentPage: 1,
-        isOffline: _repository.isOffline,
-      ));
+      emit(
+        state.copyWith(
+          status: CandidatesListStatus.loaded,
+          items: page.items,
+          totalItems: page.total,
+          currentPage: 1,
+          isOffline: _repository.isOffline,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: CandidatesListStatus.error,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(
+          status: CandidatesListStatus.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
   Future<void> filterByVerdict(String? verdict) async {
     final search = state.searchQuery;
     final sort = state.sortBy.value;
-    emit(state.copyWith(
-      verdictFilter: verdict,
-      status: CandidatesListStatus.loading,
-      items: [],
-      currentPage: 1,
-      totalItems: 0,
-    ));
+    emit(
+      state.copyWith(
+        verdictFilter: verdict,
+        status: CandidatesListStatus.loading,
+        items: [],
+        currentPage: 1,
+        totalItems: 0,
+      ),
+    );
     try {
       final page = await _repository.getCandidates(
         page: 1,
@@ -139,31 +155,37 @@ final class CandidatesListCubit extends Cubit<CandidatesListState> {
         filter: verdict,
         sort: sort,
       );
-      emit(state.copyWith(
-        status: CandidatesListStatus.loaded,
-        items: page.items,
-        totalItems: page.total,
-        currentPage: 1,
-        isOffline: _repository.isOffline,
-      ));
+      emit(
+        state.copyWith(
+          status: CandidatesListStatus.loaded,
+          items: page.items,
+          totalItems: page.total,
+          currentPage: 1,
+          isOffline: _repository.isOffline,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: CandidatesListStatus.error,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(
+          status: CandidatesListStatus.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
   Future<void> setSortBy(SortOption option) async {
     final search = state.searchQuery;
     final filter = state.verdictFilter;
-    emit(state.copyWith(
-      sortBy: option,
-      status: CandidatesListStatus.loading,
-      items: [],
-      currentPage: 1,
-      totalItems: 0,
-    ));
+    emit(
+      state.copyWith(
+        sortBy: option,
+        status: CandidatesListStatus.loading,
+        items: [],
+        currentPage: 1,
+        totalItems: 0,
+      ),
+    );
     try {
       final page = await _repository.getCandidates(
         page: 1,
@@ -172,31 +194,37 @@ final class CandidatesListCubit extends Cubit<CandidatesListState> {
         filter: filter,
         sort: option.value,
       );
-      emit(state.copyWith(
-        status: CandidatesListStatus.loaded,
-        items: page.items,
-        totalItems: page.total,
-        currentPage: 1,
-        isOffline: _repository.isOffline,
-      ));
+      emit(
+        state.copyWith(
+          status: CandidatesListStatus.loaded,
+          items: page.items,
+          totalItems: page.total,
+          currentPage: 1,
+          isOffline: _repository.isOffline,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: CandidatesListStatus.error,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(
+          status: CandidatesListStatus.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
   Future<void> resetFilters() async {
     final sort = state.sortBy.value;
-    emit(state.copyWith(
-      searchQuery: '',
-      verdictFilter: null,
-      status: CandidatesListStatus.loading,
-      items: [],
-      currentPage: 1,
-      totalItems: 0,
-    ));
+    emit(
+      state.copyWith(
+        searchQuery: '',
+        verdictFilter: null,
+        status: CandidatesListStatus.loading,
+        items: [],
+        currentPage: 1,
+        totalItems: 0,
+      ),
+    );
     try {
       final page = await _repository.getCandidates(
         page: 1,
@@ -205,18 +233,22 @@ final class CandidatesListCubit extends Cubit<CandidatesListState> {
         filter: null,
         sort: sort,
       );
-      emit(state.copyWith(
-        status: CandidatesListStatus.loaded,
-        items: page.items,
-        totalItems: page.total,
-        currentPage: 1,
-        isOffline: _repository.isOffline,
-      ));
+      emit(
+        state.copyWith(
+          status: CandidatesListStatus.loaded,
+          items: page.items,
+          totalItems: page.total,
+          currentPage: 1,
+          isOffline: _repository.isOffline,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: CandidatesListStatus.error,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(
+          status: CandidatesListStatus.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
