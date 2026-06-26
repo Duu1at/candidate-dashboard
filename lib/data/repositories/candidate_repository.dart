@@ -8,8 +8,12 @@ abstract interface class CandidateRepository {
     String? filter,
     String sort,
   });
+
   Future<CandidateModel?> getById(String id);
+
   Future<void> updateStatus(String id, String status);
+
   Stream<List<CandidateModel>> get candidatesStream;
+
   bool get isOffline;
 }

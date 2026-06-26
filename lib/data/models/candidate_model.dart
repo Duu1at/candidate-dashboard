@@ -115,6 +115,31 @@ final class CandidateModel extends Equatable {
     );
   }
 
+  String get initials {
+    final parts = name
+        .trim()
+        .split(RegExp(r'\s+'))
+        .where((p) => p.isNotEmpty)
+        .toList();
+    if (parts.isEmpty) return '?';
+    if (parts.length == 1) return parts[0][0].toUpperCase();
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  }
+
+  List<String> get stackTags {
+    return stack.split(',').map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
+  }
+
+  String get eduInstitution {
+    final i = edu.indexOf(',');
+    return i > 0 ? edu.substring(0, i).trim() : edu;
+  }
+
+  String get eduDetails {
+    final i = edu.indexOf(',');
+    return i > 0 ? edu.substring(i + 1).trim() : '';
+  }
+
   @override
   List<Object?> get props => [
     id,

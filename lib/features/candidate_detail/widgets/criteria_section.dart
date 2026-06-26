@@ -24,7 +24,7 @@ class CriteriaSection extends StatelessWidget {
               color: context.colors.surfaceContainerHighest,
               tiles: criteria.map((item) {
                 final status = item.elementAtOrNull(0) ?? '';
-                final palette = criteriaPalette(context, status);
+                final palette = context.appColors.criteriaPalette(status);
                 return ListTile(
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: AppSpacing.x4,

@@ -1,7 +1,11 @@
 import 'package:dio/dio.dart';
 
 final class ApiClientException implements Exception {
-  const ApiClientException(this.error, {this.code, this.stackTrace});
+  const ApiClientException(
+    this.error, {
+    this.code,
+    this.stackTrace,
+  });
 
   final DioException error;
   final int? code;

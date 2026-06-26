@@ -98,10 +98,13 @@ class _DetailView extends StatelessWidget {
                 ExperienceSection(candidate.exp),
                 const SizedBox(height: AppSpacing.x4),
                 if (candidate.edu.isNotEmpty) ...[
-                  EducationSection(candidate.edu),
+                  EducationSection(
+                    institution: candidate.eduInstitution,
+                    details: candidate.eduDetails,
+                  ),
                   const SizedBox(height: AppSpacing.x4),
                 ],
-                StackSection(candidate.stack),
+                StackSection(candidate.stackTags),
                 const SizedBox(height: AppSpacing.x4),
                 CriteriaSection(candidate.criteria),
                 const SizedBox(height: AppSpacing.x4),

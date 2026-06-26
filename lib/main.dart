@@ -8,8 +8,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter();
-  await Hive.openBox<String>('candidates');
-  await Hive.openBox<String>('statuses');
+
+  Future.wait([
+    Hive.openBox<String>('candidates'),
+    Hive.openBox<String>('statuses'),
+  ]);
 
   configureDependencies();
 

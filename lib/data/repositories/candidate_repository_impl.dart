@@ -19,7 +19,9 @@ final class CandidateRepositoryImpl implements CandidateRepository {
   final ConnectionService _connection;
 
   List<CandidateModel> _currentItems = [];
+
   bool _isOffline = false;
+
   final _controller = StreamController<List<CandidateModel>>.broadcast();
 
   @override
