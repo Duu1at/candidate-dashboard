@@ -49,3 +49,6 @@ app.*.map.json
 
 # Claude
 .claude/
+
+# Internal docs
+docs/

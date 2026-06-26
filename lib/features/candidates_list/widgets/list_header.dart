@@ -168,8 +168,9 @@ class _ThemeBottomSheet extends StatelessWidget {
                   Switch(
                     value: isDark,
                     onChanged: (value) {
-                      appThemeNotifier.value =
-                          value ? ThemeMode.dark : ThemeMode.light;
+                      appThemeNotifier.value = value
+                          ? ThemeMode.dark
+                          : ThemeMode.light;
                     },
                   ),
                 ],

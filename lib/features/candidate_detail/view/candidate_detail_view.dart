@@ -23,6 +23,12 @@ class _CandidateDetailViewState extends State<CandidateDetailView> {
   }
 
   @override
+  dispose() {
+    _cubit.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocListener<CandidateDetailCubit, CandidateDetailState>(
       bloc: _cubit,

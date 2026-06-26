@@ -13,12 +13,12 @@ class App extends StatelessWidget {
       valueListenable: appThemeNotifier,
       builder: (_, themeMode, _) {
         return MaterialApp.router(
-        title: 'Candidate Dashboard',
-        theme: AppTheme.light,
-        darkTheme: AppTheme.dark,
-        themeMode: themeMode,
-        routerConfig: appRouter,
-      );
+          title: 'Candidate Dashboard',
+          theme: AppTheme.light,
+          darkTheme: AppTheme.dark,
+          themeMode: themeMode,
+          routerConfig: appRouter,
+        );
       },
     );
   }
