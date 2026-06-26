@@ -91,7 +91,8 @@ class _CandidatesListViewBodyState extends State<CandidatesListViewBody> {
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: _kMaxContentWidth),
           child: RefreshIndicator(
-            onRefresh: () => context.read<CandidatesListCubit>().load(forceRefresh: true),
+            onRefresh: () =>
+                context.read<CandidatesListCubit>().load(forceRefresh: true),
             child: CustomScrollView(
               controller: _scrollController,
               physics: const AlwaysScrollableScrollPhysics(),
@@ -118,7 +119,9 @@ class _CandidatesListViewBodyState extends State<CandidatesListViewBody> {
                             searchController: _searchController,
                             onSearch: _onSearch,
                             onClear: _onClear,
-                            onFilterSelected: context.read<CandidateFiltersCubit>().filterByVerdict,
+                            onFilterSelected: context
+                                .read<CandidateFiltersCubit>()
+                                .filterByVerdict,
                           ),
                         ),
                       ),
@@ -139,8 +142,7 @@ class _CandidatesListViewBodyState extends State<CandidatesListViewBody> {
                       builder: (_, listState) {
                         return SliverToBoxAdapter(
                           child:
-                              listState.status ==
-                                      CandidatesListStatus.loaded ||
+                              listState.status == CandidatesListStatus.loaded ||
                                   listState.status ==
                                       CandidatesListStatus.loadingMore
                               ? ListSubHeader(

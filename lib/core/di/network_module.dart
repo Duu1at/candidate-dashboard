@@ -15,17 +15,17 @@ abstract class NetworkModule {
   @lazySingleton
   Dio dio(MockInterceptor mockInterceptor) {
     return Dio(
-          BaseOptions(
-            baseUrl: 'https://mock.api/',
-            contentType: 'application/json; charset=utf-8',
-            connectTimeout: const Duration(seconds: 15),
-            receiveTimeout: const Duration(seconds: 15),
-          ),
-        )
-        ..interceptors.addAll([
-          const BaseInterceptor(),
-          mockInterceptor,
-        ]);
+        BaseOptions(
+          baseUrl: 'https://mock.api/',
+          contentType: 'application/json; charset=utf-8',
+          connectTimeout: const Duration(seconds: 15),
+          receiveTimeout: const Duration(seconds: 15),
+        ),
+      )
+      ..interceptors.addAll([
+        const BaseInterceptor(),
+        mockInterceptor,
+      ]);
   }
 
   @lazySingleton
@@ -34,9 +34,9 @@ abstract class NetworkModule {
     ConnectionService connection,
   ) {
     return ApiClient.fromDio(
-    dio: dio,
-    connection: connection,
-  );
+      dio: dio,
+      connection: connection,
+    );
   }
 
   @Named('candidates_box')

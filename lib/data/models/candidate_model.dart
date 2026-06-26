@@ -127,7 +127,11 @@ final class CandidateModel extends Equatable {
   }
 
   List<String> get stackTags {
-    return stack.split(',').map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
+    return stack
+        .split(',')
+        .map((s) => s.trim())
+        .where((s) => s.isNotEmpty)
+        .toList();
   }
 
   String get eduInstitution {

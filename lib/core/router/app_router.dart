@@ -15,7 +15,7 @@ final appRouter = GoRouter(
           path: AppRoutes.candidateDetail,
           builder: (_, state) {
             final id = state.pathParameters['id']!;
-            return CandidateDetailView(id:id);
+            return CandidateDetailView(id: id);
           },
         ),
       ],

@@ -18,5 +18,5 @@ abstract class CandidateDetailState with _$CandidateDetailState {
     @Default(CandidateDetailStatus.initial) CandidateDetailStatus status,
     CandidateModel? candidate,
     String? errorMessage,
-}) = _CandidateDetailState;
+  }) = _CandidateDetailState;
 }

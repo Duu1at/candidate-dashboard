@@ -8,12 +8,12 @@ class CriteriaSection extends StatelessWidget {
   final List<List<String>> criteria;
 
   IconData _criteriaIcon(String status) {
-  return switch (status) {
-    'ok' => Icons.check_circle_outline_rounded,
-    'warn' => Icons.warning_amber_rounded,
-    _ => Icons.cancel_outlined,
-  };
-}
+    return switch (status) {
+      'ok' => Icons.check_circle_outline_rounded,
+      'warn' => Icons.warning_amber_rounded,
+      _ => Icons.cancel_outlined,
+    };
+  }
 
   @override
   Widget build(BuildContext context) {

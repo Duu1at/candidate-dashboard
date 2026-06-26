@@ -10,9 +10,9 @@ final class CandidateRepositoryImpl implements CandidateRepository {
     required RemoteDatasource remote,
     required LocalDatasource local,
     required ConnectionService connection,
-  })  : _remote = remote,
-        _local = local,
-        _connection = connection;
+  }) : _remote = remote,
+       _local = local,
+       _connection = connection;
 
   final RemoteDatasource _remote;
   final LocalDatasource _local;
@@ -54,7 +54,9 @@ final class CandidateRepositoryImpl implements CandidateRepository {
         }
         _isOffline = false;
 
-        if (params.page == 1 && params.search.isEmpty && params.filter == null) {
+        if (params.page == 1 &&
+            params.search.isEmpty &&
+            params.filter == null) {
           await _local.cacheCandidates(items);
         }
 

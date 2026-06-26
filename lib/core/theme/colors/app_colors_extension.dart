@@ -127,10 +127,10 @@ final class AppColorsExt extends ThemeExtension<AppColorsExt> {
 
   VerdictPalette verdictPalette(String vc) {
     return switch (vc) {
-    'verdict-green' => verdictGreen,
-    'verdict-orange' => verdictOrange,
-    _ => verdictRed,
-  };
+      'verdict-green' => verdictGreen,
+      'verdict-orange' => verdictOrange,
+      _ => verdictRed,
+    };
   }
 
   Color verdictColor(String vc) => verdictPalette(vc).dot;
@@ -139,10 +139,10 @@ final class AppColorsExt extends ThemeExtension<AppColorsExt> {
 
   VerdictPalette criteriaPalette(String status) {
     return switch (status) {
-    'ok' => verdictGreen,
-    'warn' => verdictOrange,
-    _ => verdictRed,
-  };
+      'ok' => verdictGreen,
+      'warn' => verdictOrange,
+      _ => verdictRed,
+    };
   }
 
   Color criteriaColor(String status) => criteriaPalette(status).dot;

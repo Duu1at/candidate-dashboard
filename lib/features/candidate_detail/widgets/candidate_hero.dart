@@ -57,17 +57,23 @@ class CandidateHero extends StatelessWidget {
                 Chip(
                   avatar: CircleAvatar(
                     radius: 4,
-                    backgroundColor: context.appColors.verdictColor(candidate.vc),
+                    backgroundColor: context.appColors.verdictColor(
+                      candidate.vc,
+                    ),
                   ),
                   label: Text(
                     candidate.verdict,
                     style: context.textTheme.labelMedium?.copyWith(
-                      color: context.appColors.onVerdictContainerColor(candidate.vc),
+                      color: context.appColors.onVerdictContainerColor(
+                        candidate.vc,
+                      ),
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.3,
                     ),
                   ),
-                  backgroundColor: context.appColors.verdictContainerColor(candidate.vc),
+                  backgroundColor: context.appColors.verdictContainerColor(
+                    candidate.vc,
+                  ),
                   side: BorderSide.none,
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   visualDensity: VisualDensity.compact,
