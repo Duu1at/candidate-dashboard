@@ -7,10 +7,12 @@ import 'package:candidate_dashboard/data/data.dart';
 @LazySingleton(as: CandidateRepository)
 final class CandidateRepositoryImpl implements CandidateRepository {
   CandidateRepositoryImpl({
-    required this._remote,
-    required this._local,
-    required this._connection,
-  });
+    required RemoteDatasource remote,
+    required LocalDatasource local,
+    required ConnectionService connection,
+  })  : _remote = remote,
+        _local = local,
+        _connection = connection;
 
   final RemoteDatasource _remote;
   final LocalDatasource _local;

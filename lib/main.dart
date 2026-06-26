@@ -9,7 +9,7 @@ void main() async {
 
   await Hive.initFlutter();
 
-  Future.wait([
+  await Future.wait([
     Hive.openBox<String>('candidates'),
     Hive.openBox<String>('statuses'),
   ]);

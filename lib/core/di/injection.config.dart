@@ -18,8 +18,6 @@ import 'package:candidate_dashboard/data/datasources/remote/remote_datasource_im
     as _i673;
 import 'package:candidate_dashboard/data/repositories/candidate_repository_impl.dart'
     as _i367;
-import 'package:candidate_dashboard/features/candidate_detail/cubit/candidate_detail_cubit.dart'
-    as _i160;
 import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:hive/hive.dart' as _i979;
@@ -67,13 +65,10 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i846.CandidateRepository>(
       () => _i367.CandidateRepositoryImpl(
-        gh<_i846.RemoteDatasource>(),
-        gh<_i846.LocalDatasource>(),
-        gh<_i712.ConnectionService>(),
+        remote: gh<_i846.RemoteDatasource>(),
+        local: gh<_i846.LocalDatasource>(),
+        connection: gh<_i712.ConnectionService>(),
       ),
-    );
-    gh.factory<_i160.CandidateDetailCubit>(
-      () => _i160.CandidateDetailCubit(gh<_i846.CandidateRepository>()),
     );
     return this;
   }

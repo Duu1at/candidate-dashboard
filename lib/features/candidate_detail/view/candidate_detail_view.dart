@@ -77,7 +77,7 @@ class _CandidateDetailViewState extends State<CandidateDetailView> {
                   currentStatus: state.candidate!.status,
                   isUpdating:
                       state.status == CandidateDetailStatus.updatingStatus,
-                  onChanged: context.read<CandidateDetailCubit>().updateStatus,
+                  onChanged: _cubit.updateStatus,
                 );
               },
             ),
