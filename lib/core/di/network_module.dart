@@ -9,25 +9,35 @@ abstract class NetworkModule {
   MockInterceptor get mockInterceptor => MockInterceptor();
 
   @lazySingleton
-  ConnectionService get connectionService => ConnectivityBasedConnectionChecker();
+  ConnectionService get connectionService =>
+      ConnectivityBasedConnectionChecker();
 
   @lazySingleton
-  Dio dio(MockInterceptor mockInterceptor) =>
-      Dio(
+  Dio dio(MockInterceptor mockInterceptor) {
+    return Dio(
         BaseOptions(
           baseUrl: 'https://mock.api/',
           contentType: 'application/json; charset=utf-8',
-          connectTimeout: const Duration(seconds: 120),
-          receiveTimeout: const Duration(seconds: 120),
+          connectTimeout: const Duration(seconds: 15),
+          receiveTimeout: const Duration(seconds: 15),
         ),
-      )..interceptors.addAll([
+      )
+      ..interceptors.addAll([
         const BaseInterceptor(),
         mockInterceptor,
       ]);
+  }
 
   @lazySingleton
-  ApiClient apiClient(Dio dio, ConnectionService connection) =>
-      ApiClient.fromDio(dio: dio, connection: connection);
+  ApiClient apiClient(
+    Dio dio,
+    ConnectionService connection,
+  ) {
+    return ApiClient.fromDio(
+      dio: dio,
+      connection: connection,
+    );
+  }
 
   @Named('candidates_box')
   @lazySingleton

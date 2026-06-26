@@ -3,19 +3,18 @@ import 'package:candidate_dashboard/core/core.dart';
 import 'package:candidate_dashboard/features/candidate_detail/candidate_detail.dart';
 
 class EducationSection extends StatelessWidget {
-  const EducationSection(this.edu, {super.key});
+  const EducationSection({
+    required this.institution,
+    required this.details,
+    super.key,
+  });
 
-  final String edu;
+  final String institution;
+  final String details;
 
   @override
   Widget build(BuildContext context) {
-    if (edu.isEmpty) return const SizedBox.shrink();
-
-    final commaIndex = edu.indexOf(',');
-    final institution = commaIndex > 0
-        ? edu.substring(0, commaIndex).trim()
-        : edu;
-    final details = commaIndex > 0 ? edu.substring(commaIndex + 1).trim() : '';
+    if (institution.isEmpty) return const SizedBox.shrink();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

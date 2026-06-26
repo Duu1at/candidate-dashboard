@@ -22,9 +22,7 @@ class ListHeader extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: context.colors.surface,
-        boxShadow: const [
-          BoxShadow(color: Color(0x0F000000), offset: Offset(0, 1)),
-        ],
+        boxShadow: context.appColors.shadowSm,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,15 +75,17 @@ class ListHeader extends StatelessWidget {
             ),
           ),
           BlocBuilder<CandidatesListCubit, CandidatesListState>(
-            buildWhen: (a, b) {
-              return a.verdictFilter != b.verdictFilter ||
-                  a.allCandidates != b.allCandidates;
-            },
-            builder: (context, state) {
-              return FilterChipsRow(
-                selected: state.verdictFilter,
-                allCandidates: state.allCandidates,
-                onSelected: onFilterSelected,
+            buildWhen: (a, b) => a.totalItems != b.totalItems,
+            builder: (context, listState) {
+              return BlocBuilder<CandidateFiltersCubit, CandidateFiltersState>(
+                buildWhen: (a, b) => a.verdictFilter != b.verdictFilter,
+                builder: (context, filtersState) {
+                  return FilterChipsRow(
+                    selected: filtersState.verdictFilter,
+                    total: listState.totalItems,
+                    onSelected: onFilterSelected,
+                  );
+                },
               );
             },
           ),

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:candidate_dashboard/core/core.dart';
 
-
 Type _getType<T>() => T;
 final Type _voidType = _getType<void>();
 
@@ -42,11 +41,7 @@ class ApiClient with ConverterMixin {
     );
   }
 
-  Future<T> get<T>(
-    String path, {
-    Object? data,
-    GetApiParams? params,
-  }) async {
+  Future<T> get<T>(String path, {Object? data, GetApiParams? params}) async {
     final response = await getResponse<T>(
       path,
       data: data,
@@ -99,11 +94,7 @@ class ApiClient with ConverterMixin {
     );
   }
 
-  Future<T> post<T>(
-    String path, {
-    Object? data,
-    PostApiParams? params,
-  }) async {
+  Future<T> post<T>(String path, {Object? data, PostApiParams? params}) async {
     final response = await postResponse<T>(
       path,
       data: data,
@@ -156,11 +147,7 @@ class ApiClient with ConverterMixin {
     );
   }
 
-  Future<T> put<T>(
-    String path, {
-    Object? data,
-    PutApiParams? params,
-  }) async {
+  Future<T> put<T>(String path, {Object? data, PutApiParams? params}) async {
     final response = await putResponse<T>(
       path,
       data: data,
@@ -310,7 +297,9 @@ class ApiClient with ConverterMixin {
 
   void clearAuthorizationHeader() {
     if (requestExecutor is DioRequestExecutor) {
-      (requestExecutor as DioRequestExecutor).dio.options.headers.remove('Authorization');
+      (requestExecutor as DioRequestExecutor).dio.options.headers.remove(
+        'Authorization',
+      );
     }
   }
 }

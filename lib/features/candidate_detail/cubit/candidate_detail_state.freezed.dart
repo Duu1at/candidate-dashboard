@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CandidateDetailState {
 
- CandidateDetailStatus get status; Candidate? get candidate; String? get errorMessage;
+ CandidateDetailStatus get status; CandidateModel? get candidate; String? get errorMessage;
 /// Create a copy of CandidateDetailState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,11 +45,11 @@ abstract mixin class $CandidateDetailStateCopyWith<$Res>  {
   factory $CandidateDetailStateCopyWith(CandidateDetailState value, $Res Function(CandidateDetailState) _then) = _$CandidateDetailStateCopyWithImpl;
 @useResult
 $Res call({
- CandidateDetailStatus status, Candidate? candidate, String? errorMessage
+ CandidateDetailStatus status, CandidateModel? candidate, String? errorMessage
 });
 
 
-$CandidateCopyWith<$Res>? get candidate;
+
 
 }
 /// @nodoc
@@ -66,23 +66,11 @@ class _$CandidateDetailStateCopyWithImpl<$Res>
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as CandidateDetailStatus,candidate: freezed == candidate ? _self.candidate : candidate // ignore: cast_nullable_to_non_nullable
-as Candidate?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as CandidateModel?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
-/// Create a copy of CandidateDetailState
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$CandidateCopyWith<$Res>? get candidate {
-    if (_self.candidate == null) {
-    return null;
-  }
 
-  return $CandidateCopyWith<$Res>(_self.candidate!, (value) {
-    return _then(_self.copyWith(candidate: value));
-  });
-}
 }
 
 
@@ -164,7 +152,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CandidateDetailStatus status,  Candidate? candidate,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CandidateDetailStatus status,  CandidateModel? candidate,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CandidateDetailState() when $default != null:
 return $default(_that.status,_that.candidate,_that.errorMessage);case _:
@@ -185,7 +173,7 @@ return $default(_that.status,_that.candidate,_that.errorMessage);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CandidateDetailStatus status,  Candidate? candidate,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CandidateDetailStatus status,  CandidateModel? candidate,  String? errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _CandidateDetailState():
 return $default(_that.status,_that.candidate,_that.errorMessage);case _:
@@ -205,7 +193,7 @@ return $default(_that.status,_that.candidate,_that.errorMessage);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CandidateDetailStatus status,  Candidate? candidate,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CandidateDetailStatus status,  CandidateModel? candidate,  String? errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _CandidateDetailState() when $default != null:
 return $default(_that.status,_that.candidate,_that.errorMessage);case _:
@@ -224,7 +212,7 @@ class _CandidateDetailState implements CandidateDetailState {
   
 
 @override@JsonKey() final  CandidateDetailStatus status;
-@override final  Candidate? candidate;
+@override final  CandidateModel? candidate;
 @override final  String? errorMessage;
 
 /// Create a copy of CandidateDetailState
@@ -257,11 +245,11 @@ abstract mixin class _$CandidateDetailStateCopyWith<$Res> implements $CandidateD
   factory _$CandidateDetailStateCopyWith(_CandidateDetailState value, $Res Function(_CandidateDetailState) _then) = __$CandidateDetailStateCopyWithImpl;
 @override @useResult
 $Res call({
- CandidateDetailStatus status, Candidate? candidate, String? errorMessage
+ CandidateDetailStatus status, CandidateModel? candidate, String? errorMessage
 });
 
 
-@override $CandidateCopyWith<$Res>? get candidate;
+
 
 }
 /// @nodoc
@@ -278,24 +266,12 @@ class __$CandidateDetailStateCopyWithImpl<$Res>
   return _then(_CandidateDetailState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as CandidateDetailStatus,candidate: freezed == candidate ? _self.candidate : candidate // ignore: cast_nullable_to_non_nullable
-as Candidate?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as CandidateModel?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
 
-/// Create a copy of CandidateDetailState
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$CandidateCopyWith<$Res>? get candidate {
-    if (_self.candidate == null) {
-    return null;
-  }
 
-  return $CandidateCopyWith<$Res>(_self.candidate!, (value) {
-    return _then(_self.copyWith(candidate: value));
-  });
-}
 }
 
 // dart format on

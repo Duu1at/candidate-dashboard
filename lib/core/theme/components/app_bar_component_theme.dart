@@ -12,10 +12,9 @@ abstract final class AppBarComponentTheme {
       elevation: 0,
       scrolledUnderElevation: 0,
       centerTitle: true,
-      systemOverlayStyle: (isDark
-              ? SystemUiOverlayStyle.light
-              : SystemUiOverlayStyle.dark)
-          .copyWith(statusBarColor: AppColors.transparent),
+      systemOverlayStyle:
+          (isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark)
+              .copyWith(statusBarColor: AppColors.transparent),
       titleTextStyle: textTheme.titleLarge,
       iconTheme: IconThemeData(color: colors.primary),
       surfaceTintColor: AppColors.transparent,

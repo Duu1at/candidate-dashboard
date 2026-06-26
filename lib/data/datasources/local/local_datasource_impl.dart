@@ -1,14 +1,14 @@
 import 'dart:convert';
-import 'package:candidate_dashboard/data/data.dart';
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
+import 'package:candidate_dashboard/data/data.dart';
 
 const _kCandidatesKey = 'candidates_list';
 const _kStatusesKey = 'statuses_map';
 
 @LazySingleton(as: LocalDatasource)
 final class LocalDatasourceImpl implements LocalDatasource {
- const LocalDatasourceImpl(
+  const LocalDatasourceImpl(
     @Named('candidates_box') this._candidatesBox,
     @Named('statuses_box') this._statusesBox,
   );

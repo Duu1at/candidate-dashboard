@@ -9,18 +9,40 @@ final class RemoteDatasourceImpl implements RemoteDatasource {
   final ApiClient _apiClient;
 
   @override
-  Future<List<CandidateModel>> getCandidates() {
-    return _apiClient.getListOfType(
+  Future<CandidatesPage> getCandidates(GetCandidatesParams params) {
+    return _apiClient.getType(
       '/candidates',
-      fromJson: CandidateModel.fromJson,
+      fromJson: CandidatesPage.fromJson,
+      params: GetApiParams(
+        queryParameters: {
+          'page': params.page,
+          'limit': params.limit,
+          if (params.search.isNotEmpty) 'search': params.search,
+          'filter': ?params.filter,
+          'sort': params.sort,
+        },
+      ),
     );
   }
 
   @override
-  Future<void> updateStatus(String id, String status) {
+  Future<CandidateModel?> getById(String id) async {
+    try {
+      return await _apiClient.getType(
+        '/candidates/$id',
+        fromJson: CandidateModel.fromJson,
+      );
+    } on ApiClientException catch (e) {
+      if (e.error.response?.statusCode == 404) return null;
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateStatus(UpdateStatusParams params) {
     return _apiClient.patch<void>(
-      '/candidates/$id/status',
-      data: {'status': status},
+      '/candidates/${params.id}/status',
+      data: {'status': params.status},
     );
   }
 }

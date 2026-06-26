@@ -7,6 +7,14 @@ class CriteriaSection extends StatelessWidget {
 
   final List<List<String>> criteria;
 
+  IconData _criteriaIcon(String status) {
+    return switch (status) {
+      'ok' => Icons.check_circle_outline_rounded,
+      'warn' => Icons.warning_amber_rounded,
+      _ => Icons.cancel_outlined,
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     if (criteria.isEmpty) return const SizedBox.shrink();
@@ -24,7 +32,7 @@ class CriteriaSection extends StatelessWidget {
               color: context.colors.surfaceContainerHighest,
               tiles: criteria.map((item) {
                 final status = item.elementAtOrNull(0) ?? '';
-                final palette = criteriaPalette(context, status);
+                final palette = context.appColors.criteriaPalette(status);
                 return ListTile(
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: AppSpacing.x4,
@@ -33,7 +41,7 @@ class CriteriaSection extends StatelessWidget {
                     radius: 13,
                     backgroundColor: palette.background,
                     child: Icon(
-                      criteriaIcon(status),
+                      _criteriaIcon(status),
                       size: 15,
                       color: palette.foreground,
                     ),

@@ -9,12 +9,9 @@ class VerdictPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final palette = verdictPalette(context, vc);
+    final palette = context.appColors.verdictPalette(vc);
     return Chip(
-      avatar: CircleAvatar(
-        radius: 3.5,
-        backgroundColor: palette.dot,
-      ),
+      avatar: CircleAvatar(radius: 3.5, backgroundColor: palette.dot),
       label: Text(
         verdict,
         style: context.textTheme.labelSmall?.copyWith(

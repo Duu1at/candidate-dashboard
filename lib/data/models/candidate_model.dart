@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -9,6 +10,7 @@ List<List<String>> _expFromJson(List<dynamic> json) =>
 List<dynamic> _expToJson(List<List<String>> list) => list;
 
 @JsonSerializable()
+@immutable
 final class CandidateModel extends Equatable {
   const CandidateModel({
     required this.id,
@@ -113,27 +115,56 @@ final class CandidateModel extends Equatable {
     );
   }
 
+  String get initials {
+    final parts = name
+        .trim()
+        .split(RegExp(r'\s+'))
+        .where((p) => p.isNotEmpty)
+        .toList();
+    if (parts.isEmpty) return '?';
+    if (parts.length == 1) return parts[0][0].toUpperCase();
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  }
+
+  List<String> get stackTags {
+    return stack
+        .split(',')
+        .map((s) => s.trim())
+        .where((s) => s.isNotEmpty)
+        .toList();
+  }
+
+  String get eduInstitution {
+    final i = edu.indexOf(',');
+    return i > 0 ? edu.substring(0, i).trim() : edu;
+  }
+
+  String get eduDetails {
+    final i = edu.indexOf(',');
+    return i > 0 ? edu.substring(i + 1).trim() : '';
+  }
+
   @override
   List<Object?> get props => [
-        id,
-        name,
-        position,
-        posLabel,
-        file,
-        email,
-        phone,
-        city,
-        tg,
-        exp,
-        totalExp,
-        stack,
-        edu,
-        verdict,
-        vc,
-        criteria,
-        summary,
-        questions,
-        status,
-        dateAdded,
-      ];
+    id,
+    name,
+    position,
+    posLabel,
+    file,
+    email,
+    phone,
+    city,
+    tg,
+    exp,
+    totalExp,
+    stack,
+    edu,
+    verdict,
+    vc,
+    criteria,
+    summary,
+    questions,
+    status,
+    dateAdded,
+  ];
 }

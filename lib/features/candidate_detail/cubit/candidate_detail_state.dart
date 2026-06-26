@@ -1,10 +1,16 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '../../../data/models/candidate_model.dart';
+import 'package:candidate_dashboard/data/data.dart';
 
 part 'candidate_detail_state.freezed.dart';
 
-enum CandidateDetailStatus { initial, loading, loaded, notFound, updatingStatus, error }
+enum CandidateDetailStatus {
+  initial,
+  loading,
+  loaded,
+  notFound,
+  updatingStatus,
+  error,
+}
 
 @freezed
 abstract class CandidateDetailState with _$CandidateDetailState {

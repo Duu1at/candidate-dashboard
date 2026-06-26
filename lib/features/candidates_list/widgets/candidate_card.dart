@@ -62,7 +62,7 @@ class _CardHeader extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CandidateAvatar(candidate.name),
+        CandidateAvatar(candidate.initials),
         const SizedBox(width: AppSpacing.x3),
         Expanded(
           child: Column(
@@ -97,10 +97,7 @@ class _CardFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final status = CandidateStatus.fromValue(candidate.status);
-    final tags = candidate.stack
-        .split(', ')
-        .where((t) => t.isNotEmpty)
-        .toList();
+    final tags = candidate.stackTags;
     final visibleTags = tags.take(4).toList();
     final extra = tags.length - visibleTags.length;
 

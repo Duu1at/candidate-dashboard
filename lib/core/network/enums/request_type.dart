@@ -4,8 +4,7 @@ enum RequestType {
   put('PUT'),
   delete('DELETE'),
   download('DOWNLOAD'),
-  patch('PATCH')
-  ;
+  patch('PATCH');
 
   const RequestType(this.value);
   final String value;

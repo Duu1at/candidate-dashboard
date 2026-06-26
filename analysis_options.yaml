@@ -3,10 +3,14 @@ include: package:flutter_lints/flutter.yaml
 analyzer:
   errors:
     avoid_print: warning
+    prefer_initializing_formals: ignore
   exclude:
     - "**/*.g.dart"
     - "**/*.freezed.dart"
     - "lib/core/di/injection.config.dart"
+    
+formatter:
+  trailing_commas: preserve
 
 linter:
   rules:

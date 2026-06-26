@@ -1,55 +1,23 @@
-
-import 'package:candidate_dashboard/core/core.dart';
-import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
-@immutable
-final class ApiClientException extends AppException<DioException> {
+final class ApiClientException implements Exception {
   const ApiClientException(
-    super.error, {
+    this.error, {
     this.code,
-    super.message,
-    super.stackTrace,
-    super.type,
-    super.handleType,
+    this.stackTrace,
   });
 
+  final DioException error;
   final int? code;
-
-  @override
-  ErrorModel getModel() {
-    return ErrorModel(
-      title: "Что-то пошло не так",
-      message: error.errorMessage ?? "Техническая ошибка, пожалуйста, обратитесь в нашу службу поддержки",
-      icon: const Icon(Icons.error),
-    );
-  }
-
-  @override
-  String getUiMessage() {
-    return error.errorMessage ?? "Что-то пошло не так";
-  }
+  final StackTrace? stackTrace;
 }
 
-@immutable
-final class ApiClientUnknownException extends AppException<Object> {
+final class ApiClientUnknownException implements Exception {
   const ApiClientUnknownException(
-    super.error, {
-    super.stackTrace,
-    super.message,
+    this.cause, {
+    this.stackTrace,
   });
 
-  @override
-  ErrorModel getModel() {
-    return ErrorModel(
-      title: "Что-то пошло не так",
-      message: message ?? "Техническая ошибка, пожалуйста, обратитесь в нашу службу поддержки",
-      icon: const Icon(Icons.error),
-    );
-  }
-
-  @override
-  String getUiMessage() {
-    return message ?? "Что-то пошло не так";
-  }
+  final Object cause;
+  final StackTrace? stackTrace;
 }

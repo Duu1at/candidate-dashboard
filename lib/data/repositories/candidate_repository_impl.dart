@@ -1,20 +1,27 @@
 import 'dart:async';
 import 'package:collection/collection.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:injectable/injectable.dart';
+import 'package:candidate_dashboard/core/core.dart';
 import 'package:candidate_dashboard/data/data.dart';
 
 @LazySingleton(as: CandidateRepository)
 final class CandidateRepositoryImpl implements CandidateRepository {
-  CandidateRepositoryImpl(RemoteDatasource remote, LocalDatasource local)
-    : _remote = remote,
-      _local = local;
+  CandidateRepositoryImpl({
+    required RemoteDatasource remote,
+    required LocalDatasource local,
+    required ConnectionService connection,
+  }) : _remote = remote,
+       _local = local,
+       _connection = connection;
 
   final RemoteDatasource _remote;
   final LocalDatasource _local;
+  final ConnectionService _connection;
 
-  List<CandidateModel> _cache = [];
+  List<CandidateModel> _currentItems = [];
+
   bool _isOffline = false;
+
   final _controller = StreamController<List<CandidateModel>>.broadcast();
 
   @override
@@ -24,39 +31,56 @@ final class CandidateRepositoryImpl implements CandidateRepository {
   Stream<List<CandidateModel>> get candidatesStream => _controller.stream;
 
   @override
-  Future<List<CandidateModel>> getCandidates({bool forceRefresh = false}) async {
-    if (_cache.isNotEmpty && !forceRefresh) return List.unmodifiable(_cache);
-
-    final connectivity = await Connectivity().checkConnectivity();
-    final hasNetwork = !connectivity.contains(ConnectivityResult.none);
+  Future<CandidatesPage> getCandidates(GetCandidatesParams params) async {
+    final hasNetwork = await _connection.checkInternetConnection();
 
     if (hasNetwork) {
       try {
-        var candidates = await _remote.getCandidates();
+        final result = await _remote.getCandidates(params);
+
         final statuses = await _local.getLocalStatuses();
-        candidates = candidates
+        final items = result.items
             .map(
               (c) => statuses.containsKey(c.id)
                   ? c.copyWith(status: statuses[c.id]!)
                   : c,
             )
             .toList();
-        _cache = candidates;
+
+        if (params.page == 1) {
+          _currentItems = items;
+        } else {
+          _currentItems = [..._currentItems, ...items];
+        }
         _isOffline = false;
-        await _local.cacheCandidates(_cache);
-        _controller.add(List.unmodifiable(_cache));
-        return List.unmodifiable(_cache);
-      } catch (_) {
-        // fall through to cache
-      }
+
+        if (params.page == 1 &&
+            params.search.isEmpty &&
+            params.filter == null) {
+          await _local.cacheCandidates(items);
+        }
+
+        return CandidatesPage(
+          items: items,
+          total: result.total,
+          page: result.page,
+          limit: result.limit,
+        );
+      } on Exception catch (_) {}
     }
 
-    final cached = await _local.getCachedCandidates();
-    if (cached != null && cached.isNotEmpty) {
-      _cache = cached;
-      _isOffline = true;
-      _controller.add(List.unmodifiable(_cache));
-      return List.unmodifiable(_cache);
+    if (params.page == 1 && params.search.isEmpty && params.filter == null) {
+      final cached = await _local.getCachedCandidates();
+      if (cached != null && cached.isNotEmpty) {
+        _currentItems = cached;
+        _isOffline = true;
+        return CandidatesPage(
+          items: cached,
+          total: cached.length,
+          page: 1,
+          limit: cached.length,
+        );
+      }
     }
 
     throw Exception('Нет данных. Проверьте соединение с интернетом.');
@@ -64,22 +88,38 @@ final class CandidateRepositoryImpl implements CandidateRepository {
 
   @override
   Future<CandidateModel?> getById(String id) async {
-    if (_cache.isEmpty) await getCandidates();
-    return _cache.firstWhereOrNull((c) => c.id == id);
+    final candidate = await _remote.getById(id);
+    if (candidate == null) return null;
+    final statuses = await _local.getLocalStatuses();
+    return statuses.containsKey(id)
+        ? candidate.copyWith(status: statuses[id]!)
+        : candidate;
   }
 
   @override
-  Future<void> updateStatus(String id, String status) async {
-    // optimistic update
-    _cache = _cache
-        .map((c) => c.id == id ? c.copyWith(status: status) : c)
-        .toList();
-    _controller.add(List.unmodifiable(_cache));
+  Future<void> updateStatus(UpdateStatusParams params) async {
+    final prev = _currentItems.firstWhereOrNull((c) => c.id == params.id);
 
-    // persist locally so it survives restart
-    await _local.saveLocalStatus(id, status);
+    if (prev != null) {
+      _currentItems = _currentItems
+          .map((c) => c.id == params.id ? c.copyWith(status: params.status) : c)
+          .toList();
+      _controller.add(List.unmodifiable(_currentItems));
+    }
 
-    // mock API call — may throw (~10%)
-    await _remote.updateStatus(id, status);
+    await _local.saveLocalStatus(params.id, params.status);
+
+    try {
+      await _remote.updateStatus(params);
+    } catch (e) {
+      if (prev != null) {
+        _currentItems = _currentItems
+            .map((c) => c.id == params.id ? prev : c)
+            .toList();
+        _controller.add(List.unmodifiable(_currentItems));
+        await _local.saveLocalStatus(params.id, prev.status);
+      }
+      rethrow;
+    }
   }
 }

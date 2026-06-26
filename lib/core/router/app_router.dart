@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:candidate_dashboard/core/core.dart';
 import 'package:candidate_dashboard/features/candidate_detail/candidate_detail.dart';
@@ -14,11 +13,10 @@ final appRouter = GoRouter(
       routes: [
         GoRoute(
           path: AppRoutes.candidateDetail,
-          builder: (_, state) => BlocProvider(
-            create: (_) => getIt<CandidateDetailCubit>()
-              ..load(state.pathParameters['id']!),
-            child: const CandidateDetailView(),
-          ),
+          builder: (_, state) {
+            final id = state.pathParameters['id']!;
+            return CandidateDetailView(id: id);
+          },
         ),
       ],
     ),

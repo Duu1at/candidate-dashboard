@@ -7,12 +7,6 @@ class CandidateHero extends StatelessWidget {
 
   final CandidateModel candidate;
 
-  static String _initials(String name) {
-    final words = name.trim().split(RegExp(r'\s+'));
-    if (words.length >= 2) return '${words[0][0]}${words[1][0]}';
-    return words.first.isNotEmpty ? words.first[0] : '';
-  }
-
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
@@ -32,7 +26,7 @@ class CandidateHero extends StatelessWidget {
               radius: 31,
               backgroundColor: context.colors.surfaceContainerHighest,
               child: Text(
-                _initials(candidate.name),
+                candidate.initials,
                 style: context.textTheme.headlineSmall?.copyWith(
                   color: context.colors.onSurfaceVariant,
                   fontWeight: FontWeight.w700,
@@ -54,27 +48,38 @@ class CandidateHero extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.x2),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.x4, vertical: AppSpacing.x2),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.x4,
+              vertical: AppSpacing.x2,
+            ),
             child: Row(
               children: [
                 Chip(
                   avatar: CircleAvatar(
                     radius: 4,
-                    backgroundColor: verdictColor(context, candidate.vc),
+                    backgroundColor: context.appColors.verdictColor(
+                      candidate.vc,
+                    ),
                   ),
                   label: Text(
                     candidate.verdict,
                     style: context.textTheme.labelMedium?.copyWith(
-                      color: onVerdictContainerColor(context, candidate.vc),
+                      color: context.appColors.onVerdictContainerColor(
+                        candidate.vc,
+                      ),
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.3,
                     ),
                   ),
-                  backgroundColor: verdictContainerColor(context, candidate.vc),
+                  backgroundColor: context.appColors.verdictContainerColor(
+                    candidate.vc,
+                  ),
                   side: BorderSide.none,
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   visualDensity: VisualDensity.compact,
-                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.x1),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.x1,
+                  ),
                 ),
                 const SizedBox(width: AppSpacing.x3),
                 Expanded(

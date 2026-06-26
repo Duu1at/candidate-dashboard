@@ -4,7 +4,10 @@ enum CandidateStatus {
   invited('invited', 'Приглашён'),
   rejected('rejected', 'Отклонён');
 
-  const CandidateStatus(this.value, this.label);
+  const CandidateStatus(
+    this.value,
+    this.label,
+  );
   final String value;
   final String label;
 

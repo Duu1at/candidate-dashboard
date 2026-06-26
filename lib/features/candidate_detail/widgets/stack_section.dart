@@ -3,18 +3,13 @@ import 'package:candidate_dashboard/core/core.dart';
 import 'package:candidate_dashboard/features/candidate_detail/candidate_detail.dart';
 
 class StackSection extends StatelessWidget {
-  const StackSection(this.stack, {super.key});
+  const StackSection(this.stackTags, {super.key});
 
-  final String stack;
+  final List<String> stackTags;
 
   @override
   Widget build(BuildContext context) {
-    final skills = stack
-        .split(',')
-        .map((s) => s.trim())
-        .where((s) => s.isNotEmpty)
-        .toList();
-    if (skills.isEmpty) return const SizedBox.shrink();
+    if (stackTags.isEmpty) return const SizedBox.shrink();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,7 +23,7 @@ class StackSection extends StatelessWidget {
             child: Wrap(
               spacing: AppSpacing.x2,
               runSpacing: AppSpacing.x2,
-              children: skills
+              children: stackTags
                   .map(
                     (skill) => Chip(
                       label: Text(

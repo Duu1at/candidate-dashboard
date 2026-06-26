@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:candidate_dashboard/core/core.dart';
 
-
 mixin ConverterMixin {
   T convertType<T>(
     Map<String, dynamic> jsonData,

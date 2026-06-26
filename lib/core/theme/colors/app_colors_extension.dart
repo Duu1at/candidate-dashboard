@@ -15,10 +15,10 @@ final class VerdictPalette {
 
   VerdictPalette _lerp(VerdictPalette other, double t) {
     return VerdictPalette(
-    background: Color.lerp(background, other.background, t)!,
-    foreground: Color.lerp(foreground, other.foreground, t)!,
-    dot: Color.lerp(dot, other.dot, t)!,
-  );
+      background: Color.lerp(background, other.background, t)!,
+      foreground: Color.lerp(foreground, other.foreground, t)!,
+      dot: Color.lerp(dot, other.dot, t)!,
+    );
   }
 }
 
@@ -124,6 +124,28 @@ final class AppColorsExt extends ThemeExtension<AppColorsExt> {
       shadowLg: shadowLg ?? this.shadowLg,
     );
   }
+
+  VerdictPalette verdictPalette(String vc) {
+    return switch (vc) {
+      'verdict-green' => verdictGreen,
+      'verdict-orange' => verdictOrange,
+      _ => verdictRed,
+    };
+  }
+
+  Color verdictColor(String vc) => verdictPalette(vc).dot;
+  Color verdictContainerColor(String vc) => verdictPalette(vc).background;
+  Color onVerdictContainerColor(String vc) => verdictPalette(vc).foreground;
+
+  VerdictPalette criteriaPalette(String status) {
+    return switch (status) {
+      'ok' => verdictGreen,
+      'warn' => verdictOrange,
+      _ => verdictRed,
+    };
+  }
+
+  Color criteriaColor(String status) => criteriaPalette(status).dot;
 
   @override
   AppColorsExt lerp(ThemeExtension<AppColorsExt>? other, double t) {

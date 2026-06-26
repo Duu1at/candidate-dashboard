@@ -11,16 +11,13 @@ class StatusPill extends StatelessWidget {
     CandidateStatus.newCandidate => context.colors.primary,
     CandidateStatus.review => context.appColors.verdictOrange.dot,
     CandidateStatus.invited => context.appColors.verdictGreen.dot,
-    CandidateStatus.rejected => context.appColors.statusRejected,
+    CandidateStatus.rejected => context.appColors.verdictRed.dot,
   };
 
   @override
   Widget build(BuildContext context) {
     return Chip(
-      avatar: CircleAvatar(
-        radius: 3.5,
-        backgroundColor: _dotColor(context),
-      ),
+      avatar: CircleAvatar(radius: 3.5, backgroundColor: _dotColor(context)),
       label: Text(
         status.label,
         style: context.textTheme.labelSmall?.copyWith(
